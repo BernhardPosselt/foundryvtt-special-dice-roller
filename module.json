@@ -1,0 +1,10 @@
+{
+  "name": "l5r-roller",
+  "title": "Legend of the 5 Rings Roller",
+  "description": "Roll 5e Legend of the 5 Rings in the chat window",
+  "version": "0.1",
+  "author": "Bernhard Posselt",
+  "scripts": ["./dist/index.js"],
+  "styles": ["./styles.css"],
+  "packs": []
+}

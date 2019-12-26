@@ -76,6 +76,40 @@ const SKILL_ROLL_TABLE: Faces[] = [
 export class RollResult {
     constructor(public die: Dice, public face: Faces) {
     }
+
+    public get imageName(): string {
+        if (this.die === Dice.RING) {
+            if (this.face === Faces.FAILURE) {
+                return 'black';
+            } else if (this.face === Faces.EXPLODING_STRIFE) {
+              return 'blacket';
+            } else if (this.face === Faces.OPPORTUNITY) {
+                return 'blacko';
+            } else if (this.face === Faces.OPPORTUNITY_STRIFE) {
+                return 'blackot';
+            } else if (this.face === Faces.SUCCESS) {
+                return 'blacks';
+            } else {
+                return 'blackst';
+            }
+        } else {
+            if (this.face === Faces.FAILURE) {
+                return 'white';
+            }  else if (this.face === Faces.EXPLODING) {
+                return 'whitee';
+            } else if (this.face === Faces.EXPLODING_STRIFE) {
+                return 'whiteet';
+            } else if (this.face === Faces.OPPORTUNITY) {
+                return 'whiteo';
+            } else if (this.face === Faces.SUCCESS) {
+                return 'whites';
+            } else if (this.face === Faces.SUCCESS_OPPORTUNITY) {
+                return 'whiteso';
+            } else {
+                return 'whitest';
+            }
+        }
+    }
 }
 
 export type RandomNumberGenerator = (zeroUpToExclusive: number) => number;
