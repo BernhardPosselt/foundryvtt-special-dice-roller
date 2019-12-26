@@ -4,7 +4,7 @@ Hooks.on('renderChatMessage', (_, html, msg) => {
     const content = msg.message.content;
     if (content.startsWith('/l5r ')) {
         const formula = content.replace(/\/l5r /g, '');
-        console.debug(`Rolling formula ${formula}`);
+        console.info(`Rolling formula ${formula}`);
 
         const chatData: ChatData = {
             user: game.user.id,
