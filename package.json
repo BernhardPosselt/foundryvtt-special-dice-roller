@@ -1,0 +1,22 @@
+{
+  "name": "l5r-roller",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Bernhard Posselt",
+  "license": "APL",
+  "private": true,
+  "dependencies": {
+    "@types/jest": "^24.0.24",
+    "array.prototype.flatmap": "^1.2.3",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.2.0",
+    "typescript": "^3.7.4"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/jest",
+    "build": "./node_modules/.bin/tsc"
+  },
+  "devDependencies": {
+    "@types/array.prototype.flatmap": "^1.2.0"
+  }
+}
