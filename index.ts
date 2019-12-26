@@ -5,7 +5,7 @@ const tpl = `
 <div>
     <div>
         {{#rolls}}
-        <img alt="{{imageName}}" src="public/modules/ffg-roller/images/{{imageName}}.png" width="36" height="36">
+        <img alt="{{imageName}}" src="modules/l5r-roller/images/{{imageName}}.png" width="36" height="36">
         {{/rolls}}
     </div>
     <hr>
