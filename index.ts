@@ -33,7 +33,9 @@ const tpl = `
 Hooks.on('preCreateChatMessage', (_, data) => {
     const content = data.content;
     if (content !== undefined && content.startsWith('/l5r ')) {
-        const formula = content.replace(/\/l5r /g, '');
+        const formula = content
+            .replace(/\/l5r /g, '')
+            .replace(/\s+/g, '');
         console.info(`Rolling formula ${formula}`);
 
         try {
