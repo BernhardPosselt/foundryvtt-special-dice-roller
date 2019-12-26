@@ -141,7 +141,7 @@ export function countResults(results: RollResult[]): Result {
     );
 }
 
-function count<T>(array: T[], test: (value: T) => boolean): number {
+export function count<T>(array: T[], test: (value: T) => boolean): number {
     let count = 0;
     for (let elem of array) {
         if (test(elem)) {

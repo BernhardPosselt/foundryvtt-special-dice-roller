@@ -5,7 +5,7 @@
   "version": "0.1",
   "author": "Bernhard Posselt",
   "scripts": ["./dist/bundle.js"],
-  "styles": [],
+  "styles": ["./styles.css"],
   "packs": [],
   "minimumCoreVersion": "0.4.3",
   "url": "https://github.com/BernhardPosselt/l5r-foundryvtt-roller",
