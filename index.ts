@@ -4,6 +4,7 @@ Hooks.on('renderChatMessage', (_, html, msg) => {
     const content = msg.message.content;
     if (content.startsWith('/l5r ')) {
         const formula = content.replace(/\/l5r /g, '');
+        console.debug(`Rolling formula ${formula}`);
         const parsedFormula = parseFormula(formula);
         const rolls = roll(parsedFormula.rings, parsedFormula.skills, generateNumber);
         html.hide();
