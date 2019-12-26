@@ -1,10 +1,13 @@
 {
   "name": "l5r-roller",
   "title": "Legend of the 5 Rings Roller",
-  "description": "Roll 5e Legend of the 5 Rings in the chat window",
+  "description": "Roll 5e Legend of the 5 Rings in the chat window like this (s for skill, r for ring): /l5r 3dr+2ds or /l5r 3dr or /l5r 2ds. Auto rolls exploding successes.",
   "version": "0.1",
   "author": "Bernhard Posselt",
   "scripts": ["./dist/bundle.js"],
   "styles": [],
-  "packs": []
+  "packs": [],
+  "url": "https://github.com/BernhardPosselt/l5r-foundryvtt-roller",
+  "manifest": "https://github.com/BernhardPosselt/l5r-foundryvtt-roller/raw/master/module.json",
+  "download": "https://github.com/BernhardPosselt/l5r-foundryvtt-roller/archive/master.zip"
 }
