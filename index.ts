@@ -4,25 +4,27 @@ import * as Mustache from 'mustache';
 const tpl = `
 <div>
     <div>
-        {{#each rolls as roll}}
-        <img alt="{{roll}}" src="public/modules/ffg-roller/images/{{roll.imageName}}.png" width="36" height="36">
-        {{/each}}
+        {{#rolls}}
+        <img alt="{{imageName}}" src="public/modules/ffg-roller/images/{{imageName}}.png" width="36" height="36">
+        {{/rolls}}
     </div>
     <hr>
     <div>
         <ul>
-            {{#if results.opportunity > 0}}
-            <li>Opportunity: {{results.opportunity}}</li>
-            {{/if}}
-            {{#if results.strife > 0}}
-            <li>Opportunity: {{results.strife}}</li>
-            {{/if}}
-            {{#if results.successes > 0}}
-            <li>Opportunity: {{results.successes}}</li>
-            {{/if}}
-            {{#if results.failures > 0}}
-            <li>Opportunity: {{results.failures}}</li>
-            {{/if}}
+        {{#results}}
+            {{#opportunity}}
+            <li>Opportunity: {{opportunity}}</li>
+            {{/opportunity}}
+            {{#strife}}
+            <li>Opportunity: {{strife}}</li>
+            {{/strife}}
+            {{#successes}}
+            <li>Opportunity: {{successes}}</li>
+            {{/successes}}
+            {{#failures}}
+            <li>Opportunity: {{failures}}</li>
+            {{/failures}}
+        {{/results}}
         </ul>
     </div>
 </div>
