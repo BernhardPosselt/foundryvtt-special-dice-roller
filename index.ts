@@ -12,17 +12,17 @@ const tpl = `
     <div>
         <ul>
         {{#results}}
+            {{#successes}}
+            <li>Successes: {{successes}}</li>
+            {{/successes}}
             {{#opportunity}}
             <li>Opportunity: {{opportunity}}</li>
             {{/opportunity}}
             {{#strife}}
-            <li>Opportunity: {{strife}}</li>
+            <li>Strife: {{strife}}</li>
             {{/strife}}
-            {{#successes}}
-            <li>Opportunity: {{successes}}</li>
-            {{/successes}}
             {{#failures}}
-            <li>Opportunity: {{failures}}</li>
+            <li>Failures: {{failures}}</li>
             {{/failures}}
         {{/results}}
         </ul>
