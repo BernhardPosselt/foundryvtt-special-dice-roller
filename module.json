@@ -4,7 +4,7 @@
   "description": "Roll 5e Legend of the 5 Rings in the chat window",
   "version": "0.1",
   "author": "Bernhard Posselt",
-  "scripts": ["./dist/index.js"],
-  "styles": ["./styles.css"],
+  "scripts": ["./dist/bundle.js"],
+  "styles": [],
   "packs": []
 }

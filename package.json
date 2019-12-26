@@ -11,11 +11,14 @@
     "array.prototype.flatmap": "^1.2.3",
     "jest": "^24.9.0",
     "ts-jest": "^24.2.0",
-    "typescript": "^3.7.4"
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.4",
+    "webpack": "^4.41.4",
+    "webpack-cli": "^3.3.10"
   },
   "scripts": {
     "test": "./node_modules/.bin/jest",
-    "build": "./node_modules/.bin/tsc"
+    "build": "./node_modules/.bin/webpack --mode production"
   },
   "devDependencies": {
     "@types/array.prototype.flatmap": "^1.2.0"
