@@ -1,6 +1,4 @@
-/dist
 /build
-!/dist/bundle.js
 node_modules
 *.iml
 .idea
