@@ -1,4 +1,3 @@
-import {shim} from 'array.prototype.flatmap';
 import {RandomNumberGenerator} from '../rng';
 import {
     Dice,
@@ -6,61 +5,77 @@ import {
     L5RRoll,
     RING_ROLL_TABLE,
     RollResult,
-    rollResultMonoid, Rolls,
+    rollResultMonoid,
+    Rolls,
     rollToRollResult,
     SKILL_ROLL_TABLE,
 } from './dice';
 import {countMatches} from '../arrays';
 import {combineAll} from '../lang';
+import {rollDie, Roller} from '../roller';
+import {parseFormula} from './parser';
+import * as Mustache from 'mustache';
+import tpl from './template';
 
-export function countResults(rolls: L5RRoll[]): RollResult {
-    const results = rolls
-        .map((roll) => rollToRollResult(roll));
-    return combineAll(results, rollResultMonoid);
-}
+export class L5RRoller extends Roller {
+    constructor(private rng: RandomNumberGenerator, command: string) {
+        super(command);
+    }
 
-export function reRoll(
-    keptResults: L5RRoll[],
-    reRollResults: L5RRoll[],
-    rng: RandomNumberGenerator,
-): L5RRoll[] {
-    const reRolledDice = reRollResults.map((roll) => roll.die);
-    const ringReRolls = countMatches(reRolledDice, (die) => die === Dice.RING);
-    const skillReRolls = countMatches(reRolledDice, (die) => die === Dice.SKILL);
-    const reRolls = roll(new Rolls(ringReRolls, skillReRolls), rng);
-    return [...keptResults, ...reRolls];
-}
+    roll(rolls: Rolls): L5RRoll[] {
+        const rings = rollDie(rolls.rings, RING_ROLL_TABLE, L5RRoller.isExploding, this.rng)
+            .map((face) => new L5RRoll(Dice.RING, face));
+        const skills = rollDie(rolls.skills, SKILL_ROLL_TABLE, L5RRoller.isExploding, this.rng)
+            .map((face) => new L5RRoll(Dice.SKILL, face));
+        return [...rings, ...skills];
+    }
 
-export function roll(
-    rolls: Rolls,
-    rng: RandomNumberGenerator,
-): L5RRoll[] {
-    const rings = rollResults(rolls.rings, RING_ROLL_TABLE, rng)
-        .map((face) => new L5RRoll(Dice.RING, face));
-    const skills = rollResults(rolls.skills, SKILL_ROLL_TABLE, rng)
-        .map((face) => new L5RRoll(Dice.SKILL, face));
-    return [...rings, ...skills];
-}
+    reRoll(keptResults: L5RRoll[], reRollResults: L5RRoll[]): L5RRoll[] {
+        const reRolledDice = reRollResults.map((roll) => roll.die);
+        const ringReRolls = countMatches(reRolledDice, (die) => die === Dice.RING);
+        const skillReRolls = countMatches(reRolledDice, (die) => die === Dice.SKILL);
+        const reRolls = this.roll(new Rolls(ringReRolls, skillReRolls));
+        return [...keptResults, ...reRolls];
+    }
 
-function isExploding(face: Faces): boolean {
-    return face === Faces.EXPLODING_STRIFE ||
-        face === Faces.EXPLODING_OPPORTUNITY ||
-        face === Faces.EXPLODING;
-}
+    combineRolls(rolls: L5RRoll[]): RollResult {
+        const results = rolls
+            .map((roll) => rollToRollResult(roll));
+        return combineAll(results, rollResultMonoid);
+    }
 
-function rollResults(
-    rolls: number,
-    rollTable: Faces[],
-    rng: RandomNumberGenerator,
-): number[] {
-    shim();
-    return Array.from({length: rolls}, () => rng(rollTable.length))
-        .map((randomNumber: number) => rollTable[randomNumber])
-        .flatMap((face) => {
-            if (isExploding(face)) {
-                return [face, ...rollResults(1, rollTable, rng)];
-            } else {
-                return [face];
-            }
+    renderNewRoll(rolls: L5RRoll[]) {
+        const chatData: ChatData = {
+            user: game.user.id,
+            content: this.formatRolls(rolls),
+        };
+        ChatMessage.create(chatData, {displaySheet: false});
+    }
+
+    protected rollFormula(formula: string): string {
+        try {
+            const parsedFormula = parseFormula(formula);
+            const rolls = this.roll(parsedFormula);
+            return this.formatRolls(rolls);
+        } catch (e) {
+            return e.message;
+        }
+    }
+
+    private formatRolls(rolls: L5RRoll[]): string {
+        return Mustache.render(tpl, {
+            rolls: rolls,
+            results: this.combineRolls(rolls),
+            timestamp: new Date().getTime(),
+            rollIndex: function () {
+                return rolls.indexOf(this);
+            },
         });
+    }
+
+    private static isExploding(face: Faces): boolean {
+        return face === Faces.EXPLODING_STRIFE ||
+            face === Faces.EXPLODING_OPPORTUNITY ||
+            face === Faces.EXPLODING;
+    }
 }

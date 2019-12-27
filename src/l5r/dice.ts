@@ -1,5 +1,5 @@
 import {Monoid} from '../lang';
-import {Roll} from '../rolls';
+import {Roll} from '../roller';
 
 export enum Faces {
     SUCCESS,

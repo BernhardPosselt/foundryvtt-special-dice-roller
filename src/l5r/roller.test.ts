@@ -1,10 +1,15 @@
-import {countResults, reRoll, roll} from './roller';
 import {makeRng} from '../rng';
 import {Dice, Faces, L5RRoll, Rolls} from './dice';
+import {L5RRoller} from './roller';
 
+test('should react to l5r command', () => {
+    const roller = new L5RRoller(makeRng(0), 'l5r');
+    expect(roller.handlesCommand('/l5r ')).toBe(true);
+});
 
 test('should roll a ring 1', () => {
-    const result = roll(new Rolls(1, 0), makeRng(0));
+    const roller = new L5RRoller(makeRng(0), '');
+    const result = roller.roll(new Rolls(1, 0));
 
     expect(result.length).toBe(1);
     expect(result[0].die).toBe(Dice.RING);
@@ -12,7 +17,8 @@ test('should roll a ring 1', () => {
 });
 
 test('should roll a ring 2', () => {
-    const result = roll(new Rolls(1, 0), makeRng(1));
+    const roller = new L5RRoller(makeRng(1), '');
+    const result = roller.roll(new Rolls(1, 0));
 
     expect(result.length).toBe(1);
     expect(result[0].die).toBe(Dice.RING);
@@ -21,7 +27,8 @@ test('should roll a ring 2', () => {
 
 
 test('should roll a ring 3', () => {
-    const result = roll(new Rolls(1, 0), makeRng(2));
+    const roller = new L5RRoller(makeRng(2), '');
+    const result = roller.roll(new Rolls(1, 0));
 
     expect(result.length).toBe(1);
     expect(result[0].die).toBe(Dice.RING);
@@ -29,7 +36,8 @@ test('should roll a ring 3', () => {
 });
 
 test('should roll a ring 4', () => {
-    const result = roll(new Rolls(1, 0), makeRng(3, 2));
+    const roller = new L5RRoller(makeRng(3, 2), '');
+    const result = roller.roll(new Rolls(1, 0));
 
     expect(result.length).toBe(2);
     expect(result[0].die).toBe(Dice.RING);
@@ -39,7 +47,8 @@ test('should roll a ring 4', () => {
 });
 
 test('should roll a ring 5', () => {
-    const result = roll(new Rolls(1, 0), makeRng(4));
+    const roller = new L5RRoller(makeRng(4), '');
+    const result = roller.roll(new Rolls(1, 0));
 
     expect(result.length).toBe(1);
     expect(result[0].die).toBe(Dice.RING);
@@ -47,7 +56,8 @@ test('should roll a ring 5', () => {
 });
 
 test('should roll a ring 6', () => {
-    const result = roll(new Rolls(1, 0), makeRng(5));
+    const roller = new L5RRoller(makeRng(5), '');
+    const result = roller.roll(new Rolls(1, 0));
 
     expect(result.length).toBe(1);
     expect(result[0].die).toBe(Dice.RING);
@@ -55,7 +65,8 @@ test('should roll a ring 6', () => {
 });
 
 test('should roll a ring 1 and skill 1', () => {
-    const result = roll(new Rolls(1, 1), makeRng(0, 1));
+    const roller = new L5RRoller(makeRng(0, 1), '');
+    const result = roller.roll(new Rolls(1, 1));
 
     expect(result.length).toBe(2);
     expect(result[0].die).toBe(Dice.RING);
@@ -65,7 +76,8 @@ test('should roll a ring 1 and skill 1', () => {
 });
 
 test('should roll a skill 1', () => {
-    const result = roll(new Rolls(0, 1), makeRng(0));
+    const roller = new L5RRoller(makeRng(0), '');
+    const result = roller.roll(new Rolls(0, 1));
 
     expect(result.length).toBe(1);
     expect(result[0].die).toBe(Dice.SKILL);
@@ -73,7 +85,8 @@ test('should roll a skill 1', () => {
 });
 
 test('should roll a skill 2', () => {
-    const result = roll(new Rolls(0,1), makeRng(1));
+    const roller = new L5RRoller(makeRng(1), '');
+    const result = roller.roll(new Rolls(0,1));
 
     expect(result.length).toBe(1);
     expect(result[0].die).toBe(Dice.SKILL);
@@ -81,7 +94,8 @@ test('should roll a skill 2', () => {
 });
 
 test('should roll a skill 3', () => {
-    const result = roll(new Rolls(0,1), makeRng(2));
+    const roller = new L5RRoller(makeRng(2), '');
+    const result = roller.roll(new Rolls(0,1));
 
     expect(result.length).toBe(1);
     expect(result[0].die).toBe(Dice.SKILL);
@@ -89,7 +103,8 @@ test('should roll a skill 3', () => {
 });
 
 test('should roll a skill 4', () => {
-    const result = roll(new Rolls(0,1), makeRng(3));
+    const roller = new L5RRoller(makeRng(3), '');
+    const result = roller.roll(new Rolls(0,1));
 
     expect(result.length).toBe(1);
     expect(result[0].die).toBe(Dice.SKILL);
@@ -97,7 +112,8 @@ test('should roll a skill 4', () => {
 });
 
 test('should roll a skill 5', () => {
-    const result = roll(new Rolls(0,1), makeRng(4));
+    const roller = new L5RRoller(makeRng(4), '');
+    const result = roller.roll(new Rolls(0,1));
 
     expect(result.length).toBe(1);
     expect(result[0].die).toBe(Dice.SKILL);
@@ -105,7 +121,8 @@ test('should roll a skill 5', () => {
 });
 
 test('should roll a skill 6', () => {
-    const result = roll(new Rolls(0,1), makeRng(5));
+    const roller = new L5RRoller(makeRng(5), '');
+    const result = roller.roll(new Rolls(0,1));
 
     expect(result.length).toBe(1);
     expect(result[0].die).toBe(Dice.SKILL);
@@ -113,7 +130,8 @@ test('should roll a skill 6', () => {
 });
 
 test('should roll a skill 7', () => {
-    const result = roll(new Rolls(0,1), makeRng(6));
+    const roller = new L5RRoller(makeRng(6), '');
+    const result = roller.roll(new Rolls(0,1));
 
     expect(result.length).toBe(1);
     expect(result[0].die).toBe(Dice.SKILL);
@@ -121,7 +139,8 @@ test('should roll a skill 7', () => {
 });
 
 test('should roll a skill 8', () => {
-    const result = roll(new Rolls(0,1), makeRng(7, 9));
+    const roller = new L5RRoller(makeRng(7, 9), '');
+    const result = roller.roll(new Rolls(0,1));
 
     expect(result.length).toBe(2);
     expect(result[0].die).toBe(Dice.SKILL);
@@ -132,7 +151,8 @@ test('should roll a skill 8', () => {
 
 
 test('should roll a skill 9', () => {
-    const result = roll(new Rolls(0,1), makeRng(8, 7, 9));
+    const roller = new L5RRoller(makeRng(8, 7, 9), '');
+    const result = roller.roll(new Rolls(0,1));
 
     expect(result.length).toBe(3);
     expect(result[0].die).toBe(Dice.SKILL);
@@ -144,14 +164,16 @@ test('should roll a skill 9', () => {
 });
 
 test('should roll a skill 10', () => {
-    const result = roll(new Rolls(0,1), makeRng(9));
+    const roller = new L5RRoller(makeRng(9), '');
+    const result = roller.roll(new Rolls(0,1));
 
     expect(result.length).toBe(1);
     expect(result[0].face).toBe(Faces.OPPORTUNITY);
 });
 
 test('should roll a skill 11', () => {
-    const result = roll(new Rolls(0,1), makeRng(10));
+    const roller = new L5RRoller(makeRng(10), '');
+    const result = roller.roll(new Rolls(0,1));
 
     expect(result.length).toBe(1);
     expect(result[0].die).toBe(Dice.SKILL);
@@ -159,7 +181,8 @@ test('should roll a skill 11', () => {
 });
 
 test('should roll a skill 12', () => {
-    const result = roll(new Rolls(0,1), makeRng(11));
+    const roller = new L5RRoller(makeRng(11), '');
+    const result = roller.roll(new Rolls(0,1));
 
     expect(result.length).toBe(1);
     expect(result[0].die).toBe(Dice.SKILL);
@@ -167,8 +190,9 @@ test('should roll a skill 12', () => {
 });
 
 test('should count results', () => {
-    const result = roll(new Rolls(0,7), makeRng(0, 2, 4, 5, 7, 0, 8, 0, 9));
-    const count = countResults(result);
+    const roller = new L5RRoller(makeRng(0, 2, 4, 5, 7, 0, 8, 0, 9), '');
+    const result = roller.roll(new Rolls(0,7));
+    const count = roller.combineRolls(result);
 
     expect(count.exploding).toBe(2);
     expect(count.strife).toBe(2);
@@ -180,7 +204,8 @@ test('should count results', () => {
 test('it should re-roll a result', () => {
     const keptDice = [new L5RRoll(Dice.RING, Faces.SUCCESS)];
     const reRollDice = [new L5RRoll(Dice.SKILL, Faces.OPPORTUNITY)];
-    const result = reRoll(keptDice, reRollDice, makeRng(0));
+    const roller = new L5RRoller(makeRng(0), '');
+    const result = roller.reRoll(keptDice, reRollDice);
 
     expect(result.length).toBe(2);
     expect(result[0].die).toBe(Dice.RING);
