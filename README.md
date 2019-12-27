@@ -1,5 +1,7 @@
 # L5R Roller
 
+[![Build Status](https://travis-ci.org/BernhardPosselt/l5r-foundryvtt-roller.svg?branch=master)](https://travis-ci.org/BernhardPosselt/l5r-foundryvtt-roller)
+
 A Legend of the 5 Rings dice roller using the images from [SkyJedi's Discord Roller](https://github.com/SkyJedi/FFGNDS-Discord-Dice-Roller)
 
 ## Usage
