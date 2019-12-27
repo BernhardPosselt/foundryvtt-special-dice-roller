@@ -1,4 +1,6 @@
 import {shim} from 'array.prototype.flatmap';
+import {RandomNumberGenerator} from '../rng';
+import {countMatches} from '../util';
 
 export enum Faces {
     SUCCESS,
@@ -112,13 +114,6 @@ export class RollResult {
     }
 }
 
-export type RandomNumberGenerator = (zeroUpToExclusive: number) => number;
-
-export function generateNumber(zeroUpToExclusive: number): number {
-    let randomValue = window.crypto.getRandomValues(new Uint8Array(1))[0];
-    return Math.floor((randomValue / 2 ** 8) * zeroUpToExclusive);
-}
-
 export class Result {
     constructor(
         public successes = 0,
@@ -133,54 +128,53 @@ export class Result {
 export function countResults(results: RollResult[]): Result {
     const faceResults = results.map((result) => result.face);
     return new Result(
-        count(faceResults, isSuccess),
-        count(faceResults, isFailure),
-        count(faceResults, isOpportunity),
-        count(faceResults, isExploding),
-        count(faceResults, isStrife),
+        countMatches(faceResults, isSuccess),
+        countMatches(faceResults, isFailure),
+        countMatches(faceResults, isOpportunity),
+        countMatches(faceResults, isExploding),
+        countMatches(faceResults, isStrife),
     );
 }
 
-export function count<T>(array: T[], test: (value: T) => boolean): number {
-    let count = 0;
-    for (let elem of array) {
-        if (test(elem)) {
-            count += 1;
-        }
-    }
-    return count;
-}
 
 export class Rolls {
     constructor(public rings = 0, public skills = 0) {
     }
 }
 
+function parseComplexFormula(trimmedFormula: string) {
+    return trimmedFormula.split('+')
+        .map((part) => {
+            const parts = part.split('d');
+            const number = parseInt(parts[0], 10);
+            if (parts[1] === 'r' || parts[1] === 'b') {
+                return new Rolls(number, 0);
+            } else {
+                return new Rolls(0, number);
+            }
+        })
+        .reduce((prev: Rolls, curr: Rolls) => {
+            return new Rolls(
+                prev.rings + curr.rings,
+                prev.skills + curr.skills,
+            );
+        }, new Rolls());
+}
+
+function parseSimpleFormula(trimmedFormula: string) {
+    const letters = trimmedFormula.split('');
+    const rings = countMatches(letters, (letter) => letter === 'r' || letter === 'b');
+    const skills = countMatches(letters, (letter) => letter === 's' || letter === 'w');
+    return new Rolls(rings, skills);
+}
+
 export function parseFormula(formula: string): Rolls {
     const trimmedFormula = formula.replace(/\s+/g, '')
         .toLowerCase();
     if (/^[1-9][0-9]*d(?:[rswb])(?:\+[1-9][0-9]*d(?:[rswb]))*$/.test(trimmedFormula)) {
-        return trimmedFormula.split('+')
-            .map((part) => {
-                const parts = part.split('d');
-                const number = parseInt(parts[0], 10);
-                if (parts[1] === 'r' || parts[1] === 'b') {
-                    return new Rolls(number, 0);
-                } else {
-                    return new Rolls(0, number);
-                }
-            })
-            .reduce((prev: Rolls, curr: Rolls) => {
-                return new Rolls(
-                    prev.rings + curr.rings,
-                    prev.skills + curr.skills,
-                );
-            }, new Rolls());
+        return parseComplexFormula(trimmedFormula);
     } else if (/^[rswb]+$/.test(trimmedFormula)) {
-        const letters = trimmedFormula.split('');
-        const rings = count(letters, (letter) => letter === 'r' || letter === 'b');
-        const skills = count(letters, (letter) => letter === 's' || letter === 'w');
-        return new Rolls(rings, skills);
+        return parseSimpleFormula(trimmedFormula);
     } else {
         throw new FormulaParseError(`Could not parse formula ${formula}! Needs to be formatted like: "wwbb" or "rss" or "xdr" or "xds" or "xdr+yds" where x and y are positive numbers`);
     }
@@ -192,12 +186,23 @@ export class FormulaParseError extends Error {
     }
 }
 
+export function reRoll(
+    keptResults: RollResult[],
+    reRollResults: RollResult[],
+    rng: RandomNumberGenerator
+): RollResult[] {
+    const reRolledDice = reRollResults.map((roll) => roll.die);
+    const ringReRolls = countMatches(reRolledDice, (die) => die === Dice.RING);
+    const skillReRolls = countMatches(reRolledDice, (die) => die === Dice.SKILL);
+    const reRolls = roll(ringReRolls, skillReRolls, rng);
+    return [...keptResults, ...reRolls];
+}
+
 export function roll(
     ringDice: number,
     skillDice: number,
     rng: RandomNumberGenerator,
 ): RollResult[] {
-    shim();
     const rings = rollResults(ringDice, RING_ROLL_TABLE, rng)
         .map((face) => new RollResult(Dice.RING, face));
     const skills = rollResults(skillDice, SKILL_ROLL_TABLE, rng)
@@ -210,6 +215,7 @@ function rollResults(
     rollTable: Faces[],
     rng: RandomNumberGenerator,
 ): number[] {
+    shim();
     return Array.from({length: rolls}, () => rng(rollTable.length))
         .map((randomNumber: number) => rollTable[randomNumber])
         .flatMap((face) => {

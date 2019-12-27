@@ -1,4 +1,5 @@
-import {countResults, Dice, Faces, RandomNumberGenerator, roll, parseFormula} from './roller';
+import {countResults, Dice, Faces, parseFormula, reRoll, roll, RollResult} from './roller';
+import {RandomNumberGenerator} from '../rng';
 
 function makeRng(...constNumber: number[]): RandomNumberGenerator {
     return () => {
@@ -212,4 +213,16 @@ test('it should parse a roll formula', () => {
     const result = parseFormula("2dw +1db");
     expect(result.rings).toBe(1);
     expect(result.skills).toBe(2);
+});
+
+test('it should re-roll a result', () => {
+    const keptDice = [new RollResult(Dice.RING, Faces.SUCCESS)];
+    const reRollDice = [new RollResult(Dice.SKILL, Faces.OPPORTUNITY)];
+    const result = reRoll(keptDice, reRollDice, makeRng(0));
+
+    expect(result.length).toBe(2);
+    expect(result[0].die).toBe(Dice.RING);
+    expect(result[0].face).toBe(Faces.SUCCESS);
+    expect(result[1].die).toBe(Dice.SKILL);
+    expect(result[1].face).toBe(Faces.FAILURE);
 });
