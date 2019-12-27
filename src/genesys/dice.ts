@@ -1,4 +1,5 @@
 import {Monoid} from '../lang';
+import {Roll} from '../roller';
 
 export enum Dice {
     BOOST,
@@ -108,7 +109,6 @@ export class Rolls {
 }
 
 export class RollResult {
-
     constructor(
         public blanks = 0,
         public successes = 0,
@@ -119,7 +119,46 @@ export class RollResult {
         public despairs = 0,
     ) {
     }
+}
 
+export class GenesysRoll extends Roll<Dice, Faces> {
+
+}
+
+export function rollToRollResult(roll: GenesysRoll): RollResult {
+    if (roll.face === Faces.BLANK) {
+        return toRollResult({blanks: 1});
+    } else if (roll.face === Faces.SUCCESS) {
+        return toRollResult({successes: 1});
+    } else if (roll.face === Faces.DOUBLE_SUCCESS) {
+        return toRollResult({successes: 2});
+    } else if (roll.face === Faces.FAILURE) {
+        return toRollResult({failures: 1});
+    } else if (roll.face === Faces.DOUBLE_FAILURE) {
+        return toRollResult({failures: 2});
+    } else if (roll.face === Faces.ABILITY) {
+        return toRollResult({abilities: 1});
+    } else if (roll.face === Faces.DOUBLE_ABILITY) {
+        return toRollResult({abilities: 2});
+    } else if (roll.face === Faces.THREAT) {
+        return toRollResult({threats: 1});
+    } else if (roll.face === Faces.DOUBLE_THREAT) {
+        return toRollResult({threats: 2});
+    } else if (roll.face === Faces.TRIUMPH) {
+        return toRollResult({triumphs: 1});
+    } else if (roll.face === Faces.DESPAIR) {
+        return toRollResult({despairs: 1});
+    } else if (roll.face === Faces.SUCCESS_ABILITY) {
+        return toRollResult({successes: 1, abilities: 1});
+    } else if (roll.face === Faces.FAILURE_THREAT) {
+        return toRollResult({failures: 1, threats: 1});
+    } else {
+        throw new Error('Unhandled Face');
+    }
+}
+
+function toRollResult(partial: Partial<RollResult>): RollResult {
+    return Object.assign(new RollResult(), partial);
 }
 
 export const rollResultMonoid: Monoid<RollResult> = {

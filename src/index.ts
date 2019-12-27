@@ -3,7 +3,6 @@ import {L5RRoller} from './l5r/roller';
 import {L5RRoll} from './l5r/dice';
 
 
-
 Hooks.on('preCreateChatMessage', (_, data) => {
     const message = data.content;
     const rollers = [new L5RRoller(secureRandomNumber, 'l5r')];

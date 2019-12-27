@@ -1,6 +1,11 @@
 import {Monoid} from '../lang';
 import {Roll} from '../roller';
 
+export enum Dice {
+    RING,
+    SKILL
+}
+
 export enum Faces {
     SUCCESS,
     FAILURE,
@@ -11,11 +16,6 @@ export enum Faces {
     EXPLODING_STRIFE,
     EXPLODING_OPPORTUNITY,
     SUCCESS_OPPORTUNITY,
-}
-
-export enum Dice {
-    RING,
-    SKILL
 }
 
 export const RING_ROLL_TABLE: Faces[] = [
@@ -42,6 +42,14 @@ export const SKILL_ROLL_TABLE: Faces[] = [
     Faces.OPPORTUNITY,
 ];
 
+export class Rolls {
+    constructor(
+        public rings = 0,
+        public skills = 0,
+    ) {
+    }
+}
+
 export class RollResult {
     constructor(
         public successes = 0,
@@ -49,14 +57,6 @@ export class RollResult {
         public opportunity = 0,
         public exploding = 0,
         public strife = 0,
-    ) {
-    }
-}
-
-export class Rolls {
-    constructor(
-        public rings = 0,
-        public skills = 0,
     ) {
     }
 }
@@ -115,8 +115,10 @@ export function rollToRollResult(roll: L5RRoll): RollResult {
         return toRollResult({successes: 1, exploding: 1, strife: 1});
     } else if (roll.face === Faces.EXPLODING_OPPORTUNITY) {
         return toRollResult({successes: 1, exploding: 1, opportunity: 1});
-    } else {
+    } else if (roll.face === Faces.SUCCESS_OPPORTUNITY) {
         return toRollResult({successes: 1, opportunity: 1});
+    } else {
+        throw new Error('Unhandled Face');
     }
 }
 
