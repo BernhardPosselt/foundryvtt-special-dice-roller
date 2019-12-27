@@ -63,7 +63,7 @@ Hooks.on('preCreateChatMessage', (_, data) => {
     }
 });
 
-function parseDies(inputs: HTMLInputElement[]): RollResult[] {
+function parseDice(inputs: HTMLInputElement[]): RollResult[] {
     return inputs
         .map((roll) => {
             const die = parseInt(roll.dataset.die ?? '0', 10);
@@ -90,17 +90,17 @@ Hooks.on('renderChatLog', () => {
         const omittedRolls = Array.from(form.querySelectorAll('input:not(:checked)')) as HTMLInputElement[];
 
         if (button.classList.contains('l5r-roller-keep')) {
-            const keptRolls = parseDies(selectedRolls);
+            const keptRolls = parseDice(selectedRolls);
             if (keptRolls.length > 0) {
                 renderNewRoll(keptRolls);
             }
         } else {
-            const reRollDice = parseDies(selectedRolls)
+            const reRollDice = parseDice(selectedRolls)
                 .map((roll) => roll.die);
             const ringReRolls = count(reRollDice, (die) => die === Dice.RING);
             const skillReRolls = count(reRollDice, (die) => die === Dice.SKILL);
             const reRolls = roll(ringReRolls, skillReRolls, generateNumber);
-            const unaffectedRolls = parseDies(omittedRolls);
+            const unaffectedRolls = parseDice(omittedRolls);
             renderNewRoll([...unaffectedRolls, ...reRolls]);
         }
         selectedRolls.forEach((elem) => elem.checked = false);

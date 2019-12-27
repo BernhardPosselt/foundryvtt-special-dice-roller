@@ -159,12 +159,12 @@ export class Rolls {
 export function parseFormula(formula: string): Rolls {
     const trimmedFormula = formula.replace(/\s+/g, '')
         .toLowerCase();
-    if (/^[1-9][0-9]*d(?:r|s)(?:\+[1-9][0-9]*d(?:r|s))*$/.test(formula)) {
+    if (/^[1-9][0-9]*d(?:[rswb])(?:\+[1-9][0-9]*d(?:[rswb]))*$/.test(trimmedFormula)) {
         return trimmedFormula.split('+')
             .map((part) => {
                 const parts = part.split('d');
                 const number = parseInt(parts[0], 10);
-                if (parts[1] === 'r') {
+                if (parts[1] === 'r' || parts[1] === 'b') {
                     return new Rolls(number, 0);
                 } else {
                     return new Rolls(0, number);
@@ -176,8 +176,13 @@ export function parseFormula(formula: string): Rolls {
                     prev.skills + curr.skills,
                 );
             }, new Rolls());
+    } else if (/^[rswb]+$/.test(trimmedFormula)) {
+        const letters = trimmedFormula.split('');
+        const rings = count(letters, (letter) => letter === 'r' || letter === 'b');
+        const skills = count(letters, (letter) => letter === 's' || letter === 'w');
+        return new Rolls(rings, skills);
     } else {
-        throw new FormulaParseError(`Could not parse formula ${formula}! Needs to be formatted like: "xdr" or "xds" or "xdr+yds" where x and y are positive numbers`);
+        throw new FormulaParseError(`Could not parse formula ${formula}! Needs to be formatted like: "wwbb" or "rss" or "xdr" or "xds" or "xdr+yds" where x and y are positive numbers`);
     }
 }
 
