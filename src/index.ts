@@ -1,9 +1,11 @@
 import {secureRandomNumber} from './rng';
-import {countResults, parseFormula, reRoll, roll, RollResult} from './l5r/roller';
+import {countResults, reRoll, roll} from './l5r/roller';
 import * as Mustache from 'mustache';
 import tpl from './l5r/template';
+import {parseFormula} from './l5r/parser';
+import {L5RRoll} from './l5r/dice';
 
-function formatRolls(rolls: RollResult[]): string {
+function formatRolls(rolls: L5RRoll[]): string {
     return Mustache.render(tpl, {
         rolls: rolls,
         results: countResults(rolls),
@@ -23,7 +25,7 @@ Hooks.on('preCreateChatMessage', (_, data) => {
 
         try {
             const parsedFormula = parseFormula(formula);
-            const rolls = roll(parsedFormula.rings, parsedFormula.skills, secureRandomNumber);
+            const rolls = roll(parsedFormula, secureRandomNumber);
             data.content = formatRolls(rolls);
         } catch (e) {
             data.content = e.message;
@@ -31,16 +33,16 @@ Hooks.on('preCreateChatMessage', (_, data) => {
     }
 });
 
-function parseDice(inputs: HTMLInputElement[]): RollResult[] {
+function parseDice(inputs: HTMLInputElement[]): L5RRoll[] {
     return inputs
         .map((roll) => {
             const die = parseInt(roll.dataset.die ?? '0', 10);
             const faces = parseInt(roll.dataset.face ?? '0', 10);
-            return new RollResult(die, faces);
+            return new L5RRoll(die, faces);
         });
 }
 
-function renderNewRoll(rolls: RollResult[]) {
+function renderNewRoll(rolls: L5RRoll[]) {
     const chatData: ChatData = {
         user: game.user.id,
         content: formatRolls(rolls),
