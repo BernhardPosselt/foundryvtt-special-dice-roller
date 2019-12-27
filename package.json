@@ -24,5 +24,9 @@
   },
   "devDependencies": {
     "@types/array.prototype.flatmap": "^1.2.0"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
   }
 }

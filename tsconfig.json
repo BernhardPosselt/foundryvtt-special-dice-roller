@@ -6,13 +6,13 @@
       "es2019"
     ],
     "target": "es2019",
-    "allowJs": false,                       /* Allow javascript files to be compiled. */
-    "sourceMap": true,                     /* Generates corresponding '.map' file. */
+    "allowJs": false,
+    "sourceMap": true,
     "strict": true,
-    "noUnusedLocals": true,                /* Report errors on unused locals. */
-    "noUnusedParameters": true,            /* Report errors on unused parameters. */
-    "noImplicitReturns": true,             /* Report error when not all code paths in function return a value. */
-    "noFallthroughCasesInSwitch": true,    /* Report errors for fallthrough cases in switch statement. */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "build"
