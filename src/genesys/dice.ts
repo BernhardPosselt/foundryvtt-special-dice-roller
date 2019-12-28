@@ -161,6 +161,10 @@ export function toRollResult(partial: Partial<RollResult>): RollResult {
     return Object.assign(new RollResult(), partial);
 }
 
+export function toRolls(partial: Partial<Rolls>): Rolls {
+    return Object.assign(new Rolls(), partial);
+}
+
 export class InterpretedResult {
     constructor(
         public succeeded: boolean = false,

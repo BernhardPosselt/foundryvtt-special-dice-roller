@@ -1,42 +1,46 @@
 import {Rolls, rollsMonoid} from './dice';
 import {combineAll} from '../lang';
 import {countMatches} from '../arrays';
+import {Parser, splitComplexRoll} from '../parser';
 
-export function parseComplexFormula(trimmedFormula: string) {
-    const rolls = trimmedFormula.split('+')
-        .map((part) => {
-            const parts = part.split('d');
-            const number = parseInt(parts[0], 10);
-            if (parts[1] === 'r' || parts[1] === 'b') {
-                return new Rolls(number, 0);
-            } else {
-                return new Rolls(0, number);
-            }
-        });
-    return combineAll(rolls, rollsMonoid);
-}
+export class SimpleParser extends Parser<Rolls> {
+    constructor() {
+        super(/^[rswb]+$/);
+    }
 
-export function parseSimpleFormula(trimmedFormula: string) {
-    const letters = trimmedFormula.split('');
-    const rings = countMatches(letters, (letter) => letter === 'r' || letter === 'b');
-    const skills = countMatches(letters, (letter) => letter === 's' || letter === 'w');
-    return new Rolls(rings, skills);
-}
+    parse(formula: string): Rolls {
+        const letters = formula.split('');
+        const rings = countMatches(letters, (letter) => letter === 'r' || letter === 'b');
+        const skills = countMatches(letters, (letter) => letter === 's' || letter === 'w');
+        return new Rolls(rings, skills);
+    }
 
-export function parseFormula(formula: string): Rolls {
-    const trimmedFormula = formula.replace(/\s+/g, '')
-        .toLowerCase();
-    if (/^[1-9][0-9]*d(?:[rswb])(?:\+[1-9][0-9]*d(?:[rswb]))*$/.test(trimmedFormula)) {
-        return parseComplexFormula(trimmedFormula);
-    } else if (/^[rswb]+$/.test(trimmedFormula)) {
-        return parseSimpleFormula(trimmedFormula);
-    } else {
-        throw new FormulaParseError(`Could not parse formula ${formula}! Needs to be formatted like: "wwbb" or "rss" or "xdr" or "xds" or "xdr+yds" where x and y are positive numbers`);
+    help(): string {
+        return 'ssrr, ss, rr, wwbb, ww, bb';
     }
 }
 
-export class FormulaParseError extends Error {
-    constructor(msg: string) {
-        super(msg);
+export class ComplexParser extends Parser<Rolls> {
+    constructor() {
+        super(/^[1-9][0-9]*d(?:[rswb])(?:\+[1-9][0-9]*d(?:[rswb]))*$/);
+    }
+
+    parse(formula: string): Rolls {
+        const rolls = formula.split('+')
+            .map((part) => {
+                const [die, number] = splitComplexRoll(part);
+                if (die === 'r' || die === 'b') {
+                    return new Rolls(number, 0);
+                } else if (die === 's' || die === 'w') {
+                    return new Rolls(0, number);
+                } else {
+                    throw new Error(`Unexpected die letter ${die}`);
+                }
+            });
+        return combineAll(rolls, rollsMonoid);
+    }
+
+    help(): string {
+        return '2dr+1ds, 2db+1dw, 2dr, 1ds, 2dw, 1db';
     }
 }

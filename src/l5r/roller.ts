@@ -13,13 +13,17 @@ import {
 import {countMatches} from '../arrays';
 import {combineAll} from '../lang';
 import {rollDie, Roller} from '../roller';
-import {parseFormula} from './parser';
 import * as Mustache from 'mustache';
 import tpl from './template';
+import {parseFormula, Parser} from '../parser';
+import {ComplexParser, SimpleParser} from './parser';
 
 export class L5RRoller extends Roller {
+    private parsers: Parser<Rolls>[];
+
     constructor(private rng: RandomNumberGenerator, command: string) {
         super(command);
+        this.parsers = [new SimpleParser(), new ComplexParser()];
     }
 
     roll(rolls: Rolls): L5RRoll[] {
@@ -54,7 +58,7 @@ export class L5RRoller extends Roller {
 
     protected rollFormula(formula: string): string {
         try {
-            const parsedFormula = parseFormula(formula);
+            const parsedFormula = parseFormula(formula, this.parsers);
             const rolls = this.roll(parsedFormula);
             return this.formatRolls(rolls);
         } catch (e) {
