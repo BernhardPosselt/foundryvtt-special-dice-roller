@@ -1,5 +1,6 @@
 import {Monoid} from '../lang';
 import {Roll} from '../roller';
+import {getDieImage} from '../images';
 
 export enum Dice {
     RING,
@@ -61,62 +62,49 @@ export class RollResult {
     }
 }
 
+const ringImages = new Map<Faces, string>();
+ringImages.set(Faces.FAILURE, 'black');
+ringImages.set(Faces.EXPLODING_STRIFE, 'blacket');
+ringImages.set(Faces.OPPORTUNITY, 'blacko');
+ringImages.set(Faces.OPPORTUNITY_STRIFE, 'blackot');
+ringImages.set(Faces.SUCCESS, 'blacks');
+ringImages.set(Faces.SUCCESS_STRIFE, 'blackst');
+
+const skillImages = new Map<Faces, string>();
+skillImages.set(Faces.FAILURE, 'white');
+skillImages.set(Faces.EXPLODING, 'whitee');
+skillImages.set(Faces.EXPLODING_STRIFE, 'whiteet');
+skillImages.set(Faces.OPPORTUNITY, 'whiteo');
+skillImages.set(Faces.SUCCESS, 'whites');
+skillImages.set(Faces.SUCCESS_OPPORTUNITY, 'whiteso');
+skillImages.set(Faces.SUCCESS_STRIFE, 'whitest');
+
+export const dieRollImages = new Map<Dice, Map<Faces, string>>();
+dieRollImages.set(Dice.RING, ringImages);
+dieRollImages.set(Dice.SKILL, skillImages);
+
 export class L5RRoll extends Roll<Dice, Faces> {
 
     public get imageName(): string {
-        if (this.die === Dice.RING) {
-            if (this.face === Faces.FAILURE) {
-                return 'black';
-            } else if (this.face === Faces.EXPLODING_STRIFE) {
-                return 'blacket';
-            } else if (this.face === Faces.OPPORTUNITY) {
-                return 'blacko';
-            } else if (this.face === Faces.OPPORTUNITY_STRIFE) {
-                return 'blackot';
-            } else if (this.face === Faces.SUCCESS) {
-                return 'blacks';
-            } else {
-                return 'blackst';
-            }
-        } else {
-            if (this.face === Faces.FAILURE) {
-                return 'white';
-            } else if (this.face === Faces.EXPLODING) {
-                return 'whitee';
-            } else if (this.face === Faces.EXPLODING_STRIFE) {
-                return 'whiteet';
-            } else if (this.face === Faces.OPPORTUNITY) {
-                return 'whiteo';
-            } else if (this.face === Faces.SUCCESS) {
-                return 'whites';
-            } else if (this.face === Faces.SUCCESS_OPPORTUNITY) {
-                return 'whiteso';
-            } else {
-                return 'whitest';
-            }
-        }
+        return getDieImage(dieRollImages, this.die, this.face);
     }
 }
 
+const rollToRollResultMapping = new Map<Faces, Partial<RollResult>>();
+rollToRollResultMapping.set(Faces.SUCCESS, {successes: 1});
+rollToRollResultMapping.set(Faces.FAILURE, {failures: 1});
+rollToRollResultMapping.set(Faces.EXPLODING, {successes: 1, exploding: 1});
+rollToRollResultMapping.set(Faces.OPPORTUNITY, {opportunity: 1});
+rollToRollResultMapping.set(Faces.SUCCESS_STRIFE, {successes: 1, strife: 1});
+rollToRollResultMapping.set(Faces.OPPORTUNITY_STRIFE, {opportunity: 1, strife: 1});
+rollToRollResultMapping.set(Faces.EXPLODING_STRIFE, {successes: 1, exploding: 1, strife: 1});
+rollToRollResultMapping.set(Faces.EXPLODING_OPPORTUNITY, {successes: 1, exploding: 1, opportunity: 1});
+rollToRollResultMapping.set(Faces.SUCCESS_OPPORTUNITY, {successes: 1, opportunity: 1});
+
 export function rollToRollResult(roll: L5RRoll): RollResult {
-    if (roll.face === Faces.SUCCESS) {
-        return toRollResult({successes: 1});
-    } else if (roll.face === Faces.FAILURE) {
-        return toRollResult({failures: 1});
-    } else if (roll.face === Faces.EXPLODING) {
-        return toRollResult({successes: 1, exploding: 1});
-    } else if (roll.face === Faces.OPPORTUNITY) {
-        return toRollResult({opportunity: 1});
-    } else if (roll.face === Faces.SUCCESS_STRIFE) {
-        return toRollResult({successes: 1, strife: 1});
-    } else if (roll.face === Faces.OPPORTUNITY_STRIFE) {
-        return toRollResult({opportunity: 1, strife: 1});
-    } else if (roll.face === Faces.EXPLODING_STRIFE) {
-        return toRollResult({successes: 1, exploding: 1, strife: 1});
-    } else if (roll.face === Faces.EXPLODING_OPPORTUNITY) {
-        return toRollResult({successes: 1, exploding: 1, opportunity: 1});
-    } else if (roll.face === Faces.SUCCESS_OPPORTUNITY) {
-        return toRollResult({successes: 1, opportunity: 1});
+    const result = rollToRollResultMapping.get(roll.face);
+    if (result !== undefined) {
+        return toRollResult(result);
     } else {
         throw new Error('Unhandled Face');
     }

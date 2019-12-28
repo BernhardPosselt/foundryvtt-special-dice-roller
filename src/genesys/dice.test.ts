@@ -10,6 +10,8 @@ test('no successes count as a failed check', () => {
     expect(result.abilities).toBe(0);
     expect(result.despairs).toBe(0);
     expect(result.triumphs).toBe(0);
+    expect(result.force).toBe(0);
+    expect(result.darkForce).toBe(0);
     expect(result.succeeded).toBe(false);
 });
 
@@ -25,6 +27,8 @@ test('one success is a successful check', () => {
     expect(result.abilities).toBe(0);
     expect(result.despairs).toBe(0);
     expect(result.triumphs).toBe(0);
+    expect(result.force).toBe(0);
+    expect(result.darkForce).toBe(0);
     expect(result.succeeded).toBe(true);
 });
 
@@ -43,6 +47,8 @@ test('successes should cancel failures', () => {
     expect(result.abilities).toBe(0);
     expect(result.despairs).toBe(1);
     expect(result.triumphs).toBe(2);
+    expect(result.force).toBe(0);
+    expect(result.darkForce).toBe(0);
     expect(result.succeeded).toBe(true);
 });
 
@@ -61,6 +67,8 @@ test('failures should cancel successes', () => {
     expect(result.abilities).toBe(0);
     expect(result.despairs).toBe(2);
     expect(result.triumphs).toBe(1);
+    expect(result.force).toBe(0);
+    expect(result.darkForce).toBe(0);
     expect(result.succeeded).toBe(false);
 });
 
@@ -77,6 +85,8 @@ test('threats should cancel abilities', () => {
     expect(result.abilities).toBe(1);
     expect(result.despairs).toBe(0);
     expect(result.triumphs).toBe(0);
+    expect(result.force).toBe(0);
+    expect(result.darkForce).toBe(0);
     expect(result.succeeded).toBe(false);
 });
 
@@ -93,5 +103,25 @@ test('abilities should cancel threats', () => {
     expect(result.abilities).toBe(0);
     expect(result.despairs).toBe(0);
     expect(result.triumphs).toBe(0);
+    expect(result.force).toBe(0);
+    expect(result.darkForce).toBe(0);
+    expect(result.succeeded).toBe(false);
+});
+
+test('should map force dice', () => {
+    const rollResult = toRollResult({
+        force: 1,
+        darkForce: 2
+    });
+    const result = interpretRollResult(rollResult);
+
+    expect(result.successes).toBe(0);
+    expect(result.failures).toBe(0);
+    expect(result.threats).toBe(0);
+    expect(result.abilities).toBe(0);
+    expect(result.despairs).toBe(0);
+    expect(result.triumphs).toBe(0);
+    expect(result.force).toBe(1);
+    expect(result.darkForce).toBe(2);
     expect(result.succeeded).toBe(false);
 });

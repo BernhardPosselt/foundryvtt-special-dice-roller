@@ -1,5 +1,6 @@
 import {Monoid} from '../lang';
 import {Roll} from '../roller';
+import {getDieImage} from '../images';
 
 export enum Dice {
     BOOST,
@@ -7,7 +8,8 @@ export enum Dice {
     ABILITY,
     DIFFICULTY,
     PROFICIENCY,
-    CHALLENGE
+    CHALLENGE,
+    FORCE
 }
 
 export enum Faces {
@@ -23,7 +25,11 @@ export enum Faces {
     TRIUMPH,
     DESPAIR,
     SUCCESS_ABILITY,
-    FAILURE_THREAT
+    FAILURE_THREAT,
+    DARK_FORCE,
+    DOUBLE_DARK_FORCE,
+    FORCE,
+    DOUBLE_FORCE
 }
 
 export const BOOST_ROLL_TABLE: Faces[] = [
@@ -96,6 +102,21 @@ export const CHALLENGE_ROLL_TABLE: Faces[] = [
     Faces.DESPAIR,
 ];
 
+export const FORCE_ROLL_TABLE: Faces[] = [
+    Faces.DARK_FORCE,
+    Faces.DARK_FORCE,
+    Faces.DARK_FORCE,
+    Faces.DARK_FORCE,
+    Faces.DARK_FORCE,
+    Faces.DARK_FORCE,
+    Faces.DOUBLE_DARK_FORCE,
+    Faces.FORCE,
+    Faces.FORCE,
+    Faces.DOUBLE_FORCE,
+    Faces.DOUBLE_FORCE,
+    Faces.DOUBLE_FORCE,
+];
+
 export class Rolls {
     constructor(
         public boost = 0,
@@ -104,6 +125,8 @@ export class Rolls {
         public difficulty = 0,
         public proficiency = 0,
         public challenge = 0,
+        public force = 0,
+        public darkForce = 0
     ) {
     }
 }
@@ -117,37 +140,39 @@ export class RollResult {
         public threats = 0,
         public triumphs = 0,
         public despairs = 0,
+        public force = 0,
+        public darkForce = 0
     ) {
     }
 }
 
-const boostImages = new Map<number, string>();
+const boostImages = new Map<Faces, string>();
 boostImages.set(Faces.BLANK, 'blue');
 boostImages.set(Faces.SUCCESS, 'blues');
 boostImages.set(Faces.SUCCESS_ABILITY, 'bluesa');
 boostImages.set(Faces.DOUBLE_ABILITY, 'blueaa');
 boostImages.set(Faces.ABILITY, 'bluea');
 
-const setbackImages = new Map<number, string>();
+const setbackImages = new Map<Faces, string>();
 setbackImages.set(Faces.BLANK, 'black');
 setbackImages.set(Faces.FAILURE, 'blackf');
 setbackImages.set(Faces.THREAT, 'blackt');
 
-const abilityImages = new Map<number, string>();
+const abilityImages = new Map<Faces, string>();
 abilityImages.set(Faces.SUCCESS, 'greens');
 abilityImages.set(Faces.DOUBLE_SUCCESS, 'greenss');
 abilityImages.set(Faces.ABILITY, 'greena');
 abilityImages.set(Faces.SUCCESS_ABILITY, 'greensa');
 abilityImages.set(Faces.DOUBLE_ABILITY, 'greenaa');
 
-const difficultyImages = new Map<number, string>();
+const difficultyImages = new Map<Faces, string>();
 difficultyImages.set(Faces.FAILURE, 'purplef');
 difficultyImages.set(Faces.DOUBLE_FAILURE, 'purpleff');
 difficultyImages.set(Faces.THREAT, 'purplet');
 difficultyImages.set(Faces.DOUBLE_THREAT, 'purplett');
 difficultyImages.set(Faces.FAILURE_THREAT, 'purpleft');
 
-const proficiencyImages = new Map<number, string>();
+const proficiencyImages = new Map<Faces, string>();
 proficiencyImages.set(Faces.SUCCESS, 'yellows');
 proficiencyImages.set(Faces.DOUBLE_SUCCESS, 'yellowss');
 proficiencyImages.set(Faces.ABILITY, 'yellowa');
@@ -155,7 +180,7 @@ proficiencyImages.set(Faces.SUCCESS_ABILITY, 'yellowsa');
 proficiencyImages.set(Faces.DOUBLE_ABILITY, 'yellowaa');
 proficiencyImages.set(Faces.TRIUMPH, 'yellowr');
 
-const challengeImages = new Map<number, string>();
+const challengeImages = new Map<Faces, string>();
 proficiencyImages.set(Faces.FAILURE, 'redf');
 proficiencyImages.set(Faces.DOUBLE_FAILURE, 'redff');
 proficiencyImages.set(Faces.THREAT, 'redt');
@@ -163,54 +188,50 @@ proficiencyImages.set(Faces.FAILURE_THREAT, 'redft');
 proficiencyImages.set(Faces.DOUBLE_THREAT, 'redtt');
 proficiencyImages.set(Faces.DESPAIR, 'redd');
 
+const forceImages = new Map<Faces, string>();
+proficiencyImages.set(Faces.DARK_FORCE, 'whiten');
+proficiencyImages.set(Faces.DOUBLE_DARK_FORCE, 'whitenn');
+proficiencyImages.set(Faces.FORCE, 'whitel');
+proficiencyImages.set(Faces.DOUBLE_FORCE, 'whitell');
+
+export const dieRollImages = new Map<Dice, Map<Faces, string>>();
+dieRollImages.set(Dice.BOOST, boostImages);
+dieRollImages.set(Dice.SETBACK, setbackImages);
+dieRollImages.set(Dice.ABILITY, abilityImages);
+dieRollImages.set(Dice.DIFFICULTY, difficultyImages);
+dieRollImages.set(Dice.PROFICIENCY, proficiencyImages);
+dieRollImages.set(Dice.CHALLENGE, challengeImages);
+dieRollImages.set(Dice.FORCE, forceImages);
 
 export class GenesysRoll extends Roll<Dice, Faces> {
     public get imageName(): string {
-        if (this.die === Dice.BOOST) {
-            return boostImages.get(this.face) as string;
-        } else if (this.die === Dice.SETBACK) {
-            return setbackImages.get(this.face) as string;
-        } else if (this.die === Dice.ABILITY) {
-            return abilityImages.get(this.face) as string;
-        } else if (this.die === Dice.DIFFICULTY) {
-            return difficultyImages.get(this.face) as string;
-        } else if (this.die === Dice.PROFICIENCY) {
-            return proficiencyImages.get(this.face) as string;
-        } else if (this.die === Dice.CHALLENGE) {
-            return challengeImages.get(this.face) as string;
-        } else {
-            throw new Error(`Unknown die ${this.die}`);
-        }
+        return getDieImage(dieRollImages, this.die, this.face);
     }
 }
 
+const rollToRollResultMapping = new Map<Faces, Partial<RollResult>>();
+rollToRollResultMapping.set(Faces.BLANK, {blanks: 1});
+rollToRollResultMapping.set(Faces.SUCCESS, {successes: 1});
+rollToRollResultMapping.set(Faces.DOUBLE_SUCCESS, {successes: 2});
+rollToRollResultMapping.set(Faces.FAILURE, {failures: 1});
+rollToRollResultMapping.set(Faces.DOUBLE_FAILURE, {failures: 2});
+rollToRollResultMapping.set(Faces.ABILITY, {abilities: 1});
+rollToRollResultMapping.set(Faces.DOUBLE_ABILITY, {abilities: 2});
+rollToRollResultMapping.set(Faces.THREAT, {threats: 1});
+rollToRollResultMapping.set(Faces.DOUBLE_THREAT, {threats: 2});
+rollToRollResultMapping.set(Faces.TRIUMPH, {triumphs: 1, successes: 1});
+rollToRollResultMapping.set(Faces.DESPAIR, {despairs: 1, failures: 1});
+rollToRollResultMapping.set(Faces.SUCCESS_ABILITY, {successes: 1, abilities: 1});
+rollToRollResultMapping.set(Faces.FAILURE_THREAT, {failures: 1, threats: 1});
+rollToRollResultMapping.set(Faces.DARK_FORCE, {darkForce: 1});
+rollToRollResultMapping.set(Faces.DOUBLE_DARK_FORCE, {darkForce: 2});
+rollToRollResultMapping.set(Faces.FORCE, {force: 1});
+rollToRollResultMapping.set(Faces.DOUBLE_DARK_FORCE, {force: 2});
+
 export function rollToRollResult(roll: GenesysRoll): RollResult {
-    if (roll.face === Faces.BLANK) {
-        return toRollResult({blanks: 1});
-    } else if (roll.face === Faces.SUCCESS) {
-        return toRollResult({successes: 1});
-    } else if (roll.face === Faces.DOUBLE_SUCCESS) {
-        return toRollResult({successes: 2});
-    } else if (roll.face === Faces.FAILURE) {
-        return toRollResult({failures: 1});
-    } else if (roll.face === Faces.DOUBLE_FAILURE) {
-        return toRollResult({failures: 2});
-    } else if (roll.face === Faces.ABILITY) {
-        return toRollResult({abilities: 1});
-    } else if (roll.face === Faces.DOUBLE_ABILITY) {
-        return toRollResult({abilities: 2});
-    } else if (roll.face === Faces.THREAT) {
-        return toRollResult({threats: 1});
-    } else if (roll.face === Faces.DOUBLE_THREAT) {
-        return toRollResult({threats: 2});
-    } else if (roll.face === Faces.TRIUMPH) {
-        return toRollResult({triumphs: 1, successes: 1});
-    } else if (roll.face === Faces.DESPAIR) {
-        return toRollResult({despairs: 1, failures: 1});
-    } else if (roll.face === Faces.SUCCESS_ABILITY) {
-        return toRollResult({successes: 1, abilities: 1});
-    } else if (roll.face === Faces.FAILURE_THREAT) {
-        return toRollResult({failures: 1, threats: 1});
+    const result = rollToRollResultMapping.get(roll.face);
+    if (result !== undefined) {
+        return toRollResult(result);
     } else {
         throw new Error('Unhandled Face');
     }
@@ -233,6 +254,8 @@ export class InterpretedResult {
         public failures = 0,
         public abilities = 0,
         public threats = 0,
+        public force = 0,
+        public darkForce = 0
     ) {
     }
 }
@@ -253,6 +276,8 @@ export function interpretRollResult(result: RollResult) {
         failures,
         abilities,
         threats,
+        result.force,
+        result.darkForce
     );
 }
 
@@ -266,6 +291,8 @@ export const rollResultMonoid: Monoid<RollResult> = {
         roll1.threats + roll2.threats,
         roll1.triumphs + roll2.triumphs,
         roll1.despairs + roll2.despairs,
+        roll1.force + roll2.force,
+        roll1.darkForce + roll2.darkForce,
     ),
 };
 
@@ -278,5 +305,7 @@ export const rollsMonoid: Monoid<Rolls> = {
         roll1.difficulty + roll2.difficulty,
         roll1.proficiency + roll2.proficiency,
         roll1.challenge + roll2.challenge,
+        roll1.force + roll2.force,
+        roll1.darkForce + roll2.darkForce,
     ),
 };
