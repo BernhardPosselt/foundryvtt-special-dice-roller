@@ -13,10 +13,10 @@ export function tpl(system: string) {
             <ul>
             {{#results}}
                 {{#succeeded}}
-                <li>Check: succeeded</li>
+                <li class="l5r-roller-succeeded">Check: succeeded</li>
                 {{/succeeded}}
                 {{^succeeded}}
-                <li>Check: failed</li>
+                <li class="l5r-roller-failed">Check: failed</li>
                 {{/succeeded}}
                 {{#successes}}
                 <li>Successes: {{successes}}</li>

@@ -41,7 +41,7 @@ test('successes should cancel failures', () => {
     });
     const result = interpretRollResult(rollResult);
 
-    expect(result.successes).toBe(2);
+    expect(result.successes).toBe(1);
     expect(result.failures).toBe(0);
     expect(result.threats).toBe(0);
     expect(result.advantages).toBe(0);
@@ -62,7 +62,7 @@ test('failures should cancel successes', () => {
     const result = interpretRollResult(rollResult);
 
     expect(result.successes).toBe(0);
-    expect(result.failures).toBe(2);
+    expect(result.failures).toBe(1);
     expect(result.threats).toBe(0);
     expect(result.advantages).toBe(0);
     expect(result.despairs).toBe(2);

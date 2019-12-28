@@ -80,3 +80,37 @@ test('should interpret results for setback', () => {
     expect(interpreted.darkForce).toBe(0);
     expect(interpreted.succeeded).toBe(false);
 });
+
+test('should correctly calculate successes', () => {
+    const roller = new GenesysRoller(makeRng( 3, 11), 'gen');
+    const result = roller.roll(new Rolls(0, 0, 0, 0, 2, 0, 0));
+    const combined = roller.combineRolls(result);
+    const interpreted = interpretRollResult(combined);
+
+    expect(interpreted.successes).toBe(3);
+    expect(interpreted.failures).toBe(0);
+    expect(interpreted.advantages).toBe(0);
+    expect(interpreted.threats).toBe(0);
+    expect(interpreted.triumphs).toBe(1);
+    expect(interpreted.despairs).toBe(0);
+    expect(interpreted.force).toBe(0);
+    expect(interpreted.darkForce).toBe(0);
+    expect(interpreted.succeeded).toBe(true);
+});
+
+test('should correctly calculate failures', () => {
+    const roller = new GenesysRoller(makeRng( 3, 11), 'gen');
+    const result = roller.roll(new Rolls(0, 0, 0, 0, 0, 2, 0));
+    const combined = roller.combineRolls(result);
+    const interpreted = interpretRollResult(combined);
+
+    expect(interpreted.successes).toBe(0);
+    expect(interpreted.failures).toBe(3);
+    expect(interpreted.advantages).toBe(0);
+    expect(interpreted.threats).toBe(0);
+    expect(interpreted.triumphs).toBe(0);
+    expect(interpreted.despairs).toBe(1);
+    expect(interpreted.force).toBe(0);
+    expect(interpreted.darkForce).toBe(0);
+    expect(interpreted.succeeded).toBe(false);
+});
