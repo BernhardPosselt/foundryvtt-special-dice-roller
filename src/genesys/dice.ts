@@ -237,7 +237,7 @@ rollToRollResultMapping.set(Faces.FAILURE_THREAT, {failures: 1, threats: 1});
 rollToRollResultMapping.set(Faces.DARK_FORCE, {darkForce: 1});
 rollToRollResultMapping.set(Faces.DOUBLE_DARK_FORCE, {darkForce: 2});
 rollToRollResultMapping.set(Faces.FORCE, {force: 1});
-rollToRollResultMapping.set(Faces.DOUBLE_DARK_FORCE, {force: 2});
+rollToRollResultMapping.set(Faces.DOUBLE_FORCE, {force: 2});
 
 export function rollToRollResult(roll: GenesysRoll): RollResult {
     const result = rollToRollResultMapping.get(roll.face);
