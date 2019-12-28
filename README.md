@@ -44,3 +44,5 @@ Usage is similar to L5R but re-rolls and keeping dice is unsupported. Use the **
 * p: proficiency
 * c: challenge
 * f: force (only sw)
+
+![roller usage](docs/rollergen.png)
