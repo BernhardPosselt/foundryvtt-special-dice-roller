@@ -16,7 +16,7 @@ import {rollDie, Roller} from '../roller';
 import * as Mustache from 'mustache';
 import tpl from './template';
 import {parseFormula, Parser} from '../parser';
-import {ComplexParser, SimpleParser} from './parser';
+import {SimpleParser} from './parser';
 import {escapeHtml} from '../util';
 
 export class L5RRoller extends Roller {
@@ -24,7 +24,7 @@ export class L5RRoller extends Roller {
 
     constructor(private rng: RandomNumberGenerator, command: string) {
         super(command);
-        this.parsers = [new SimpleParser(), new ComplexParser()];
+        this.parsers = [new SimpleParser()];
     }
 
     roll(rolls: Rolls): L5RRoll[] {

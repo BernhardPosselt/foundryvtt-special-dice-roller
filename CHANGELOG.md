@@ -4,11 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2019-12-28
+### Added
+- Accept numbers for simple formulas: wwbb can now be written as 2w2b
+
+### Changed
+
+- Removed xdy+zda format in favor of simpler roll formula
+
+### Security
+- Fix possible XSS when entering an invalid roll formula
+
 ## [0.3.0] - 2019-12-28
+### Added
 
 - Added support for FFG's Genesys and Star Wars dice
 
-### Added
 
 ## [0.2.0] - 2019-12-27
 

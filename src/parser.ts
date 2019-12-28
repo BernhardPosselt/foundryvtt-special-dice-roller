@@ -34,30 +34,47 @@ export class FormulaParseError extends Error {
     }
 }
 
-export function splitComplexRoll(roll: string): [string, number] {
-    const number = parseInt(roll.substring(0, roll.indexOf('d')), 10);
-    const die = roll.substring(roll.indexOf('d')+1);
-    return [die, number];
-}
-
 export class DefaultSimpleParser<R> extends Parser<R> {
     private readonly letters: string[];
+    private numbers = new Set<string>();
 
     constructor(
         alphabet: string,
-        private letterToRolls: (letter: string) => R,
+        private letterToRolls: (letter: string, number: number) => R,
         private rollsMonoid: Monoid<R>,
         private letterExplanation: string[]
     ) {
-        super(new RegExp(`^[${alphabet}]+$`));
+        super(new RegExp(`^(?:(?:[1-9][0-9]*)?[${alphabet}])+$`));
         this.letters = alphabet.split('');
+        this.numbers.add('0');
+        this.numbers.add('1');
+        this.numbers.add('2');
+        this.numbers.add('3');
+        this.numbers.add('4');
+        this.numbers.add('5');
+        this.numbers.add('6');
+        this.numbers.add('7');
+        this.numbers.add('8');
+        this.numbers.add('9');
     }
 
     parse(formula: string): R {
-        const rolls = formula.split('')
-            .map((letter) => {
-                return this.letterToRolls(letter);
-            });
+        const letters = formula.split('');
+        const rolls = [];
+        let modifier = '';
+        for (let letter of letters) {
+            if (this.numbers.has(letter)) {
+                modifier += letter;
+            } else {
+                if (modifier.length > 0) {
+                    const multiplier = parseInt(modifier, 10);
+                    rolls.push(this.letterToRolls(letter, multiplier));
+                    modifier = '';
+                } else {
+                    rolls.push(this.letterToRolls(letter, 1));
+                }
+            }
+        }
         return combineAll(rolls, this.rollsMonoid);
     }
 
@@ -65,39 +82,7 @@ export class DefaultSimpleParser<R> extends Parser<R> {
         const mappings = this.letterExplanation
             .map((explanation, index) => `${this.letters[index]} = ${explanation}`)
             .join(', ');
-        return `Any combination of the following letters: ${this.letters.join(', ')} (${mappings}). To roll multiple dice simply add multiple letters`;
-    }
-}
-
-export class DefaultComplexParser<R> extends Parser<R> {
-    private readonly letters: string[];
-
-    constructor(
-        alphabet: string,
-        private letterToRolls: (letter: string, value: number) => R,
-        private rollsMonoid: Monoid<R>,
-        private letterExplanation: string[]
-    ) {
-        super(new RegExp(`^[1-9][0-9]*d(?:[${alphabet}])(?:\\+[1-9][0-9]*d(?:[${alphabet}]))*$`));
-        this.letters = alphabet.split('');
+        return `Any combination of the following letters: ${this.letters.join(', ')} (${mappings}). To roll multiple dice simply add multiple letters or prepend a number, e.g.: c3ba`;
     }
 
-    parse(formula: string): R {
-        const rolls = formula.split('+')
-            .map((part) => {
-                const [die, number] = splitComplexRoll(part);
-                return this.letterToRolls(die, number);
-            });
-        return combineAll(rolls, this.rollsMonoid);
-    }
-
-    help(): string {
-        const mappings = this.letterExplanation
-            .map((explanation, index) => `${this.letters[index]} = ${explanation}`)
-            .join(', ');
-        const singleExample = '2d' + this.letters[0];
-        const multipleExample = singleExample + '+1d' + this.letters[1];
-        return `Any combination of the following letters: ${this.letters.join(', ')} (${mappings}) formatted like: ndl (n = number, l = letter), e.g.: ${singleExample}. To roll different dice, simply separate them via a +, e.g.: ${multipleExample}`;
-
-    }
 }

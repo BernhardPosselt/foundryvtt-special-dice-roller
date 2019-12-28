@@ -10,7 +10,7 @@ import {
     Rolls, rollToRollResult,
     SETBACK_ROLL_TABLE,
 } from './dice';
-import {ComplexParser, ComplexSWParser, SimpleParser, SimpleSWParser} from './parser';
+import {SimpleParser, SimpleSWParser} from './parser';
 import * as Mustache from 'mustache';
 import {combineAll} from '../lang';
 import {tpl} from './template';
@@ -22,9 +22,9 @@ export class GenesysRoller extends Roller {
     constructor(private rng: RandomNumberGenerator, command: string) {
         super(command);
         if (command === 'sw') {
-            this.parsers = [new SimpleSWParser(), new ComplexSWParser()];
+            this.parsers = [new SimpleSWParser()];
         } else {
-            this.parsers = [new SimpleParser(), new ComplexParser()];
+            this.parsers = [new SimpleParser()];
         }
     }
 
