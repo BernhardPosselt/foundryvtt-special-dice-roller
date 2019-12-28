@@ -125,8 +125,7 @@ export class Rolls {
         public difficulty = 0,
         public proficiency = 0,
         public challenge = 0,
-        public force = 0,
-        public darkForce = 0
+        public force = 0
     ) {
     }
 }
@@ -306,6 +305,5 @@ export const rollsMonoid: Monoid<Rolls> = {
         roll1.proficiency + roll2.proficiency,
         roll1.challenge + roll2.challenge,
         roll1.force + roll2.force,
-        roll1.darkForce + roll2.darkForce,
     ),
 };

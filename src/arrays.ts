@@ -1,4 +1,4 @@
-export type Predicate<T> = (value: T) => boolean
+import {Predicate} from './lang';
 
 export function countMatches<T>(array: T[], match: Predicate<T>): number {
     let count = 0;

@@ -8,7 +8,7 @@ export class Roll<D, F> {
 }
 
 export abstract class Roller {
-    protected constructor(private command: string) {
+    protected constructor(protected command: string) {
     }
 
     handlesCommand(command: string): boolean {

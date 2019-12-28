@@ -10,17 +10,21 @@ import {
     Rolls, rollToRollResult,
     SETBACK_ROLL_TABLE,
 } from './dice';
-import {ComplexParser, SimpleParser} from './parser';
+import {ComplexParser, ComplexSWParser, SimpleParser, SimpleSWParser} from './parser';
 import * as Mustache from 'mustache';
-import tpl from './template';
 import {combineAll} from '../lang';
+import {tpl} from './template';
 
 export class GenesysRoller extends Roller {
     private readonly parsers: Parser<Rolls>[];
 
     constructor(private rng: RandomNumberGenerator, command: string) {
         super(command);
-        this.parsers = [new SimpleParser(), new ComplexParser()];
+        if (command === 'sw') {
+            this.parsers = [new SimpleSWParser(), new ComplexSWParser()];
+        } else {
+            this.parsers = [new SimpleParser(), new ComplexParser()];
+        }
     }
 
     roll(rolls: Rolls): GenesysRoll[] {
@@ -63,7 +67,7 @@ export class GenesysRoller extends Roller {
     }
 
     private formatRolls(rolls: GenesysRoll[]): string {
-        return Mustache.render(tpl, {
+        return Mustache.render(tpl(this.command), {
             rolls: rolls,
             results: interpretRollResult(this.combineRolls(rolls)),
             timestamp: new Date().getTime(),

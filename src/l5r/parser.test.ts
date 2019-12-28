@@ -16,7 +16,7 @@ test('it should parse a mixed roll formula', () => {
 });
 
 test('it should fail to parse a roll formula', () => {
-    const msg = 'Incorrect roll formula 1dx + 4ds! Usage: ssrr, ss, rr, wwbb, ww, bb, 2dr+1ds, 2db+1dw, 2dr, 1ds, 2dw, 1db';
+    const msg = 'Incorrect roll formula 1dx + 4ds! Usage: Any combination of the following letters: r, b, w, s (r = ring, b = ring, w = skill, s = skill). To roll multiple dice simply add multiple letters; Any combination of the following letters: r, b, w, s (r = ring, b = ring, w = skill, s = skill) formatted like: ndl (n = number, l = letter), e.g.: 2dr. To roll different dice, simply separate them via a +, e.g.: 2dr+1db';
     expect(() => parseFormula("1dx + 4ds", parsers)).toThrow(msg);
 });
 

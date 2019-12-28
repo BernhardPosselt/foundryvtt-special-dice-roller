@@ -9,6 +9,7 @@ Hooks.on('preCreateChatMessage', (_, data) => {
     const rollers = [
         new L5RRoller(secureRandomNumber, 'l5r'),
         new GenesysRoller(secureRandomNumber, 'gen'),
+        new GenesysRoller(secureRandomNumber, 'sw'),
     ];
     if (message !== undefined) {
         for (let roller of rollers) {

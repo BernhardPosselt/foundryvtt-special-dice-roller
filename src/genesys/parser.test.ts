@@ -14,7 +14,7 @@ test('it should parse a roll formula', () => {
 });
 
 test('it should fail to parse a roll formula', () => {
-    const msg = 'Incorrect roll formula 1dx + 4ds! Usage: bbssaaddppcc, bb, ss, aaa, dd, pp, cc, 2db+2ds+2da+2dd+2dp+2dc, 2db, 2ds, 2da, 2dd, 2dp, 2dc';
+    const msg = 'Incorrect roll formula 1dx + 4ds! Usage: bbssaaddppcc, bb, ss, aaa, dd, pp, cc; 2db+2ds+2da+2dd+2dp+2dc, 2db, 2ds, 2da, 2dd, 2dp, 2dc';
     expect(() => parseFormula("1dx + 4ds", parsers)).toThrow(msg);
 });
 
