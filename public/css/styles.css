@@ -12,7 +12,19 @@
     outline: none;
 }
 
+.l5r-roller form input[type=checkbox]:disabled {
+    cursor: default;
+}
+
 .l5r-roller form input[type=checkbox]:checked {
     outline: none;
     border: 1px solid #ac0f1a;
+}
+
+.l5r-roller-succeeded {
+    color: darkgreen;
+}
+
+.l5r-roller-failed {
+    color: darkred;
 }
