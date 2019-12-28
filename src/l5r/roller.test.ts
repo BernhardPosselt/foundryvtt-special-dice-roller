@@ -1,5 +1,5 @@
 import {makeRng} from '../rng';
-import {Dice, Faces, L5RRoll, Rolls} from './dice';
+import {Dice, Faces, interpretResult, L5RRoll, Rolls} from './dice';
 import {L5RRoller} from './roller';
 
 test('should react to l5r command', () => {
@@ -192,7 +192,7 @@ test('should roll a skill 12', () => {
 test('should count results', () => {
     const roller = new L5RRoller(makeRng(0, 2, 4, 5, 7, 0, 8, 0, 9), '');
     const result = roller.roll(new Rolls(0,7));
-    const count = roller.combineRolls(result);
+    const count = interpretResult(roller.combineRolls(result));
 
     expect(count.exploding).toBe(2);
     expect(count.strife).toBe(2);

@@ -93,13 +93,23 @@ export class L5RRoll extends Roll<Dice, Faces> {
 const rollToRollResultMapping = new Map<Faces, Partial<RollResult>>();
 rollToRollResultMapping.set(Faces.SUCCESS, {successes: 1});
 rollToRollResultMapping.set(Faces.FAILURE, {failures: 1});
-rollToRollResultMapping.set(Faces.EXPLODING, {successes: 1, exploding: 1});
+rollToRollResultMapping.set(Faces.EXPLODING, {exploding: 1});
 rollToRollResultMapping.set(Faces.OPPORTUNITY, {opportunity: 1});
 rollToRollResultMapping.set(Faces.SUCCESS_STRIFE, {successes: 1, strife: 1});
 rollToRollResultMapping.set(Faces.OPPORTUNITY_STRIFE, {opportunity: 1, strife: 1});
-rollToRollResultMapping.set(Faces.EXPLODING_STRIFE, {successes: 1, exploding: 1, strife: 1});
-rollToRollResultMapping.set(Faces.EXPLODING_OPPORTUNITY, {successes: 1, exploding: 1, opportunity: 1});
+rollToRollResultMapping.set(Faces.EXPLODING_STRIFE, {exploding: 1, strife: 1});
+rollToRollResultMapping.set(Faces.EXPLODING_OPPORTUNITY, {exploding: 1, opportunity: 1});
 rollToRollResultMapping.set(Faces.SUCCESS_OPPORTUNITY, {successes: 1, opportunity: 1});
+
+export function interpretResult(result: RollResult): RollResult {
+    return new RollResult(
+        result.successes + result.exploding,
+        result.failures,
+        result.opportunity,
+        result.exploding,
+        result.strife
+    )
+}
 
 export function rollToRollResult(roll: L5RRoll): RollResult {
     const result = rollToRollResultMapping.get(roll.face);

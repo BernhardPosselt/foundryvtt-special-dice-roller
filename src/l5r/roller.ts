@@ -1,7 +1,7 @@
 import {RandomNumberGenerator} from '../rng';
 import {
     Dice,
-    Faces,
+    Faces, interpretResult,
     L5RRoll,
     RING_ROLL_TABLE,
     RollResult,
@@ -70,7 +70,7 @@ export class L5RRoller extends Roller {
     private formatRolls(rolls: L5RRoll[]): string {
         return Mustache.render(tpl, {
             rolls: rolls,
-            results: this.combineRolls(rolls),
+            results: interpretResult(this.combineRolls(rolls)),
             timestamp: new Date().getTime(),
             rollIndex: function () {
                 return rolls.indexOf(this);

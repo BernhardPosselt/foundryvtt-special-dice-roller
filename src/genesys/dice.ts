@@ -230,8 +230,8 @@ rollToRollResultMapping.set(Faces.ADVANTAGE, {advantages: 1});
 rollToRollResultMapping.set(Faces.DOUBLE_ADVANTAGE, {advantages: 2});
 rollToRollResultMapping.set(Faces.THREAT, {threats: 1});
 rollToRollResultMapping.set(Faces.DOUBLE_THREAT, {threats: 2});
-rollToRollResultMapping.set(Faces.TRIUMPH, {triumphs: 1, successes: 1});
-rollToRollResultMapping.set(Faces.DESPAIR, {despairs: 1, failures: 1});
+rollToRollResultMapping.set(Faces.TRIUMPH, {triumphs: 1});
+rollToRollResultMapping.set(Faces.DESPAIR, {despairs: 1});
 rollToRollResultMapping.set(Faces.SUCCESS_ADVANTAGE, {successes: 1, advantages: 1});
 rollToRollResultMapping.set(Faces.FAILURE_THREAT, {failures: 1, threats: 1});
 rollToRollResultMapping.set(Faces.DARK_FORCE, {darkForce: 1});
@@ -271,8 +271,8 @@ export class InterpretedResult {
     }
 }
 
-export function interpretRollResult(result: RollResult) {
-    const successBalance = result.successes - result.failures;
+export function interpretRollResult(result: RollResult): InterpretedResult {
+    const successBalance = result.successes + result.triumphs - result.failures - result.despairs;
     const advantageBalance = result.advantages - result.threats;
     const failures = successBalance < 0 ? Math.abs(successBalance) : 0;
     const threats = advantageBalance < 0 ? Math.abs(advantageBalance) : 0;
