@@ -19,7 +19,7 @@ import {parseFormula, Parser} from '../parser';
 import {ComplexParser, SimpleParser} from './parser';
 
 export class L5RRoller extends Roller {
-    private parsers: Parser<Rolls>[];
+    private readonly parsers: Parser<Rolls>[];
 
     constructor(private rng: RandomNumberGenerator, command: string) {
         super(command);
