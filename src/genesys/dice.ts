@@ -145,9 +145,9 @@ export function rollToRollResult(roll: GenesysRoll): RollResult {
     } else if (roll.face === Faces.DOUBLE_THREAT) {
         return toRollResult({threats: 2});
     } else if (roll.face === Faces.TRIUMPH) {
-        return toRollResult({triumphs: 1});
+        return toRollResult({triumphs: 1, successes: 1});
     } else if (roll.face === Faces.DESPAIR) {
-        return toRollResult({despairs: 1});
+        return toRollResult({despairs: 1, failures: 1});
     } else if (roll.face === Faces.SUCCESS_ABILITY) {
         return toRollResult({successes: 1, abilities: 1});
     } else if (roll.face === Faces.FAILURE_THREAT) {
@@ -157,8 +157,40 @@ export function rollToRollResult(roll: GenesysRoll): RollResult {
     }
 }
 
-function toRollResult(partial: Partial<RollResult>): RollResult {
+export function toRollResult(partial: Partial<RollResult>): RollResult {
     return Object.assign(new RollResult(), partial);
+}
+
+export class InterpretedResult {
+    constructor(
+        public succeeded: boolean = false,
+        public despairs = 0,
+        public triumphs = 0,
+        public successes = 0,
+        public failures = 0,
+        public abilities = 0,
+        public threats = 0,
+    ) {
+    }
+}
+
+export function interpretRollResult(result: RollResult) {
+    const successBalance = result.successes + result.triumphs - result.failures - result.despairs;
+    const abilityBalance = result.abilities - result.threats;
+    const failures = successBalance < 0 ? Math.abs(successBalance) : 0;
+    const threats = abilityBalance < 0 ? Math.abs(abilityBalance) : 0;
+    const successes = successBalance > 0 ? successBalance : 0;
+    const abilities = abilityBalance > 0 ? abilityBalance : 0;
+    const succeeded = successBalance > 0;
+    return new InterpretedResult(
+        succeeded,
+        result.despairs,
+        result.triumphs,
+        successes,
+        failures,
+        abilities,
+        threats,
+    );
 }
 
 export const rollResultMonoid: Monoid<RollResult> = {
