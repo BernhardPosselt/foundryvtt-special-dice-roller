@@ -121,8 +121,67 @@ export class RollResult {
     }
 }
 
-export class GenesysRoll extends Roll<Dice, Faces> {
+const boostImages = new Map<number, string>();
+boostImages.set(Faces.BLANK, 'blue');
+boostImages.set(Faces.SUCCESS, 'blues');
+boostImages.set(Faces.SUCCESS_ABILITY, 'bluesa');
+boostImages.set(Faces.DOUBLE_ABILITY, 'blueaa');
+boostImages.set(Faces.ABILITY, 'bluea');
 
+const setbackImages = new Map<number, string>();
+setbackImages.set(Faces.BLANK, 'black');
+setbackImages.set(Faces.FAILURE, 'blackf');
+setbackImages.set(Faces.THREAT, 'blackt');
+
+const abilityImages = new Map<number, string>();
+abilityImages.set(Faces.SUCCESS, 'greens');
+abilityImages.set(Faces.DOUBLE_SUCCESS, 'greenss');
+abilityImages.set(Faces.ABILITY, 'greena');
+abilityImages.set(Faces.SUCCESS_ABILITY, 'greensa');
+abilityImages.set(Faces.DOUBLE_ABILITY, 'greenaa');
+
+const difficultyImages = new Map<number, string>();
+difficultyImages.set(Faces.FAILURE, 'purplef');
+difficultyImages.set(Faces.DOUBLE_FAILURE, 'purpleff');
+difficultyImages.set(Faces.THREAT, 'purplet');
+difficultyImages.set(Faces.DOUBLE_THREAT, 'purplett');
+difficultyImages.set(Faces.FAILURE_THREAT, 'purpleft');
+
+const proficiencyImages = new Map<number, string>();
+proficiencyImages.set(Faces.SUCCESS, 'yellows');
+proficiencyImages.set(Faces.DOUBLE_SUCCESS, 'yellowss');
+proficiencyImages.set(Faces.ABILITY, 'yellowa');
+proficiencyImages.set(Faces.SUCCESS_ABILITY, 'yellowsa');
+proficiencyImages.set(Faces.DOUBLE_ABILITY, 'yellowaa');
+proficiencyImages.set(Faces.TRIUMPH, 'yellowr');
+
+const challengeImages = new Map<number, string>();
+proficiencyImages.set(Faces.FAILURE, 'redf');
+proficiencyImages.set(Faces.DOUBLE_FAILURE, 'redff');
+proficiencyImages.set(Faces.THREAT, 'redt');
+proficiencyImages.set(Faces.FAILURE_THREAT, 'redft');
+proficiencyImages.set(Faces.DOUBLE_THREAT, 'redtt');
+proficiencyImages.set(Faces.DESPAIR, 'redd');
+
+
+export class GenesysRoll extends Roll<Dice, Faces> {
+    public get imageName(): string {
+        if (this.die === Dice.BOOST) {
+            return boostImages.get(this.face) as string;
+        } else if (this.die === Dice.SETBACK) {
+            return setbackImages.get(this.face) as string;
+        } else if (this.die === Dice.ABILITY) {
+            return abilityImages.get(this.face) as string;
+        } else if (this.die === Dice.DIFFICULTY) {
+            return difficultyImages.get(this.face) as string;
+        } else if (this.die === Dice.PROFICIENCY) {
+            return proficiencyImages.get(this.face) as string;
+        } else if (this.die === Dice.CHALLENGE) {
+            return challengeImages.get(this.face) as string;
+        } else {
+            throw new Error(`Unknown die ${this.die}`);
+        }
+    }
 }
 
 export function rollToRollResult(roll: GenesysRoll): RollResult {
