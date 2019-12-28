@@ -4,7 +4,7 @@ import {RandomNumberGenerator} from '../rng';
 import {
     ABILITY_ROLL_TABLE,
     BOOST_ROLL_TABLE, CHALLENGE_ROLL_TABLE,
-    Dice, DIFFICULTY_ROLL_TABLE,
+    Dice, DIFFICULTY_ROLL_TABLE, FORCE_ROLL_TABLE,
     GenesysRoll,
     interpretRollResult, PROFICIENCY_ROLL_TABLE, RollResult, rollResultMonoid,
     Rolls, rollToRollResult,
@@ -32,7 +32,7 @@ export class GenesysRoller extends Roller {
             .map((face) => new GenesysRoll(Dice.BOOST, face));
         const setbacks = rollDie(rolls.setback, SETBACK_ROLL_TABLE, () => false, this.rng)
             .map((face) => new GenesysRoll(Dice.SETBACK, face));
-        const abilities = rollDie(rolls.ability, ABILITY_ROLL_TABLE, () => false, this.rng)
+        const abilities = rollDie(rolls.advantage, ABILITY_ROLL_TABLE, () => false, this.rng)
             .map((face) => new GenesysRoll(Dice.ABILITY, face));
         const difficulties = rollDie(rolls.difficulty, DIFFICULTY_ROLL_TABLE, () => false, this.rng)
             .map((face) => new GenesysRoll(Dice.DIFFICULTY, face));
@@ -40,6 +40,8 @@ export class GenesysRoller extends Roller {
             .map((face) => new GenesysRoll(Dice.PROFICIENCY, face));
         const challenges = rollDie(rolls.challenge, CHALLENGE_ROLL_TABLE, () => false, this.rng)
             .map((face) => new GenesysRoll(Dice.CHALLENGE, face));
+        const forces = rollDie(rolls.force, FORCE_ROLL_TABLE, () => false, this.rng)
+            .map((face) => new GenesysRoll(Dice.FORCE, face));
         return [
             ...boosts,
             ...setbacks,
@@ -47,6 +49,7 @@ export class GenesysRoller extends Roller {
             ...difficulties,
             ...proficiencies,
             ...challenges,
+            ...forces,
         ];
     }
 

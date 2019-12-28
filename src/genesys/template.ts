@@ -24,9 +24,9 @@ export function tpl(system: string) {
                 {{#failures}}
                 <li>Failures: {{failures}}</li>
                 {{/failures}}
-                {{#abilities}}
-                <li>Abilities: {{abilities}}</li>
-                {{/abilities}}
+                {{#advantages}}
+                <li>Advantages: {{advantages}}</li>
+                {{/advantages}}
                 {{#threats}}
                 <li>Threats: {{threats}}</li>
                 {{/threats}}
