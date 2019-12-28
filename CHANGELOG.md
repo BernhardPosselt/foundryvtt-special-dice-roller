@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Removed xdy+zda format in favor of simpler roll formula
+- Removed irrelevant failures from l5r roll results
 
 ### Security
 - Fix possible XSS when entering an invalid roll formula

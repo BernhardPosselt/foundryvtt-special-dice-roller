@@ -22,9 +22,6 @@ const tpl = `
             {{#strife}}
             <li>Strife: {{strife}}</li>
             {{/strife}}
-            {{#failures}}
-            <li>Failures: {{failures}}</li>
-            {{/failures}}
         {{/results}}
         </ul>
     </div>
