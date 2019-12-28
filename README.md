@@ -24,7 +24,7 @@ Roll Legend of the 5 Rings 5th edition dice in the chat window. Auto rolls explo
 
 Use the **/l5r** command using the following dice letters:
 
-* b, r: ring
+* r, b: ring
 * s, w: skill
 
 ![roller usage](docs/l5rroll.png)
@@ -41,6 +41,6 @@ Usage is similar to L5R but re-rolls and keeping dice is unsupported. Use the **
 * d: difficulty
 * p: proficiency
 * c: challenge
-* f: force (only sw)
+* f: force (sw only)
 
 ![roller usage](docs/genroll.png)
