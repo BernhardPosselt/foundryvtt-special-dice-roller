@@ -17,6 +17,7 @@ import * as Mustache from 'mustache';
 import tpl from './template';
 import {parseFormula, Parser} from '../parser';
 import {ComplexParser, SimpleParser} from './parser';
+import {escapeHtml} from '../util';
 
 export class L5RRoller extends Roller {
     private readonly parsers: Parser<Rolls>[];
@@ -62,7 +63,7 @@ export class L5RRoller extends Roller {
             const rolls = this.roll(parsedFormula);
             return this.formatRolls(rolls);
         } catch (e) {
-            return e.message;
+            return escapeHtml(e.message);
         }
     }
 

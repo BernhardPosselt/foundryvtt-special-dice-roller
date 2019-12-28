@@ -14,6 +14,7 @@ import {ComplexParser, ComplexSWParser, SimpleParser, SimpleSWParser} from './pa
 import * as Mustache from 'mustache';
 import {combineAll} from '../lang';
 import {tpl} from './template';
+import {escapeHtml} from '../util';
 
 export class GenesysRoller extends Roller {
     private readonly parsers: Parser<Rolls>[];
@@ -61,7 +62,7 @@ export class GenesysRoller extends Roller {
             const rolls = this.roll(parsedFormula);
             return this.formatRolls(rolls);
         } catch (e) {
-            return e.message;
+            return escapeHtml(e.message);
         }
     }
 
