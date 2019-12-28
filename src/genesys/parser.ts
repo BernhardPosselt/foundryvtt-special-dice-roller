@@ -7,7 +7,8 @@ export class SimpleParser extends DefaultSimpleParser<Rolls> {
             'absdpc',
             letterToRolls,
             rollsMonoid,
-            ['boost', 'setback', 'ability', 'difficulty', 'proficiency', 'challenge']);
+            ['boost', 'setback', 'ability', 'difficulty', 'proficiency', 'challenge']
+        );
     }
 }
 
@@ -17,7 +18,8 @@ export class SimpleSWParser extends DefaultSimpleParser<Rolls> {
             'absdpcf',
             letterToRolls,
             rollsMonoid,
-            ['boost', 'setback', 'ability', 'difficulty', 'proficiency', 'challenge', 'force']);
+            ['boost', 'setback', 'ability', 'difficulty', 'proficiency', 'challenge', 'force']
+        );
     }
 }
 
