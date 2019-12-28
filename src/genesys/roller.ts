@@ -42,7 +42,7 @@ export class GenesysRoller extends Roller {
             .map((face) => new GenesysRoll(Dice.CHALLENGE, face));
         const forces = rollDie(rolls.force, FORCE_ROLL_TABLE, () => false, this.rng)
             .map((face) => new GenesysRoll(Dice.FORCE, face));
-        return [
+        const result = [
             ...boosts,
             ...setbacks,
             ...abilities,
@@ -51,6 +51,8 @@ export class GenesysRoller extends Roller {
             ...challenges,
             ...forces,
         ];
+        console.log(`Rolled ${result} with formula ${rolls}`);
+        return result;
     }
 
     protected rollFormula(formula: string): string {

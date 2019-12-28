@@ -137,3 +137,26 @@ test('should get a dice image', () => {
 
     expect(roll.imageName).toBe('green');
 });
+
+test('should get a correct boost image', () => {
+    const roll = new GenesysRoll(Dice.BOOST, Faces.DOUBLE_ADVANTAGE);
+
+    expect(roll.imageName).toBe('blueaa');
+});
+
+test('should roll correct boost', () => {
+    const rollResult = toRollResult({
+        failures: 1
+    });
+    const result = interpretRollResult(rollResult);
+
+    expect(result.successes).toBe(0);
+    expect(result.failures).toBe(1);
+    expect(result.threats).toBe(0);
+    expect(result.advantages).toBe(0);
+    expect(result.despairs).toBe(0);
+    expect(result.triumphs).toBe(0);
+    expect(result.force).toBe(0);
+    expect(result.darkForce).toBe(0);
+    expect(result.succeeded).toBe(false);
+});

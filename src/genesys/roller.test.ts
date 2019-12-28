@@ -1,6 +1,6 @@
 import {GenesysRoller} from './roller';
 import {makeRng} from '../rng';
-import {Dice, Faces, Rolls} from './dice';
+import {Dice, Faces, interpretRollResult, Rolls} from './dice';
 
 test('should react to gen command', () => {
     const roller = new GenesysRoller(makeRng(0), 'gen');
@@ -47,4 +47,36 @@ test('should count results', () => {
     expect(combined.despairs).toBe(0);
     expect(combined.force).toBe(1);
     expect(combined.darkForce).toBe(0);
+});
+
+test('should interpret results', () => {
+    const roller = new GenesysRoller(makeRng(1, 2, 3, 4, 5, 6, 7), 'gen');
+    const result = roller.roll(new Rolls(1, 1, 1, 1, 1, 1, 1));
+    const combined = roller.combineRolls(result);
+    const interpreted = interpretRollResult(combined);
+
+    expect(interpreted.successes).toBe(1);
+    expect(interpreted.advantages).toBe(0);
+    expect(interpreted.threats).toBe(1);
+    expect(interpreted.triumphs).toBe(0);
+    expect(interpreted.despairs).toBe(0);
+    expect(interpreted.force).toBe(1);
+    expect(interpreted.darkForce).toBe(0);
+});
+
+test('should interpret results for setback', () => {
+    const roller = new GenesysRoller(makeRng( 3), 'gen');
+    const result = roller.roll(new Rolls(0, 1, 0, 0, 0, 0, 0));
+    const combined = roller.combineRolls(result);
+    const interpreted = interpretRollResult(combined);
+
+    expect(interpreted.successes).toBe(0);
+    expect(interpreted.failures).toBe(1);
+    expect(interpreted.advantages).toBe(0);
+    expect(interpreted.threats).toBe(0);
+    expect(interpreted.triumphs).toBe(0);
+    expect(interpreted.despairs).toBe(0);
+    expect(interpreted.force).toBe(0);
+    expect(interpreted.darkForce).toBe(0);
+    expect(interpreted.succeeded).toBe(false);
 });

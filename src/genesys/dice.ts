@@ -128,6 +128,10 @@ export class Rolls {
         public force = 0
     ) {
     }
+
+    toString(): string {
+        return `boost: ${this.boost}, setback: ${this.setback}, advantage: ${this.advantage}, difficulty: ${this.difficulty}, difficulty: ${this.difficulty}, proficiency: ${this.proficiency}, challenge: ${this.challenge}, force: ${this.force}`
+    }
 }
 
 export class RollResult {
@@ -210,6 +214,10 @@ export class GenesysRoll extends Roll<Dice, Faces> {
     public get imageName(): string {
         return getDieImage(dieRollImages, this.die, this.face);
     }
+
+    toString(): string {
+        return `die: ${this.die}, face: ${this.face}`
+    }
 }
 
 const rollToRollResultMapping = new Map<Faces, Partial<RollResult>>();
@@ -290,7 +298,7 @@ export const rollResultMonoid: Monoid<RollResult> = {
         roll1.blanks + roll2.blanks,
         roll1.successes + roll2.successes,
         roll1.failures + roll2.failures,
-        roll1.advantages + roll2.failures,
+        roll1.advantages + roll2.advantages,
         roll1.threats + roll2.threats,
         roll1.triumphs + roll2.triumphs,
         roll1.despairs + roll2.despairs,
