@@ -73,3 +73,22 @@ Usage is similar to L5R but keeping dice is unsupported. Use the **/v5** command
 You can choose to re-roll certain dice. To do that, click on the dice to select them and hit the re-roll button. Re-rolled dice are removed from the roll and new rolls are attached at the end.
 
 ![roller usage](docs/v5roll.png)
+
+# Building the Project
+
+Install **yarn** and run:
+
+    yarn install
+    yarn build
+
+Tests use Jest and are run via:
+
+    yarn test
+
+The relevant files and folders that need to be included in your (local) FoundryVTT module folder are:
+
+* module.json
+* dist/
+* public/
+
+Further development documentation is included in the docs/ folder.
