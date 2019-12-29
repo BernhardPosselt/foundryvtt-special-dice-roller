@@ -60,3 +60,5 @@ Usage is similar to L5R but keeping dice is unsupported. Use the **/v5** command
 * h, r: hunger dice
 
 You can choose to re-roll certain dice. To do that, click on the dice to select them and hit the re-roll button. Re-rolled dice are removed from the roll and new rolls are attached at the end.
+
+![roller usage](docs/v5roll.png)
