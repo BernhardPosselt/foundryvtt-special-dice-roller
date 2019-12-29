@@ -27,8 +27,8 @@ export class L5RRoller extends Roller<Dice, Faces, DicePool> {
 
     roll(pool: DicePool): Roll<Dice, Faces>[] {
         return [
-            ...(rollDie(pool.rings, Dice.RING, RING_ROLL_TABLE, this.rng, isExploding)),
-            ...(rollDie(pool.skills, Dice.SKILL, SKILL_ROLL_TABLE, this.rng, isExploding))
+            ...rollDie(pool.rings, Dice.RING, RING_ROLL_TABLE, this.rng, isExploding),
+            ...rollDie(pool.skills, Dice.SKILL, SKILL_ROLL_TABLE, this.rng, isExploding),
         ];
     }
 

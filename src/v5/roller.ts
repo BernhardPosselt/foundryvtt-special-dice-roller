@@ -26,8 +26,8 @@ export class V5Roller extends Roller<Dice, Faces, DicePool> {
 
     roll(rolls: DicePool): Roll<Dice, Faces>[] {
         return [
-            ...(rollDie(rolls.hunger, Dice.HUNGER, HUNGER_ROLL_TABLE, this.rng)),
-            ...(rollDie(rolls.skills, Dice.SKILL, SKILL_ROLL_TABLE, this.rng))
+            ...rollDie(rolls.hunger, Dice.HUNGER, HUNGER_ROLL_TABLE, this.rng),
+            ...rollDie(rolls.skills, Dice.SKILL, SKILL_ROLL_TABLE, this.rng)
         ];
     }
 
