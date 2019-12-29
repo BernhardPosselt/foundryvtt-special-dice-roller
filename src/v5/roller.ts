@@ -1,14 +1,14 @@
 import {RandomNumberGenerator} from '../rng';
 import {
     Dice,
-    Faces, interpretResult,
-    L5RRoll,
-    RING_ROLL_TABLE,
+    interpretResult,
+    V5Roll,
     RollResult,
     rollResultMonoid,
     Rolls,
     rollToRollResult,
     SKILL_ROLL_TABLE,
+    HUNGER_ROLL_TABLE
 } from './dice';
 import {countMatches} from '../arrays';
 import {combineAll} from '../lang';
@@ -17,35 +17,34 @@ import * as Mustache from 'mustache';
 import tpl from './template';
 import {SimpleParser} from './parser';
 
-export class L5RRoller extends Roller<L5RRoll, Rolls> {
-
+export class V5Roller extends Roller<V5Roll, Rolls> {
     constructor(private rng: RandomNumberGenerator, command: string) {
         super(command, [new SimpleParser()]);
     }
 
-    roll(rolls: Rolls): L5RRoll[] {
-        const rings = rollDie(rolls.rings, RING_ROLL_TABLE, L5RRoller.isExploding, this.rng)
-            .map((face) => new L5RRoll(Dice.RING, face));
-        const skills = rollDie(rolls.skills, SKILL_ROLL_TABLE, L5RRoller.isExploding, this.rng)
-            .map((face) => new L5RRoll(Dice.SKILL, face));
-        return [...rings, ...skills];
+    roll(rolls: Rolls): V5Roll[] {
+        const hunger = rollDie(rolls.hunger, HUNGER_ROLL_TABLE, () => false, this.rng)
+            .map((face) => new V5Roll(Dice.HUNGER, face));
+        const skills = rollDie(rolls.skills, SKILL_ROLL_TABLE, () => false, this.rng)
+            .map((face) => new V5Roll(Dice.SKILL, face));
+        return [...hunger, ...skills];
     }
 
-    reRoll(keptResults: L5RRoll[], reRollResults: L5RRoll[]): L5RRoll[] {
+    reRoll(keptResults: V5Roll[], reRollResults: V5Roll[]): V5Roll[] {
         const reRolledDice = reRollResults.map((roll) => roll.die);
-        const ringReRolls = countMatches(reRolledDice, (die) => die === Dice.RING);
+        const hungerReRolls = countMatches(reRolledDice, (die) => die === Dice.HUNGER);
         const skillReRolls = countMatches(reRolledDice, (die) => die === Dice.SKILL);
-        const reRolls = this.roll(new Rolls(ringReRolls, skillReRolls));
+        const reRolls = this.roll(new Rolls(hungerReRolls, skillReRolls));
         return [...keptResults, ...reRolls];
     }
 
-    combineRolls(rolls: L5RRoll[]): RollResult {
+    combineRolls(rolls: V5Roll[]): RollResult {
         const results = rolls
             .map((roll) => rollToRollResult(roll));
         return combineAll(results, rollResultMonoid);
     }
 
-    protected formatRolls(rolls: L5RRoll[]): string {
+    protected formatRolls(rolls: V5Roll[]): string {
         return Mustache.render(tpl, {
             rolls: rolls,
             results: interpretResult(this.combineRolls(rolls)),
@@ -54,11 +53,5 @@ export class L5RRoller extends Roller<L5RRoll, Rolls> {
                 return rolls.indexOf(this);
             },
         });
-    }
-
-    private static isExploding(face: Faces): boolean {
-        return face === Faces.EXPLODING_STRIFE ||
-            face === Faces.EXPLODING_OPPORTUNITY ||
-            face === Faces.EXPLODING;
     }
 }

@@ -1,12 +1,11 @@
 import {rollDie, Roller} from '../roller';
-import {parseFormula, Parser} from '../parser';
 import {RandomNumberGenerator} from '../rng';
 import {
     ABILITY_ROLL_TABLE,
     BOOST_ROLL_TABLE, CHALLENGE_ROLL_TABLE,
     Dice, DIFFICULTY_ROLL_TABLE, FORCE_ROLL_TABLE,
     GenesysRoll,
-    interpretRollResult, PROFICIENCY_ROLL_TABLE, RollResult, rollResultMonoid,
+    interpretResult, PROFICIENCY_ROLL_TABLE, RollResult, rollResultMonoid,
     Rolls, rollToRollResult,
     SETBACK_ROLL_TABLE,
 } from './dice';
@@ -14,18 +13,19 @@ import {SimpleParser, SimpleSWParser} from './parser';
 import * as Mustache from 'mustache';
 import {combineAll} from '../lang';
 import {tpl} from './template';
-import {escapeHtml} from '../util';
+import {Parser} from '../parser';
 
-export class GenesysRoller extends Roller {
-    private readonly parsers: Parser<Rolls>[];
+export function genesysRoller(rng: RandomNumberGenerator, command: string) {
+    return new GenesysRoller(rng, command, [new SimpleParser()])
+}
 
-    constructor(private rng: RandomNumberGenerator, command: string) {
-        super(command);
-        if (command === 'sw') {
-            this.parsers = [new SimpleSWParser()];
-        } else {
-            this.parsers = [new SimpleParser()];
-        }
+export function starWarsRoller(rng: RandomNumberGenerator, command: string) {
+    return new GenesysRoller(rng, command, [new SimpleSWParser()])
+}
+
+export class GenesysRoller extends Roller<GenesysRoll, Rolls> {
+    constructor(private rng: RandomNumberGenerator, command: string, parsers: Parser<Rolls>[]) {
+        super(command, parsers);
     }
 
     roll(rolls: Rolls): GenesysRoll[] {
@@ -56,26 +56,16 @@ export class GenesysRoller extends Roller {
         return result;
     }
 
-    protected rollFormula(formula: string): string {
-        try {
-            const parsedFormula = parseFormula(formula, this.parsers);
-            const rolls = this.roll(parsedFormula);
-            return this.formatRolls(rolls);
-        } catch (e) {
-            return escapeHtml(e.message);
-        }
-    }
-
     combineRolls(rolls: GenesysRoll[]): RollResult {
         const results = rolls
             .map((roll) => rollToRollResult(roll));
         return combineAll(results, rollResultMonoid);
     }
 
-    private formatRolls(rolls: GenesysRoll[]): string {
+    protected formatRolls(rolls: GenesysRoll[]): string {
         return Mustache.render(tpl(this.command), {
             rolls: rolls,
-            results: interpretRollResult(this.combineRolls(rolls)),
+            results: interpretResult(this.combineRolls(rolls)),
             timestamp: new Date().getTime(),
             rollIndex: function () {
                 return rolls.indexOf(this);

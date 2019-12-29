@@ -271,7 +271,7 @@ export class InterpretedResult {
     }
 }
 
-export function interpretRollResult(result: RollResult): InterpretedResult {
+export function interpretResult(result: RollResult): InterpretedResult {
     const successBalance = result.successes + result.triumphs - result.failures - result.despairs;
     const advantageBalance = result.advantages - result.threats;
     const failures = successBalance < 0 ? Math.abs(successBalance) : 0;

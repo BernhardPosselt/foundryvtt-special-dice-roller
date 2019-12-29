@@ -1,14 +1,19 @@
 import {Predicate} from './lang';
 import {RandomNumberGenerator} from './rng';
 import {shim} from 'array.prototype.flatmap';
+import {parseFormula, Parser} from './parser';
+import {escapeHtml} from './util';
 
 export class Roll<D, F> {
     constructor(public die: D, public face: F) {
     }
 }
 
-export abstract class Roller {
-    protected constructor(protected command: string) {
+export abstract class Roller<R, RS> {
+    protected constructor(
+        protected command: string,
+        protected parsers: Parser<RS>[]
+    ) {
     }
 
     handlesCommand(command: string): boolean {
@@ -21,7 +26,27 @@ export abstract class Roller {
         return this.rollFormula(formula);
     }
 
-    protected abstract rollFormula(formula: string): string
+    protected rollFormula(formula: string): string {
+        try {
+            const parsedFormula = parseFormula(formula, this.parsers);
+            const rolls = this.roll(parsedFormula);
+            return this.formatRolls(rolls);
+        } catch (e) {
+            return escapeHtml(e.message);
+        }
+    }
+
+    renderNewRoll(rolls: R[]) {
+        const chatData: ChatData = {
+            user: game.user.id,
+            content: this.formatRolls(rolls),
+        };
+        ChatMessage.create(chatData, {displaySheet: false});
+    }
+
+    protected abstract roll(parsedFormula: RS): R[]
+
+    protected abstract formatRolls(rolls: R[]): string
 }
 
 /**

@@ -1,15 +1,15 @@
 import {secureRandomNumber} from './rng';
 import {L5RRoller} from './l5r/roller';
 import {L5RRoll} from './l5r/dice';
-import {GenesysRoller} from './genesys/roller';
+import {genesysRoller, starWarsRoller} from './genesys/roller';
 
 
 Hooks.on('preCreateChatMessage', (_, data) => {
     const message = data.content;
     const rollers = [
         new L5RRoller(secureRandomNumber, 'l5r'),
-        new GenesysRoller(secureRandomNumber, 'gen'),
-        new GenesysRoller(secureRandomNumber, 'sw'),
+        genesysRoller(secureRandomNumber, 'gen'),
+        starWarsRoller(secureRandomNumber, 'sw'),
     ];
     if (message !== undefined) {
         for (let roller of rollers) {
