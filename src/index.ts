@@ -40,9 +40,9 @@ Hooks.on('renderChatLog', () => {
         event.preventDefault();
 
         const button = event.target as HTMLButtonElement;
-        const rollerKey = button.dataset.roller as string;
         const form = button.parentElement as HTMLFormElement;
-        const rolls = Array.from(form.querySelectorAll('input')) as HTMLInputElement[];
+        const rollerKey = button.dataset.roller;
+        const rolls = Array.from(form.querySelectorAll('input'));
         const selectedRolls = rolls.filter((roll) => roll.checked);
 
         if (selectedRolls.length > 0) {
