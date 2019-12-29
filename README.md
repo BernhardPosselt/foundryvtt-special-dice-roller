@@ -1,6 +1,6 @@
 # Special Dice Roller
 
-[![Build Status](https://travis-ci.org/BernhardPosselt/l5r-foundryvtt-roller.svg?branch=master)](https://travis-ci.org/BernhardPosselt/l5r-foundryvtt-roller)
+[![Build Status](https://travis-ci.org/BernhardPosselt/foundryvtt-special-dice-roller.svg?branch=master)](https://travis-ci.org/BernhardPosselt/l5r-foundryvtt-roller)
 
 Supports Rolling Dice for various systems:
 
