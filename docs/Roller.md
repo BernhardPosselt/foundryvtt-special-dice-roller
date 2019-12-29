@@ -60,6 +60,7 @@ export const D6_ROLL_TABLE: Faces[] = [
 and define the image names for each die and face:
 
 ```typescript
+// images will end in .png so blackf1 will be located in public/images/d20/blackf1.png
 const d4Images = new Map<Faces, string>();
 d4Images.set(Faces.FACE1, 'blackf1');
 d4Images.set(Faces.FACE2, 'blackf2');
