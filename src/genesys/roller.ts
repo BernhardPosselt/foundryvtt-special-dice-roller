@@ -60,7 +60,6 @@ export class GenesysRoller extends Roller<Dice, Faces, DicePool> {
         return Mustache.render(tpl(this.command), {
             rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
             results: interpretResult(this.combineRolls(rolls)),
-            timestamp: new Date().getTime(),
             rollIndex: function () {
                 return rolls.indexOf(this);
             },

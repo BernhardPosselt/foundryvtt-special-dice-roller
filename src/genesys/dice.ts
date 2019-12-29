@@ -233,7 +233,7 @@ export function rollToRollResult(roll: Roll<Dice, Faces>): RollValues {
     if (result !== undefined) {
         return toRollResult(result);
     } else {
-        throw new Error('Unhandled Face');
+        throw new Error(`Unhandled Face ${roll.face}`);
     }
 }
 

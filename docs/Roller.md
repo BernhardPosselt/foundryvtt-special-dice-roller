@@ -37,7 +37,46 @@ export enum Dice {
 }
 ```
 
-Now we need an object to describe the dice pool itself and a Monoid that describes how we should add two DicePools. The identity element is an object that is used if none or one DicePool is present and that can be added to a DicePool without changing its result. Since we define 0 default values in the constructor, we can just re-use that:
+Next we are going to define what face each die side should get:
+
+```typescript
+export const D4_ROLL_TABLE: Faces[] = [
+    Faces.FACE1,
+    Faces.FACE1,
+    Faces.FACE2,
+    Faces.FACE2,
+];
+
+export const D6_ROLL_TABLE: Faces[] = [
+    Faces.FACE1,
+    Faces.FACE1,
+    Faces.FACE2,
+    Faces.FACE2,
+    Faces.DOUBLE_FACE2,
+    Faces.DOUBLE_FACE2,
+];
+```
+
+and define the image names for each die and face:
+
+```typescript
+const d4Images = new Map<Faces, string>();
+d4Images.set(Faces.FACE1, 'blackf1');
+d4Images.set(Faces.FACE2, 'blackf2');
+
+const d6Images = new Map<Faces, string>();
+d6Images.set(Faces.FACE1, 'redf1');
+d6Images.set(Faces.FACE2, 'redf2');
+d6Images.set(Faces.FACE2, 'redff2');
+
+export const dieRollImages = new Map<Dice, Map<Faces, string>>();
+dieRollImages.set(Dice.D4, d4Images);
+dieRollImages.set(Dice.D6, d6Images);
+```
+
+## Describing Rolls
+
+Now we need an object to describe the dice pool itself and a Monoid that describes how we should add two DicePools. The identity element is an object that is used if none or one DicePool is present and that can be added to a DicePool without changing its result. Since we define 0 as default values in the constructor, we can just re-use that:
 
 ```typescript
 export class DicePool {
@@ -54,7 +93,7 @@ export const dicePoolMonoid: Monoid<DicePool> = {
 };
 ```
 
-Next we need a way to record all results that were rolled. To do that create a RollsValues class which holds all values that need to be counted. We also need a Monoid for that to combine multiple values:
+Next we need a way to count all results that were rolled. To do that create a RollsValues class which holds all values that need to be counted. We also need a Monoid so we can combine two results:
 
 ```typescript
 export class RollValues {
@@ -69,4 +108,152 @@ export const rollValuesMonoid: Monoid<RollValues> = {
         roll1.face2 + roll2.face2,
     ),
 };
+```
+
+We now need a way to map from a die and a face to a RollValues Object. To do that we create a simple function:
+
+```typescript
+export function rollToRollResult(roll: Roll<Dice, Faces>): RollValues {
+    if (roll.face === Faces.Face1) {
+        return new RollValues(1, 0);
+    } else if (roll.face === Face.Face2) {
+        return new RollValues(0, 1);
+    } else if (roll.face === Face.DOUBLE_FACE2) {
+        return new RollValues(0, 2);
+    } else {
+        throw new Error(`Unhandled Face ${roll.face}`);
+    }
+}
+```
+
+The last remaining part is a way to explain the dice result in our template. Let's say that rolling the same FACE1 and FACE2 values makes our check succeed:
+
+```typescript
+export class InterpretedResult {
+    constructor(public face1: 0, public face2: 0, public succeeded: boolean) {
+    }
+}
+
+export function interpretResult(result: RollValues): InterpretedResult {
+    return new InterpretedResult(
+        result.face1,
+        result.face2,
+        result.face1 === result.face2
+    )
+}
+```
+
+## Parsing the Chat Message
+
+Now that we know what dice we have available, we need a way to parse the chat message that was sent by a user. To do that you can either subclass the **Parser** class for a more complicated roll formula or simply re-use the current convention which counts a single letter.
+
+Let's use f(our) and s(ix) for d4 and d6 respectively
+
+We want to place that in a new file called **parser.ts**:
+
+```typescript
+function letterToRolls(letter: string, number: number): DicePool {
+    if (letter === 'f') {
+        return new DicePool(number, 0);
+    } else if (letter === 's') {
+        return new DicePool(0, number);
+    } else {
+        throw new Error(`Unknown letter ${letter}`);
+    }
+}
+
+export class SimpleParser extends DefaultSimpleParser<DicePool> {
+    constructor() {
+        super(
+            'fs',
+            letterToRolls,
+            dicePoolMonoid,
+            ['d4', 'd6'],
+        );
+    }
+}
+```
+
+## Creating the Template
+
+You can use any template language that you want or re-use the shipped Mustache engine. Our roll template would look something like this in Mustache:
+
+```typescript
+const tpl = `<div class="special-dice-roller">
+    <div>
+        <form>
+            {{#rolls}}
+            <input type="checkbox" style="background-image: url('modules/special-dice-roller/public/images/d20/{{imageName}}.png')" name="roll{{rollIndex}}" data-die="{{die}}" data-face="{{face}}"/>
+            {{/rolls}}
+        </form>
+    </div>
+    <hr>
+    <div>
+        <ul>
+        {{#results}}
+            {{#succeeded}}
+            <li>Roll Succeded</li>
+            {{/succeeded}}
+            {{#face1}}
+            <li>Face 1's: {{face1}}</li>
+            {{/face1}}
+            {{#face2}}
+            <li>Face 2's: {{face2}}</li>
+            {{/face2}}
+        {{/results}}
+        </ul>
+    </div>
+</div>`
+export default tpl;
+```
+
+## Creating the Roller
+
+The thing that ties everything together is the Roller. Create a **roller.ts** file and
+
+```typescript
+export class D20Roller extends Roller<Dice, Faces, DicePool> {
+    constructor(private rng: RandomNumberGenerator, command: string) {
+        super(command, [new SimpleParser()]);
+    }
+
+    roll(rolls: DicePool): Roll<Dice, Faces>[] {
+        return [
+            ...(rollDie(rolls.d4, Dice.D4, D4_ROLL_TABLE, this.rng)),
+            ...(rollDie(rolls.d6, Dice.D6, D6_ROLL_TABLE, this.rng))
+        ];
+    }
+
+    combineRolls(rolls: Roll<Dice, Faces>[]): RollValues {
+        const results = rolls
+            .map((roll) => parseRollValues(roll));
+        return combineAll(results, rollValuesMonoid);
+    }
+
+    formatRolls(rolls: Roll<Dice, Faces>[]): string {
+        return Mustache.render(tpl, {
+            rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
+            results: interpretResult(this.combineRolls(rolls)),
+            rollIndex: function () {
+                return rolls.indexOf(this);
+            },
+        });
+    }
+
+    protected toDicePool(faces: Dice[]): DicePool {
+        const d4 = countMatches(faces, (die) => die === Dice.D4);
+        const d6 = countMatches(faces, (die) => die === Dice.D6);
+        return new DicePool(d4, d6);
+    }
+}
+```
+
+## Adding the Roller
+
+To wire everything up we just need to add our Roller to the list of available rollers in **index.ts**
+```typescript
+rollers = [
+    // ...
+    new D20Roller(secureRandomNumber, '/d20'),
+]
 ```

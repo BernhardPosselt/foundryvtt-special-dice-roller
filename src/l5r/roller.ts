@@ -42,7 +42,6 @@ export class L5RRoller extends Roller<Dice, Faces, DicePool> {
         return Mustache.render(tpl, {
             rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
             results: interpretResult(this.combineRolls(rolls)),
-            timestamp: new Date().getTime(),
             rollIndex: function () {
                 return rolls.indexOf(this);
             },
