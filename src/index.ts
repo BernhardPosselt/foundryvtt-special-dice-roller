@@ -51,5 +51,63 @@ Hooks.on('renderChatLog', () => {
             }
             selectedRolls.forEach((elem) => elem.checked = false);
         }
+
+        const dialogOptions = {
+            width: 350,
+            bottom: 12,
+            right: 300,
+            classes: ['dialog', 'l5r-dice-panel'],
+        };
+        // @ts-ignore
+        new Dialog(
+            {
+                title: 'Dice Roller',
+                buttons: {},
+                content: `
+<div>
+    <label>System
+    <select>
+        <option>D20</option>
+        <option>Star Wars</option>
+        <option selected>Genesys</option>
+        <option>Legend of the 5 Rings</option>
+    </select>
+    </label>
+    <div class="l5r-roller-dice">
+        <button title="boost" style="background-image: url('modules/l5r-roller/public/images/gen/blue.png')" class="l5r-roller-die"></button>
+        <button title="setback" style="background-image: url('modules/l5r-roller/public/images/gen/black.png')" class="l5r-roller-die"></button>
+        <button title="ability" style="background-image: url('modules/l5r-roller/public/images/gen/green.png')" class="l5r-roller-die"></button>
+        <button title="difficulty" style="background-image: url('modules/l5r-roller/public/images/gen/purple.png')" class="l5r-roller-die"></button>
+        <button title="proficiency" style="background-image: url('modules/l5r-roller/public/images/gen/yellow.png')" class="l5r-roller-die"></button>
+        <button title="challenge
+        " style="background-image: url('modules/l5r-roller/public/images/gen/red.png')" class="l5r-roller-die"></button>
+    </div>
+    <div class="l5r-roller-dice">
+        <button style="background-image: url('modules/l5r-roller/public/images/sw/blue.png')" class="l5r-roller-die"></button>
+        <button style="background-image: url('modules/l5r-roller/public/images/sw/black.png')" class="l5r-roller-die"></button>
+        <button style="background-image: url('modules/l5r-roller/public/images/sw/green.png')" class="l5r-roller-die"></button>
+        <button style="background-image: url('modules/l5r-roller/public/images/sw/purple.png')" class="l5r-roller-die"></button>
+        <button style="background-image: url('modules/l5r-roller/public/images/sw/yellow.png')" class="l5r-roller-die"></button>
+        <button style="background-image: url('modules/l5r-roller/public/images/sw/red.png')" class="l5r-roller-die"></button>
+        <button style="background-image: url('modules/l5r-roller/public/images/sw/whiteHex.png')" class="l5r-roller-die"></button>
+    </div>
+    <div class="l5r-roller-dice">
+        <button style="background-image: url('modules/l5r-roller/public/images/l5r/white.png')" class="l5r-roller-die"></button>
+        <button style="background-image: url('modules/l5r-roller/public/images/l5r/black.png')" class="l5r-roller-die"></button>
+    </div>
+    <div>
+        <button>Roll</button>
+    </div>
+</div>
+`,
+            },
+            dialogOptions,
+        )
+            .render(true);
     });
+});
+
+
+Hooks.on('ready', () => {
+
 });
