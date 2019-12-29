@@ -136,7 +136,7 @@ export const rollValuesMonoid: Monoid<RollValues> = {
     ),
 };
 
-export const rollsMonoid: Monoid<DicePool> = {
+export const dicePoolMonoid: Monoid<DicePool> = {
     identity: new DicePool(),
     combine: (roll1: DicePool, roll2: DicePool) => new DicePool(
         roll1.skills + roll2.skills,

@@ -1,4 +1,4 @@
-import {DicePool, rollsMonoid} from './dice';
+import {DicePool, dicePoolMonoid} from './dice';
 import {DefaultSimpleParser} from '../parser';
 
 function letterToRolls(letter: string, number: number): DicePool {
@@ -16,7 +16,7 @@ export class SimpleParser extends DefaultSimpleParser<DicePool> {
         super(
             'rbws',
             letterToRolls,
-            rollsMonoid,
+            dicePoolMonoid,
             ['ring', 'ring', 'skill', 'skill'],
         );
     }

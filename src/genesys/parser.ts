@@ -1,4 +1,4 @@
-import {DicePool, rollsMonoid} from './dice';
+import {DicePool, dicePoolMonoid} from './dice';
 import {DefaultSimpleParser} from '../parser';
 
 export class SimpleParser extends DefaultSimpleParser<DicePool> {
@@ -6,7 +6,7 @@ export class SimpleParser extends DefaultSimpleParser<DicePool> {
         super(
             'absdpc',
             letterToRolls,
-            rollsMonoid,
+            dicePoolMonoid,
             ['boost', 'setback', 'ability', 'difficulty', 'proficiency', 'challenge']
         );
     }
@@ -17,7 +17,7 @@ export class SimpleSWParser extends DefaultSimpleParser<DicePool> {
         super(
             'absdpcf',
             letterToRolls,
-            rollsMonoid,
+            dicePoolMonoid,
             ['boost', 'setback', 'ability', 'difficulty', 'proficiency', 'challenge', 'force']
         );
     }
