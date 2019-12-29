@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/BernhardPosselt/foundryvtt-special-dice-roller.svg?branch=master)](https://travis-ci.org/BernhardPosselt/l5r-foundryvtt-roller)
 
-Supports Rolling Dice for various systems:
+Supports rolling dice in your chat window for various non regular dice systems:
 
 * Legend of the 5 Rings 5th edition
 * Vampire the Masquerade 5th edition
@@ -11,6 +11,17 @@ Supports Rolling Dice for various systems:
 
 L5R, Genesys and Star Wars images are taken from [SkyJedi's Discord Roller](https://github.com/SkyJedi/FFGNDS-Discord-Dice-Roller)
 Vampire the Masquerade images are taken from and [Lumi#5953's Thirst Discord bot](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=2ahUKEwj-iKLCjNvmAhWOyqYKHaYEC7AQFjAAegQIAhAB&url=https%3A%2F%2Fdiscordapp.com%2Foauth2%2Fauthorize%3Fclient_id%3D475234745848954905%26scope%3Dbot%26permissions%3D0&usg=AOvVaw0fV9gFSh3hD3WQd2BwJKv7). 
+
+# Installation
+
+Go to your setup page and click on the **Add-on Modules** Tab.
+
+Hit the button **Install Module** at the bottom.
+
+Insert the module URL https://github.com/BernhardPosselt/foundryvtt-special-dice-roller/raw/master/module.json and click **Install**.
+
+After you've launched your game, go to the Game Settings page and click on **Manage Modules**. Enable the Special Dice Roller app and hit **Save Module Settings**.
+
 
 # Usage
 
