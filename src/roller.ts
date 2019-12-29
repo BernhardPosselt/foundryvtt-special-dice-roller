@@ -56,27 +56,30 @@ export abstract class Roller<D, F, P> {
 }
 
 /**
- * Rolls a roll table
+ * Given a die and various die faces, roll it (and potentially explode)
  * @param times how many times a die should be rolled
+ * @param die enum value
  * @param faces the enum with all the die's faces
  * @param explodes a function that returns true if a dice explodes
  * @param rng random number generator
  * @return an array with all rolled faces
  */
-export function rollDie<T>(
+export function rollDie<D, F>(
     times: number,
-    faces: T[],
-    explodes: Predicate<T>,
+    die: D,
+    faces: F[],
     rng: RandomNumberGenerator,
-): T[] {
+    explodes: Predicate<F> = () => false,
+): Roll<D, F>[] {
     shim();
     return Array.from({length: times}, () => rng(faces.length))
         .map((randomNumber: number) => faces[randomNumber])
         .flatMap((face) => {
+            const result = new Roll(die, face);
             if (explodes(face)) {
-                return [face, ...rollDie(1, faces, explodes, rng)];
+                return [result, ...rollDie(1, die, faces, rng, explodes)];
             } else {
-                return [face];
+                return [result];
             }
         });
 }

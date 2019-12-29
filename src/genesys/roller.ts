@@ -39,28 +39,14 @@ export class GenesysRoller extends Roller<Dice, Faces, DicePool> {
     }
 
     roll(pool: DicePool): Roll<Dice, Faces>[] {
-        const boosts = rollDie(pool.boost, BOOST_ROLL_TABLE, () => false, this.rng)
-            .map((face) => new Roll(Dice.BOOST, face));
-        const setbacks = rollDie(pool.setback, SETBACK_ROLL_TABLE, () => false, this.rng)
-            .map((face) => new Roll(Dice.SETBACK, face));
-        const abilities = rollDie(pool.ability, ABILITY_ROLL_TABLE, () => false, this.rng)
-            .map((face) => new Roll(Dice.ABILITY, face));
-        const difficulties = rollDie(pool.difficulty, DIFFICULTY_ROLL_TABLE, () => false, this.rng)
-            .map((face) => new Roll(Dice.DIFFICULTY, face));
-        const proficiencies = rollDie(pool.proficiency, PROFICIENCY_ROLL_TABLE, () => false, this.rng)
-            .map((face) => new Roll(Dice.PROFICIENCY, face));
-        const challenges = rollDie(pool.challenge, CHALLENGE_ROLL_TABLE, () => false, this.rng)
-            .map((face) => new Roll(Dice.CHALLENGE, face));
-        const forces = rollDie(pool.force, FORCE_ROLL_TABLE, () => false, this.rng)
-            .map((face) => new Roll(Dice.FORCE, face));
         return [
-            ...boosts,
-            ...setbacks,
-            ...abilities,
-            ...difficulties,
-            ...proficiencies,
-            ...challenges,
-            ...forces,
+            ...(rollDie(pool.boost, Dice.BOOST, BOOST_ROLL_TABLE, this.rng)),
+            ...(rollDie(pool.setback, Dice.SETBACK, SETBACK_ROLL_TABLE, this.rng)),
+            ...(rollDie(pool.ability, Dice.ABILITY, ABILITY_ROLL_TABLE, this.rng)),
+            ...(rollDie(pool.difficulty, Dice.DIFFICULTY, DIFFICULTY_ROLL_TABLE, this.rng)),
+            ...(rollDie(pool.proficiency, Dice.PROFICIENCY, PROFICIENCY_ROLL_TABLE, this.rng)),
+            ...(rollDie(pool.challenge, Dice.CHALLENGE, CHALLENGE_ROLL_TABLE, this.rng)),
+            ...(rollDie(pool.force, Dice.FORCE, FORCE_ROLL_TABLE, this.rng)),
         ];
     }
 

@@ -1,13 +1,15 @@
 import {RandomNumberGenerator} from '../rng';
 import {
     Dice,
+    DicePool,
+    dieRollImages,
+    Faces,
+    HUNGER_ROLL_TABLE,
     interpretResult,
+    parseRollValues,
     RollValues,
     rollValuesMonoid,
-    DicePool,
-    parseRollValues,
     SKILL_ROLL_TABLE,
-    HUNGER_ROLL_TABLE, Faces, dieRollImages,
 } from './dice';
 import {countMatches} from '../arrays';
 import {combineAll} from '../lang';
@@ -23,11 +25,10 @@ export class V5Roller extends Roller<Dice, Faces, DicePool> {
     }
 
     roll(rolls: DicePool): Roll<Dice, Faces>[] {
-        const hunger = rollDie(rolls.hunger, HUNGER_ROLL_TABLE, () => false, this.rng)
-            .map((face) => new Roll(Dice.HUNGER, face));
-        const skills = rollDie(rolls.skills, SKILL_ROLL_TABLE, () => false, this.rng)
-            .map((face) => new Roll(Dice.SKILL, face));
-        return [...hunger, ...skills];
+        return [
+            ...(rollDie(rolls.hunger, Dice.HUNGER, HUNGER_ROLL_TABLE, this.rng)),
+            ...(rollDie(rolls.skills, Dice.SKILL, SKILL_ROLL_TABLE, this.rng))
+        ];
     }
 
     combineRolls(rolls: Roll<Dice, Faces>[]): RollValues {

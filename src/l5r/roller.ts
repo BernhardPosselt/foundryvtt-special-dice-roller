@@ -1,14 +1,15 @@
 import {RandomNumberGenerator} from '../rng';
 import {
     Dice,
+    DicePool,
+    dieRollImages,
     Faces,
     interpretResult,
     RING_ROLL_TABLE,
+    rollToRollResult,
     RollValues,
     rollValuesMonoid,
-    DicePool,
-    rollToRollResult,
-    SKILL_ROLL_TABLE, dieRollImages,
+    SKILL_ROLL_TABLE,
 } from './dice';
 import {countMatches} from '../arrays';
 import {combineAll} from '../lang';
@@ -25,11 +26,10 @@ export class L5RRoller extends Roller<Dice, Faces, DicePool> {
     }
 
     roll(pool: DicePool): Roll<Dice, Faces>[] {
-        const rings = rollDie(pool.rings, RING_ROLL_TABLE, isExploding, this.rng)
-            .map((face) => new Roll(Dice.RING, face));
-        const skills = rollDie(pool.skills, SKILL_ROLL_TABLE, isExploding, this.rng)
-            .map((face) => new Roll(Dice.SKILL, face));
-        return [...rings, ...skills];
+        return [
+            ...(rollDie(pool.rings, Dice.RING, RING_ROLL_TABLE, this.rng, isExploding)),
+            ...(rollDie(pool.skills, Dice.SKILL, SKILL_ROLL_TABLE, this.rng, isExploding))
+        ];
     }
 
     combineRolls(rolls: Roll<Dice, Faces>[]): RollValues {
