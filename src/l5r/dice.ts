@@ -1,6 +1,5 @@
 import {Monoid} from '../lang';
 import {Roll} from '../roller';
-import {getDieImage} from '../images';
 
 export enum Dice {
     RING,
@@ -43,15 +42,19 @@ export const SKILL_ROLL_TABLE: Faces[] = [
     Faces.OPPORTUNITY,
 ];
 
-export class Rolls {
+export class DicePool {
     constructor(
         public rings = 0,
         public skills = 0,
     ) {
     }
+
+    toString(): string {
+        return `rings: ${this.rings}, skills: ${this.skills}`
+    }
 }
 
-export class RollResult {
+export class RollValues {
     constructor(
         public successes = 0,
         public failures = 0,
@@ -83,14 +86,7 @@ export const dieRollImages = new Map<Dice, Map<Faces, string>>();
 dieRollImages.set(Dice.RING, ringImages);
 dieRollImages.set(Dice.SKILL, skillImages);
 
-export class L5RRoll extends Roll<Dice, Faces> {
-
-    public get imageName(): string {
-        return getDieImage(dieRollImages, this.die, this.face);
-    }
-}
-
-const rollToRollResultMapping = new Map<Faces, Partial<RollResult>>();
+const rollToRollResultMapping = new Map<Faces, Partial<RollValues>>();
 rollToRollResultMapping.set(Faces.SUCCESS, {successes: 1});
 rollToRollResultMapping.set(Faces.FAILURE, {failures: 1});
 rollToRollResultMapping.set(Faces.EXPLODING, {exploding: 1});
@@ -101,8 +97,8 @@ rollToRollResultMapping.set(Faces.EXPLODING_STRIFE, {exploding: 1, strife: 1});
 rollToRollResultMapping.set(Faces.EXPLODING_OPPORTUNITY, {exploding: 1, opportunity: 1});
 rollToRollResultMapping.set(Faces.SUCCESS_OPPORTUNITY, {successes: 1, opportunity: 1});
 
-export function interpretResult(result: RollResult): RollResult {
-    return new RollResult(
+export function interpretResult(result: RollValues): RollValues {
+    return new RollValues(
         result.successes + result.exploding,
         result.failures,
         result.opportunity,
@@ -111,7 +107,7 @@ export function interpretResult(result: RollResult): RollResult {
     )
 }
 
-export function rollToRollResult(roll: L5RRoll): RollResult {
+export function rollToRollResult(roll: Roll<Dice, Faces>): RollValues {
     const result = rollToRollResultMapping.get(roll.face);
     if (result !== undefined) {
         return toRollResult(result);
@@ -120,13 +116,13 @@ export function rollToRollResult(roll: L5RRoll): RollResult {
     }
 }
 
-function toRollResult(partial: Partial<RollResult>): RollResult {
-    return Object.assign(new RollResult(), partial);
+function toRollResult(partial: Partial<RollValues>): RollValues {
+    return Object.assign(new RollValues(), partial);
 }
 
-export const rollResultMonoid: Monoid<RollResult> = {
-    identity: new RollResult(),
-    combine: (roll1: RollResult, roll2: RollResult) => new RollResult(
+export const rollValuesMonoid: Monoid<RollValues> = {
+    identity: new RollValues(),
+    combine: (roll1: RollValues, roll2: RollValues) => new RollValues(
         roll1.successes + roll2.successes,
         roll1.failures + roll2.failures,
         roll1.opportunity + roll2.opportunity,
@@ -135,9 +131,9 @@ export const rollResultMonoid: Monoid<RollResult> = {
     ),
 };
 
-export const rollsMonoid: Monoid<Rolls> = {
-    identity: new Rolls(),
-    combine: (roll1: Rolls, roll2: Rolls) => new Rolls(
+export const rollsMonoid: Monoid<DicePool> = {
+    identity: new DicePool(),
+    combine: (roll1: DicePool, roll2: DicePool) => new DicePool(
         roll1.rings + roll2.rings,
         roll1.skills + roll2.skills,
     ),

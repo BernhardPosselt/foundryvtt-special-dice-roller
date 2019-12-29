@@ -1,6 +1,5 @@
 import {Monoid} from '../lang';
 import {Roll} from '../roller';
-import {getDieImage} from '../images';
 
 export enum Dice {
     BOOST,
@@ -117,11 +116,11 @@ export const FORCE_ROLL_TABLE: Faces[] = [
     Faces.DOUBLE_FORCE,
 ];
 
-export class Rolls {
+export class DicePool {
     constructor(
         public boost = 0,
         public setback = 0,
-        public advantage = 0,
+        public ability = 0,
         public difficulty = 0,
         public proficiency = 0,
         public challenge = 0,
@@ -130,11 +129,11 @@ export class Rolls {
     }
 
     toString(): string {
-        return `boost: ${this.boost}, setback: ${this.setback}, advantage: ${this.advantage}, difficulty: ${this.difficulty}, difficulty: ${this.difficulty}, proficiency: ${this.proficiency}, challenge: ${this.challenge}, force: ${this.force}`
+        return `boost: ${this.boost}, setback: ${this.setback}, ability: ${this.ability}, difficulty: ${this.difficulty}, difficulty: ${this.difficulty}, proficiency: ${this.proficiency}, challenge: ${this.challenge}, force: ${this.force}`
     }
 }
 
-export class RollResult {
+export class RollValues {
     constructor(
         public blanks = 0,
         public successes = 0,
@@ -210,17 +209,7 @@ dieRollImages.set(Dice.PROFICIENCY, proficiencyImages);
 dieRollImages.set(Dice.CHALLENGE, challengeImages);
 dieRollImages.set(Dice.FORCE, forceImages);
 
-export class GenesysRoll extends Roll<Dice, Faces> {
-    public get imageName(): string {
-        return getDieImage(dieRollImages, this.die, this.face);
-    }
-
-    toString(): string {
-        return `die: ${this.die}, face: ${this.face}`
-    }
-}
-
-const rollToRollResultMapping = new Map<Faces, Partial<RollResult>>();
+const rollToRollResultMapping = new Map<Faces, Partial<RollValues>>();
 rollToRollResultMapping.set(Faces.BLANK, {blanks: 1});
 rollToRollResultMapping.set(Faces.SUCCESS, {successes: 1});
 rollToRollResultMapping.set(Faces.DOUBLE_SUCCESS, {successes: 2});
@@ -239,7 +228,7 @@ rollToRollResultMapping.set(Faces.DOUBLE_DARK_FORCE, {darkForce: 2});
 rollToRollResultMapping.set(Faces.FORCE, {force: 1});
 rollToRollResultMapping.set(Faces.DOUBLE_FORCE, {force: 2});
 
-export function rollToRollResult(roll: GenesysRoll): RollResult {
+export function rollToRollResult(roll: Roll<Dice, Faces>): RollValues {
     const result = rollToRollResultMapping.get(roll.face);
     if (result !== undefined) {
         return toRollResult(result);
@@ -248,12 +237,8 @@ export function rollToRollResult(roll: GenesysRoll): RollResult {
     }
 }
 
-export function toRollResult(partial: Partial<RollResult>): RollResult {
-    return Object.assign(new RollResult(), partial);
-}
-
-export function toRolls(partial: Partial<Rolls>): Rolls {
-    return Object.assign(new Rolls(), partial);
+export function toRollResult(partial: Partial<RollValues>): RollValues {
+    return Object.assign(new RollValues(), partial);
 }
 
 export class InterpretedResult {
@@ -271,7 +256,7 @@ export class InterpretedResult {
     }
 }
 
-export function interpretResult(result: RollResult): InterpretedResult {
+export function interpretResult(result: RollValues): InterpretedResult {
     const successBalance = result.successes + result.triumphs - result.failures - result.despairs;
     const advantageBalance = result.advantages - result.threats;
     const failures = successBalance < 0 ? Math.abs(successBalance) : 0;
@@ -292,9 +277,9 @@ export function interpretResult(result: RollResult): InterpretedResult {
     );
 }
 
-export const rollResultMonoid: Monoid<RollResult> = {
-    identity: new RollResult(),
-    combine: (roll1: RollResult, roll2: RollResult) => new RollResult(
+export const rollValuesMonoid: Monoid<RollValues> = {
+    identity: new RollValues(),
+    combine: (roll1: RollValues, roll2: RollValues) => new RollValues(
         roll1.blanks + roll2.blanks,
         roll1.successes + roll2.successes,
         roll1.failures + roll2.failures,
@@ -307,12 +292,12 @@ export const rollResultMonoid: Monoid<RollResult> = {
     ),
 };
 
-export const rollsMonoid: Monoid<Rolls> = {
-    identity: new Rolls(),
-    combine: (roll1: Rolls, roll2: Rolls) => new Rolls(
+export const rollsMonoid: Monoid<DicePool> = {
+    identity: new DicePool(),
+    combine: (roll1: DicePool, roll2: DicePool) => new DicePool(
         roll1.boost + roll2.boost,
         roll1.setback + roll2.setback,
-        roll1.advantage + roll2.advantage,
+        roll1.ability + roll2.ability,
         roll1.difficulty + roll2.difficulty,
         roll1.proficiency + roll2.proficiency,
         roll1.challenge + roll2.challenge,

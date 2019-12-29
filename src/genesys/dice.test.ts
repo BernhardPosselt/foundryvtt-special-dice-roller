@@ -1,4 +1,6 @@
-import {Dice, Faces, GenesysRoll, interpretResult, toRollResult} from './dice';
+import {Dice, dieRollImages, Faces, interpretResult, toRollResult} from './dice';
+import {Roll} from '../roller';
+import {getDieImage} from '../images';
 
 test('no successes count as a failed check', () => {
     const rollResult = toRollResult({});
@@ -127,21 +129,21 @@ test('should map force dice', () => {
 });
 
 test('should get a dice image', () => {
-    const roll = new GenesysRoll(Dice.ABILITY, Faces.ADVANTAGE);
+    const roll = new Roll(Dice.ABILITY, Faces.ADVANTAGE);
 
-    expect(roll.imageName).toBe('greena');
+    expect(getDieImage(dieRollImages, roll.die, roll.face)).toBe('greena');
 });
 
 test('should get a dice image', () => {
-    const roll = new GenesysRoll(Dice.ABILITY, Faces.BLANK);
+    const roll = new Roll(Dice.ABILITY, Faces.BLANK);
 
-    expect(roll.imageName).toBe('green');
+    expect(getDieImage(dieRollImages, roll.die, roll.face)).toBe('green');
 });
 
 test('should get a correct boost image', () => {
-    const roll = new GenesysRoll(Dice.BOOST, Faces.DOUBLE_ADVANTAGE);
+    const roll = new Roll(Dice.BOOST, Faces.DOUBLE_ADVANTAGE);
 
-    expect(roll.imageName).toBe('blueaa');
+    expect(getDieImage(dieRollImages, roll.die, roll.face)).toBe('blueaa');
 });
 
 test('should roll correct boost', () => {

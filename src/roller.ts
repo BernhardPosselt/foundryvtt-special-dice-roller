@@ -7,12 +7,16 @@ import {escapeHtml} from './util';
 export class Roll<D, F> {
     constructor(public die: D, public face: F) {
     }
+
+    toString(): string {
+        return `die: ${this.die}, face: ${this.face}`
+    }
 }
 
-export abstract class Roller<R, RS> {
+export abstract class Roller<D, F, P> {
     protected constructor(
         protected command: string,
-        protected parsers: Parser<RS>[]
+        protected parsers: Parser<P>[]
     ) {
     }
 
@@ -30,19 +34,25 @@ export abstract class Roller<R, RS> {
         try {
             const parsedFormula = parseFormula(formula, this.parsers);
             const rolls = this.roll(parsedFormula);
+            console.log(`Rolled ${rolls} with formula ${parsedFormula}`);
             return this.formatRolls(rolls);
         } catch (e) {
             return escapeHtml(e.message);
         }
     }
 
-    abstract roll(parsedFormula: RS): R[]
+    reRoll(keptResults: Roll<D, F>[], reRollResults: Roll<D, F>[]): Roll<D, F>[] {
+        const reRolledDice: D[] = reRollResults.map((roll) => roll.die);
+        const pool = this.toDicePool(reRolledDice);
+        const reRolls = this.roll(pool);
+        return [...keptResults, ...reRolls];
+    }
 
-    abstract formatRolls(rolls: R[]): string
-}
+    protected abstract toDicePool(faces: D[]): P
 
-export interface CanReRoll<R> {
-    reRoll(keptResults: R[], reRollResults: R[]): R[]
+    abstract roll(dicePool: P): Roll<D, F>[]
+
+    abstract formatRolls(rolls: Roll<D, F>[]): string
 }
 
 /**

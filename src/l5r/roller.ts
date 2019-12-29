@@ -3,58 +3,56 @@ import {
     Dice,
     Faces,
     interpretResult,
-    L5RRoll,
     RING_ROLL_TABLE,
-    RollResult,
-    rollResultMonoid,
-    Rolls,
+    RollValues,
+    rollValuesMonoid,
+    DicePool,
     rollToRollResult,
-    SKILL_ROLL_TABLE,
+    SKILL_ROLL_TABLE, dieRollImages,
 } from './dice';
 import {countMatches} from '../arrays';
 import {combineAll} from '../lang';
-import {CanReRoll, rollDie, Roller} from '../roller';
+import {Roll, rollDie, Roller} from '../roller';
 import * as Mustache from 'mustache';
 import tpl from './template';
 import {SimpleParser} from './parser';
+import {DieRollView} from '../view';
 
-export class L5RRoller extends Roller<L5RRoll, Rolls> implements CanReRoll<L5RRoll>{
+export class L5RRoller extends Roller<Dice, Faces, DicePool> {
 
     constructor(private rng: RandomNumberGenerator, command: string) {
         super(command, [new SimpleParser()]);
     }
 
-    roll(rolls: Rolls): L5RRoll[] {
-        const rings = rollDie(rolls.rings, RING_ROLL_TABLE, isExploding, this.rng)
-            .map((face) => new L5RRoll(Dice.RING, face));
-        const skills = rollDie(rolls.skills, SKILL_ROLL_TABLE, isExploding, this.rng)
-            .map((face) => new L5RRoll(Dice.SKILL, face));
+    roll(pool: DicePool): Roll<Dice, Faces>[] {
+        const rings = rollDie(pool.rings, RING_ROLL_TABLE, isExploding, this.rng)
+            .map((face) => new Roll(Dice.RING, face));
+        const skills = rollDie(pool.skills, SKILL_ROLL_TABLE, isExploding, this.rng)
+            .map((face) => new Roll(Dice.SKILL, face));
         return [...rings, ...skills];
     }
 
-    reRoll(keptResults: L5RRoll[], reRollResults: L5RRoll[]): L5RRoll[] {
-        const reRolledDice = reRollResults.map((roll) => roll.die);
-        const ringReRolls = countMatches(reRolledDice, (die) => die === Dice.RING);
-        const skillReRolls = countMatches(reRolledDice, (die) => die === Dice.SKILL);
-        const reRolls = this.roll(new Rolls(ringReRolls, skillReRolls));
-        return [...keptResults, ...reRolls];
-    }
-
-    combineRolls(rolls: L5RRoll[]): RollResult {
+    combineRolls(rolls: Roll<Dice, Faces>[]): RollValues {
         const results = rolls
             .map((roll) => rollToRollResult(roll));
-        return combineAll(results, rollResultMonoid);
+        return combineAll(results, rollValuesMonoid);
     }
 
-    public formatRolls(rolls: L5RRoll[]): string {
+    public formatRolls(rolls: Roll<Dice, Faces>[]): string {
         return Mustache.render(tpl, {
-            rolls: rolls,
+            rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
             results: interpretResult(this.combineRolls(rolls)),
             timestamp: new Date().getTime(),
             rollIndex: function () {
                 return rolls.indexOf(this);
             },
         });
+    }
+
+    protected toDicePool(faces: Dice[]): DicePool {
+        const rings = countMatches(faces, (die) => die === Dice.RING);
+        const skills = countMatches(faces, (die) => die === Dice.SKILL);
+        return new DicePool(rings, skills);
     }
 }
 

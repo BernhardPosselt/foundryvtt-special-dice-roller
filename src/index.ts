@@ -1,10 +1,8 @@
 import {secureRandomNumber} from './rng';
 import {L5RRoller} from './l5r/roller';
-import {L5RRoll} from './l5r/dice';
 import {genesysRoller, starWarsRoller} from './genesys/roller';
 import {V5Roller} from './v5/roller';
-import {CanReRoll, Roller} from './roller';
-import {V5Roll} from './v5/dice';
+import {Roll, Roller} from './roller';
 
 
 Hooks.on('preCreateChatMessage', (_, data) => {
@@ -24,9 +22,9 @@ Hooks.on('preCreateChatMessage', (_, data) => {
     }
 });
 
-type NumericDieParser<R> = (die: number, face: number) => R;
+type NumericDieParser<D, F> = (die: number, face: number) => Roll<D, F>;
 
-function parseDice<R>(inputs: HTMLInputElement[], toDie: NumericDieParser<R>): R[] {
+function parseDice<D, F>(inputs: HTMLInputElement[], toDie: NumericDieParser<D, F>): Roll<D, F>[] {
     return inputs
         .map((roll) => {
             const die = parseInt(roll.dataset.die ?? '0', 10);
@@ -49,17 +47,17 @@ Hooks.on('renderChatLog', () => {
             if (button.classList.contains('l5r-roller-keep')) {
                 if (rollerKey === 'l5r') {
                     const roller = new L5RRoller(secureRandomNumber, 'l5r');
-                    const keptRolls = parseDice(selectedRolls, (die, face) => new L5RRoll(die, face));
+                    const keptRolls = parseDice(selectedRolls, (die, face) => new Roll(die, face));
                     renderNewRoll(roller.formatRolls(keptRolls));
                 }
             } else {
                 const omittedRolls = rolls.filter((roll) => !roll.checked);
                 if (rollerKey === 'v5') {
                     const roller = new V5Roller(secureRandomNumber, 'v5');
-                    reRoll(roller, (die, face) => new V5Roll(die, face), selectedRolls, omittedRolls);
+                    reRoll(roller, (die, face) => new Roll(die, face), selectedRolls, omittedRolls);
                 } else if (rollerKey === 'l5r') {
                     const roller = new L5RRoller(secureRandomNumber, 'l5r');
-                    reRoll(roller, (die, face) => new L5RRoll(die, face), selectedRolls, omittedRolls);
+                    reRoll(roller, (die, face) => new Roll(die, face), selectedRolls, omittedRolls);
                 }
             }
             selectedRolls.forEach((elem) => elem.checked = false);
@@ -67,9 +65,9 @@ Hooks.on('renderChatLog', () => {
     });
 });
 
-function reRoll<R, RS>(
-    roller: CanReRoll<R> & Roller<R, RS>,
-    diceParser: NumericDieParser<R>,
+function reRoll<D, F, P>(
+    roller: Roller<D, F, P>,
+    diceParser: NumericDieParser<D, F>,
     selectedRolls: HTMLInputElement[],
     omittedRolls: HTMLInputElement[]
 ) {

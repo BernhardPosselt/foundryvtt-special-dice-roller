@@ -2,56 +2,54 @@ import {RandomNumberGenerator} from '../rng';
 import {
     Dice,
     interpretResult,
-    V5Roll,
-    RollResult,
-    rollResultMonoid,
-    Rolls,
-    rollToRollResult,
+    RollValues,
+    rollValuesMonoid,
+    DicePool,
+    parseRollValues,
     SKILL_ROLL_TABLE,
-    HUNGER_ROLL_TABLE,
+    HUNGER_ROLL_TABLE, Faces, dieRollImages,
 } from './dice';
 import {countMatches} from '../arrays';
 import {combineAll} from '../lang';
-import {CanReRoll, rollDie, Roller} from '../roller';
+import {Roll, rollDie, Roller} from '../roller';
 import * as Mustache from 'mustache';
 import tpl from './template';
 import {SimpleParser} from './parser';
+import {DieRollView} from '../view';
 
-export class V5Roller extends Roller<V5Roll, Rolls> implements CanReRoll<V5Roll> {
+export class V5Roller extends Roller<Dice, Faces, DicePool> {
     constructor(private rng: RandomNumberGenerator, command: string) {
         super(command, [new SimpleParser()]);
     }
 
-    roll(rolls: Rolls): V5Roll[] {
+    roll(rolls: DicePool): Roll<Dice, Faces>[] {
         const hunger = rollDie(rolls.hunger, HUNGER_ROLL_TABLE, () => false, this.rng)
-            .map((face) => new V5Roll(Dice.HUNGER, face));
+            .map((face) => new Roll(Dice.HUNGER, face));
         const skills = rollDie(rolls.skills, SKILL_ROLL_TABLE, () => false, this.rng)
-            .map((face) => new V5Roll(Dice.SKILL, face));
+            .map((face) => new Roll(Dice.SKILL, face));
         return [...hunger, ...skills];
     }
 
-    reRoll(keptResults: V5Roll[], reRollResults: V5Roll[]): V5Roll[] {
-        const reRolledDice = reRollResults.map((roll) => roll.die);
-        const hungerReRolls = countMatches(reRolledDice, (die) => die === Dice.HUNGER);
-        const skillReRolls = countMatches(reRolledDice, (die) => die === Dice.SKILL);
-        const reRolls = this.roll(new Rolls(hungerReRolls, skillReRolls));
-        return [...keptResults, ...reRolls];
-    }
-
-    combineRolls(rolls: V5Roll[]): RollResult {
+    combineRolls(rolls: Roll<Dice, Faces>[]): RollValues {
         const results = rolls
-            .map((roll) => rollToRollResult(roll));
-        return combineAll(results, rollResultMonoid);
+            .map((roll) => parseRollValues(roll));
+        return combineAll(results, rollValuesMonoid);
     }
 
-    formatRolls(rolls: V5Roll[]): string {
+    formatRolls(rolls: Roll<Dice, Faces>[]): string {
         return Mustache.render(tpl, {
-            rolls: rolls,
+            rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
             results: interpretResult(this.combineRolls(rolls)),
             timestamp: new Date().getTime(),
             rollIndex: function () {
                 return rolls.indexOf(this);
             },
         });
+    }
+
+    protected toDicePool(faces: Dice[]): DicePool {
+        const hunger = countMatches(faces, (die) => die === Dice.HUNGER);
+        const skills = countMatches(faces, (die) => die === Dice.SKILL);
+        return new DicePool(skills, hunger);
     }
 }

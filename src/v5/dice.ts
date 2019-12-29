@@ -1,6 +1,5 @@
 import {Monoid} from '../lang';
 import {Roll} from '../roller';
-import {getDieImage} from '../images';
 
 export enum Dice {
     HUNGER,
@@ -41,15 +40,19 @@ export const HUNGER_ROLL_TABLE: Faces[] = [
     Faces.HUNGER_POTENTIAL_CRITICAL_SUCCESS,
 ];
 
-export class Rolls {
+export class DicePool {
     constructor(
         public skills = 0,
         public hunger = 0,
     ) {
     }
+
+    toString(): string {
+        return `skills: ${this.skills}, hunger: ${this.hunger}`;
+    }
 }
 
-export class RollResult {
+export class RollValues {
     constructor(
         public successes = 0,
         public failures = 0,
@@ -75,14 +78,7 @@ export const dieRollImages = new Map<Dice, Map<Faces, string>>();
 dieRollImages.set(Dice.HUNGER, hungerImages);
 dieRollImages.set(Dice.SKILL, skillImages);
 
-export class V5Roll extends Roll<Dice, Faces> {
-
-    public get imageName(): string {
-        return getDieImage(dieRollImages, this.die, this.face);
-    }
-}
-
-const rollToRollResultMapping = new Map<Faces, Partial<RollResult>>();
+const rollToRollResultMapping = new Map<Faces, Partial<RollValues>>();
 rollToRollResultMapping.set(Faces.SUCCESS, {successes: 1});
 rollToRollResultMapping.set(Faces.FAILURE, {failures: 1});
 rollToRollResultMapping.set(Faces.HUNGER_FAILURE_1, {hungerFailures1: 1});
@@ -98,10 +94,12 @@ export class InterpretedResult {
     }
 }
 
-export function interpretResult(result: RollResult): InterpretedResult {
+export function interpretResult(result: RollValues): InterpretedResult {
     // each pair of 10s is worth 4 successes
-    const criticalSuccesses = Math.floor((result.hungerPotentialCriticals + result.potentialCriticals) / 2);
-    const successes = result.successes + criticalSuccesses * 4;
+    const potentialCriticals = result.hungerPotentialCriticals + result.potentialCriticals;
+    const leftOverCriticals = potentialCriticals % 2;
+    const criticalSuccesses = Math.floor(potentialCriticals / 2);
+    const successes = result.successes + criticalSuccesses * 4 + leftOverCriticals;
     // if there is at least one critical and a hunger critical, it becomes messy
     const messyCritical = criticalSuccesses > 0 && result.hungerPotentialCriticals > 0;
     const bestialFailure = result.hungerFailures1 > 0;
@@ -109,11 +107,11 @@ export function interpretResult(result: RollResult): InterpretedResult {
     return new InterpretedResult(
         successes,
         messyCritical,
-        bestialFailure
+        bestialFailure,
     );
 }
 
-export function rollToRollResult(roll: V5Roll): RollResult {
+export function parseRollValues(roll: Roll<Dice, Faces>): RollValues {
     const result = rollToRollResultMapping.get(roll.face);
     if (result !== undefined) {
         return toRollResult(result);
@@ -122,24 +120,25 @@ export function rollToRollResult(roll: V5Roll): RollResult {
     }
 }
 
-export function toRollResult(partial: Partial<RollResult>): RollResult {
-    return Object.assign(new RollResult(), partial);
+export function toRollResult(partial: Partial<RollValues>): RollValues {
+    return Object.assign(new RollValues(), partial);
 }
 
-export const rollResultMonoid: Monoid<RollResult> = {
-    identity: new RollResult(),
-    combine: (roll1: RollResult, roll2: RollResult) => new RollResult(
+export const rollValuesMonoid: Monoid<RollValues> = {
+    identity: new RollValues(),
+    combine: (roll1: RollValues, roll2: RollValues) => new RollValues(
         roll1.successes + roll2.successes,
         roll1.failures + roll2.failures,
-        roll1.hungerFailures1 + roll2.hungerFailures1,
         roll1.potentialCriticals + roll2.potentialCriticals,
+
+        roll1.hungerFailures1 + roll2.hungerFailures1,
         roll1.hungerPotentialCriticals + roll2.hungerPotentialCriticals,
     ),
 };
 
-export const rollsMonoid: Monoid<Rolls> = {
-    identity: new Rolls(),
-    combine: (roll1: Rolls, roll2: Rolls) => new Rolls(
+export const rollsMonoid: Monoid<DicePool> = {
+    identity: new DicePool(),
+    combine: (roll1: DicePool, roll2: DicePool) => new DicePool(
         roll1.skills + roll2.skills,
         roll1.hunger + roll2.hunger,
     ),
