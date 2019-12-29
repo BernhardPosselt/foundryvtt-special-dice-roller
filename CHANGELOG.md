@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added support for rolling Vampire the Masquerade 5th Edition dice
 
+### Changed
+- Renamed module to Special Dice Roller
+
 ## [0.4.0] - 2019-12-28
 ### Added
 - Accept numbers for simple formulas: wwbb can now be written as 2w2b

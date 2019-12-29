@@ -34,7 +34,7 @@ function parseDice<D, F>(inputs: HTMLInputElement[], toDie: NumericDieParser<D, 
 }
 
 Hooks.on('renderChatLog', () => {
-    $('#chat-log').on('click', '.l5r-roller button', (event: Event) => {
+    $('#chat-log').on('click', '.special-dice-roller button', (event: Event) => {
         event.preventDefault();
 
         const button = event.target as HTMLButtonElement;
@@ -44,7 +44,7 @@ Hooks.on('renderChatLog', () => {
         const selectedRolls = rolls.filter((roll) => roll.checked);
 
         if (selectedRolls.length > 0) {
-            if (button.classList.contains('l5r-roller-keep')) {
+            if (button.classList.contains('special-dice-roller-keep')) {
                 if (rollerKey === 'l5r') {
                     const roller = new L5RRoller(secureRandomNumber, 'l5r');
                     const keptRolls = parseDice(selectedRolls, (die, face) => new Roll(die, face));

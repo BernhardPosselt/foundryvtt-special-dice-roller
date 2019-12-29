@@ -1,11 +1,11 @@
 const tpl = `
-<div class="l5r-roller">
+<div class="special-dice-roller">
     <div>
         <form>
             {{#rolls}}
-            <input type="checkbox" style="background-image: url('modules/l5r-roller/public/images/v5/{{imageName}}.png')" name="roll{{rollIndex}}" data-die="{{die}}" data-face="{{face}}"/>
+            <input type="checkbox" style="background-image: url('modules/special-dice-roller/public/images/v5/{{imageName}}.png')" name="roll{{rollIndex}}" data-die="{{die}}" data-face="{{face}}"/>
             {{/rolls}}
-            <button class="l5r-roller-reroll" data-roller="v5">re-roll selected</button>
+            <button class="special-dice-roller-reroll" data-roller="v5">re-roll selected</button>
         </form>
     </div>
     <hr>
@@ -16,7 +16,7 @@ const tpl = `
             <li>Successes: {{successes}}</li>
             {{/successes}}
             {{#messyCritical}}
-            <li class="l5r-roller-v5-messy-critical">Messy Critical</li>
+            <li class="special-dice-roller-v5-messy-critical">Messy Critical</li>
             {{/messyCritical}}
             {{#bestialFailure}}
             <li>Potential Bestial Failure</li>

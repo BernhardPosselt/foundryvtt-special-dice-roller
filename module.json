@@ -1,6 +1,6 @@
 {
-  "name": "l5r-roller",
-  "title": "Legend of the 5 Rings Roller",
+  "name": "special-dice-roller",
+  "title": "Special Dice Roller",
   "description": "Supports rolling dice for: Legend of the 5 Rings 5th edition, Genesys, Vampire the Masquerade 5th edition, FFG's Star Wars TTRPG. Check out the README.md on the homepage for a guide on how to roll various dice.",
   "version": "0.5.0",
   "author": "Bernhard Posselt",
@@ -8,7 +8,7 @@
   "styles": ["./public/css/styles.css"],
   "packs": [],
   "minimumCoreVersion": "0.4.3",
-  "url": "https://github.com/BernhardPosselt/l5r-foundryvtt-roller",
-  "manifest": "https://github.com/BernhardPosselt/l5r-foundryvtt-roller/raw/master/module.json",
-  "download": "https://github.com/BernhardPosselt/l5r-foundryvtt-roller/archive/master.zip"
+  "url": "https://github.com/BernhardPosselt/foundryvtt-special-dice-roller",
+  "manifest": "https://github.com/BernhardPosselt/foundryvtt-special-dice-roller/raw/master/module.json",
+  "download": "https://github.com/BernhardPosselt/foundryvtt-special-dice-roller/archive/master.zip"
 }

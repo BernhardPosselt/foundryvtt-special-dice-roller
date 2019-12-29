@@ -1,4 +1,4 @@
-# L5R Roller
+# Special Dice Roller
 
 [![Build Status](https://travis-ci.org/BernhardPosselt/l5r-foundryvtt-roller.svg?branch=master)](https://travis-ci.org/BernhardPosselt/l5r-foundryvtt-roller)
 
