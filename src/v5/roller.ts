@@ -1,14 +1,13 @@
 import {RandomNumberGenerator} from '../rng';
 import {
     Dice,
-    Faces,
     interpretResult,
-    RING_ROLL_TABLE,
     RollValues,
     rollValuesMonoid,
     DicePool,
-    rollToRollResult,
-    SKILL_ROLL_TABLE, dieRollImages,
+    parseRollValues,
+    SKILL_ROLL_TABLE,
+    HUNGER_ROLL_TABLE, Faces, dieRollImages,
 } from './dice';
 import {countMatches} from '../arrays';
 import {combineAll} from '../lang';
@@ -18,27 +17,26 @@ import tpl from './template';
 import {SimpleParser} from './parser';
 import {DieRollView} from '../view';
 
-export class L5RRoller extends Roller<Dice, Faces, DicePool> {
-
+export class V5Roller extends Roller<Dice, Faces, DicePool> {
     constructor(private rng: RandomNumberGenerator, command: string) {
         super(command, [new SimpleParser()]);
     }
 
-    roll(pool: DicePool): Roll<Dice, Faces>[] {
-        const rings = rollDie(pool.rings, RING_ROLL_TABLE, isExploding, this.rng)
-            .map((face) => new Roll(Dice.RING, face));
-        const skills = rollDie(pool.skills, SKILL_ROLL_TABLE, isExploding, this.rng)
+    roll(rolls: DicePool): Roll<Dice, Faces>[] {
+        const hunger = rollDie(rolls.hunger, HUNGER_ROLL_TABLE, () => false, this.rng)
+            .map((face) => new Roll(Dice.HUNGER, face));
+        const skills = rollDie(rolls.skills, SKILL_ROLL_TABLE, () => false, this.rng)
             .map((face) => new Roll(Dice.SKILL, face));
-        return [...rings, ...skills];
+        return [...hunger, ...skills];
     }
 
     combineRolls(rolls: Roll<Dice, Faces>[]): RollValues {
         const results = rolls
-            .map((roll) => rollToRollResult(roll));
+            .map((roll) => parseRollValues(roll));
         return combineAll(results, rollValuesMonoid);
     }
 
-    public formatRolls(rolls: Roll<Dice, Faces>[]): string {
+    formatRolls(rolls: Roll<Dice, Faces>[]): string {
         return Mustache.render(tpl, {
             rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
             results: interpretResult(this.combineRolls(rolls)),
@@ -50,14 +48,8 @@ export class L5RRoller extends Roller<Dice, Faces, DicePool> {
     }
 
     protected toDicePool(faces: Dice[]): DicePool {
-        const rings = countMatches(faces, (die) => die === Dice.RING);
+        const hunger = countMatches(faces, (die) => die === Dice.HUNGER);
         const skills = countMatches(faces, (die) => die === Dice.SKILL);
-        return new DicePool(rings, skills);
+        return new DicePool(skills, hunger);
     }
-}
-
-function isExploding(face: Faces): boolean {
-    return face === Faces.EXPLODING_STRIFE ||
-        face === Faces.EXPLODING_OPPORTUNITY ||
-        face === Faces.EXPLODING;
 }

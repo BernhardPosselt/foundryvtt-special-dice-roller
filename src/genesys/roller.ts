@@ -1,49 +1,59 @@
-import {rollDie, Roller} from '../roller';
-import {parseFormula, Parser} from '../parser';
+import {Roll, rollDie, Roller} from '../roller';
 import {RandomNumberGenerator} from '../rng';
 import {
     ABILITY_ROLL_TABLE,
-    BOOST_ROLL_TABLE, CHALLENGE_ROLL_TABLE,
-    Dice, DIFFICULTY_ROLL_TABLE, FORCE_ROLL_TABLE,
-    GenesysRoll,
-    interpretRollResult, PROFICIENCY_ROLL_TABLE, RollResult, rollResultMonoid,
-    Rolls, rollToRollResult,
+    BOOST_ROLL_TABLE,
+    CHALLENGE_ROLL_TABLE,
+    Dice,
+    DicePool,
+    dieRollImages,
+    DIFFICULTY_ROLL_TABLE,
+    Faces,
+    FORCE_ROLL_TABLE,
+    interpretResult,
+    PROFICIENCY_ROLL_TABLE,
+    rollToRollResult,
+    RollValues,
+    rollValuesMonoid,
     SETBACK_ROLL_TABLE,
 } from './dice';
 import {SimpleParser, SimpleSWParser} from './parser';
 import * as Mustache from 'mustache';
 import {combineAll} from '../lang';
 import {tpl} from './template';
-import {escapeHtml} from '../util';
+import {Parser} from '../parser';
+import {countMatches} from '../arrays';
+import {DieRollView} from '../view';
 
-export class GenesysRoller extends Roller {
-    private readonly parsers: Parser<Rolls>[];
+export function genesysRoller(rng: RandomNumberGenerator, command: string) {
+    return new GenesysRoller(rng, command, [new SimpleParser()]);
+}
 
-    constructor(private rng: RandomNumberGenerator, command: string) {
-        super(command);
-        if (command === 'sw') {
-            this.parsers = [new SimpleSWParser()];
-        } else {
-            this.parsers = [new SimpleParser()];
-        }
+export function starWarsRoller(rng: RandomNumberGenerator, command: string) {
+    return new GenesysRoller(rng, command, [new SimpleSWParser()]);
+}
+
+export class GenesysRoller extends Roller<Dice, Faces, DicePool> {
+    constructor(private rng: RandomNumberGenerator, command: string, parsers: Parser<DicePool>[]) {
+        super(command, parsers);
     }
 
-    roll(rolls: Rolls): GenesysRoll[] {
-        const boosts = rollDie(rolls.boost, BOOST_ROLL_TABLE, () => false, this.rng)
-            .map((face) => new GenesysRoll(Dice.BOOST, face));
-        const setbacks = rollDie(rolls.setback, SETBACK_ROLL_TABLE, () => false, this.rng)
-            .map((face) => new GenesysRoll(Dice.SETBACK, face));
-        const abilities = rollDie(rolls.advantage, ABILITY_ROLL_TABLE, () => false, this.rng)
-            .map((face) => new GenesysRoll(Dice.ABILITY, face));
-        const difficulties = rollDie(rolls.difficulty, DIFFICULTY_ROLL_TABLE, () => false, this.rng)
-            .map((face) => new GenesysRoll(Dice.DIFFICULTY, face));
-        const proficiencies = rollDie(rolls.proficiency, PROFICIENCY_ROLL_TABLE, () => false, this.rng)
-            .map((face) => new GenesysRoll(Dice.PROFICIENCY, face));
-        const challenges = rollDie(rolls.challenge, CHALLENGE_ROLL_TABLE, () => false, this.rng)
-            .map((face) => new GenesysRoll(Dice.CHALLENGE, face));
-        const forces = rollDie(rolls.force, FORCE_ROLL_TABLE, () => false, this.rng)
-            .map((face) => new GenesysRoll(Dice.FORCE, face));
-        const result = [
+    roll(pool: DicePool): Roll<Dice, Faces>[] {
+        const boosts = rollDie(pool.boost, BOOST_ROLL_TABLE, () => false, this.rng)
+            .map((face) => new Roll(Dice.BOOST, face));
+        const setbacks = rollDie(pool.setback, SETBACK_ROLL_TABLE, () => false, this.rng)
+            .map((face) => new Roll(Dice.SETBACK, face));
+        const abilities = rollDie(pool.ability, ABILITY_ROLL_TABLE, () => false, this.rng)
+            .map((face) => new Roll(Dice.ABILITY, face));
+        const difficulties = rollDie(pool.difficulty, DIFFICULTY_ROLL_TABLE, () => false, this.rng)
+            .map((face) => new Roll(Dice.DIFFICULTY, face));
+        const proficiencies = rollDie(pool.proficiency, PROFICIENCY_ROLL_TABLE, () => false, this.rng)
+            .map((face) => new Roll(Dice.PROFICIENCY, face));
+        const challenges = rollDie(pool.challenge, CHALLENGE_ROLL_TABLE, () => false, this.rng)
+            .map((face) => new Roll(Dice.CHALLENGE, face));
+        const forces = rollDie(pool.force, FORCE_ROLL_TABLE, () => false, this.rng)
+            .map((face) => new Roll(Dice.FORCE, face));
+        return [
             ...boosts,
             ...setbacks,
             ...abilities,
@@ -52,34 +62,33 @@ export class GenesysRoller extends Roller {
             ...challenges,
             ...forces,
         ];
-        console.log(`Rolled ${result} with formula ${rolls}`);
-        return result;
     }
 
-    protected rollFormula(formula: string): string {
-        try {
-            const parsedFormula = parseFormula(formula, this.parsers);
-            const rolls = this.roll(parsedFormula);
-            return this.formatRolls(rolls);
-        } catch (e) {
-            return escapeHtml(e.message);
-        }
-    }
-
-    combineRolls(rolls: GenesysRoll[]): RollResult {
+    combineRolls(rolls: Roll<Dice, Faces>[]): RollValues {
         const results = rolls
             .map((roll) => rollToRollResult(roll));
-        return combineAll(results, rollResultMonoid);
+        return combineAll(results, rollValuesMonoid);
     }
 
-    private formatRolls(rolls: GenesysRoll[]): string {
+    formatRolls(rolls: Roll<Dice, Faces>[]): string {
         return Mustache.render(tpl(this.command), {
-            rolls: rolls,
-            results: interpretRollResult(this.combineRolls(rolls)),
+            rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
+            results: interpretResult(this.combineRolls(rolls)),
             timestamp: new Date().getTime(),
             rollIndex: function () {
                 return rolls.indexOf(this);
             },
         });
+    }
+
+    protected toDicePool(faces: Dice[]): DicePool {
+        const boost = countMatches(faces, (die) => die === Dice.BOOST);
+        const setback = countMatches(faces, (die) => die === Dice.SETBACK);
+        const ability = countMatches(faces, (die) => die === Dice.ABILITY);
+        const difficulty  = countMatches(faces, (die) => die === Dice.DIFFICULTY);
+        const proficiency = countMatches(faces, (die) => die === Dice.PROFICIENCY);
+        const challenge  = countMatches(faces, (die) => die === Dice.CHALLENGE);
+        const force = countMatches(faces, (die) => die === Dice.FORCE);
+        return new DicePool(boost, setback, ability, difficulty, proficiency, challenge, force);
     }
 }

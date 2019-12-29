@@ -8,5 +8,4 @@ export function combineAll<T>(values: T[], monoid: Monoid<T>) {
         .reduce((prev, curr) => monoid.combine(prev, curr), monoid.identity);
 }
 
-
 export type Predicate<T> = (value: T) => boolean;

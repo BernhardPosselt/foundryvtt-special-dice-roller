@@ -12,7 +12,7 @@ test('it should parse a simple roll formula', () => {
     const result = parseFormula("bbsaaaddddpppppcccccc", parsers);
     expect(result.boost).toBe(2);
     expect(result.setback).toBe(1);
-    expect(result.advantage).toBe(3);
+    expect(result.ability).toBe(3);
     expect(result.difficulty).toBe(4);
     expect(result.proficiency).toBe(5);
     expect(result.challenge).toBe(6);
@@ -22,7 +22,7 @@ test('it should parse a simple counted roll formula', () => {
     const result = parseFormula("bbs3aaddddpppppcccccc", parsers);
     expect(result.boost).toBe(2);
     expect(result.setback).toBe(1);
-    expect(result.advantage).toBe(4);
+    expect(result.ability).toBe(4);
     expect(result.difficulty).toBe(4);
     expect(result.proficiency).toBe(5);
     expect(result.challenge).toBe(6);

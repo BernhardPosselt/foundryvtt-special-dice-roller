@@ -1,8 +1,10 @@
-import {Dice, Faces, GenesysRoll, interpretRollResult, toRollResult} from './dice';
+import {Dice, dieRollImages, Faces, interpretResult, toRollResult} from './dice';
+import {Roll} from '../roller';
+import {getDieImage} from '../images';
 
 test('no successes count as a failed check', () => {
     const rollResult = toRollResult({});
-    const result = interpretRollResult(rollResult);
+    const result = interpretResult(rollResult);
 
     expect(result.successes).toBe(0);
     expect(result.failures).toBe(0);
@@ -19,7 +21,7 @@ test('one success is a successful check', () => {
     const rollResult = toRollResult({
         successes: 1
     });
-    const result = interpretRollResult(rollResult);
+    const result = interpretResult(rollResult);
 
     expect(result.successes).toBe(1);
     expect(result.failures).toBe(0);
@@ -39,7 +41,7 @@ test('successes should cancel failures', () => {
         failures: 1,
         despairs: 1
     });
-    const result = interpretRollResult(rollResult);
+    const result = interpretResult(rollResult);
 
     expect(result.successes).toBe(2);
     expect(result.failures).toBe(0);
@@ -59,7 +61,7 @@ test('failures should cancel successes', () => {
         failures: 2,
         despairs: 2
     });
-    const result = interpretRollResult(rollResult);
+    const result = interpretResult(rollResult);
 
     expect(result.successes).toBe(0);
     expect(result.failures).toBe(2);
@@ -77,7 +79,7 @@ test('threats should cancel abilities', () => {
         advantages: 2,
         threats: 1
     });
-    const result = interpretRollResult(rollResult);
+    const result = interpretResult(rollResult);
 
     expect(result.successes).toBe(0);
     expect(result.failures).toBe(0);
@@ -95,7 +97,7 @@ test('abilities should cancel threats', () => {
         advantages: 1,
         threats: 2
     });
-    const result = interpretRollResult(rollResult);
+    const result = interpretResult(rollResult);
 
     expect(result.successes).toBe(0);
     expect(result.failures).toBe(0);
@@ -113,7 +115,7 @@ test('should map force dice', () => {
         force: 1,
         darkForce: 2
     });
-    const result = interpretRollResult(rollResult);
+    const result = interpretResult(rollResult);
 
     expect(result.successes).toBe(0);
     expect(result.failures).toBe(0);
@@ -127,28 +129,28 @@ test('should map force dice', () => {
 });
 
 test('should get a dice image', () => {
-    const roll = new GenesysRoll(Dice.ABILITY, Faces.ADVANTAGE);
+    const roll = new Roll(Dice.ABILITY, Faces.ADVANTAGE);
 
-    expect(roll.imageName).toBe('greena');
+    expect(getDieImage(dieRollImages, roll.die, roll.face)).toBe('greena');
 });
 
 test('should get a dice image', () => {
-    const roll = new GenesysRoll(Dice.ABILITY, Faces.BLANK);
+    const roll = new Roll(Dice.ABILITY, Faces.BLANK);
 
-    expect(roll.imageName).toBe('green');
+    expect(getDieImage(dieRollImages, roll.die, roll.face)).toBe('green');
 });
 
 test('should get a correct boost image', () => {
-    const roll = new GenesysRoll(Dice.BOOST, Faces.DOUBLE_ADVANTAGE);
+    const roll = new Roll(Dice.BOOST, Faces.DOUBLE_ADVANTAGE);
 
-    expect(roll.imageName).toBe('blueaa');
+    expect(getDieImage(dieRollImages, roll.die, roll.face)).toBe('blueaa');
 });
 
 test('should roll correct boost', () => {
     const rollResult = toRollResult({
         failures: 1
     });
-    const result = interpretRollResult(rollResult);
+    const result = interpretResult(rollResult);
 
     expect(result.successes).toBe(0);
     expect(result.failures).toBe(1);

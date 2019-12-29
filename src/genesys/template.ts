@@ -1,10 +1,10 @@
 export function tpl(system: string) {
     return `
-    <div class="l5r-roller">
+    <div class="special-dice-roller">
         <div>
             <form>
                 {{#rolls}}
-                <input type="checkbox" style="background-image: url('modules/l5r-roller/public/images/${system}/{{imageName}}.png')" name="roll{{rollIndex}}" data-die="{{die}}" data-face="{{face}}" disabled/>
+                <input type="checkbox" style="background-image: url('modules/special-dice-roller/public/images/${system}/{{imageName}}.png')" name="roll{{rollIndex}}" data-die="{{die}}" data-face="{{face}}" disabled/>
                 {{/rolls}}
             </form>
         </div>
@@ -13,10 +13,10 @@ export function tpl(system: string) {
             <ul>
             {{#results}}
                 {{#succeeded}}
-                <li class="l5r-roller-succeeded">Check: succeeded</li>
+                <li class="special-dice-roller-succeeded">Check: succeeded</li>
                 {{/succeeded}}
                 {{^succeeded}}
-                <li class="l5r-roller-failed">Check: failed</li>
+                <li class="special-dice-roller-failed">Check: failed</li>
                 {{/succeeded}}
                 {{#successes}}
                 <li>Successes: {{successes}}</li>

@@ -1,10 +1,16 @@
-# L5R Roller
+# Special Dice Roller
 
 [![Build Status](https://travis-ci.org/BernhardPosselt/l5r-foundryvtt-roller.svg?branch=master)](https://travis-ci.org/BernhardPosselt/l5r-foundryvtt-roller)
 
-A Legend of the 5 Rings dice roller using the images from [SkyJedi's Discord Roller](https://github.com/SkyJedi/FFGNDS-Discord-Dice-Roller)
+Supports Rolling Dice for various systems:
 
-Also supports Genesys and Fantasy Flight Games Star Wars RPG
+* Legend of the 5 Rings 5th edition
+* Vampire the Masquerade 5th edition
+* Genesys
+* FFG's Star Wars TTRPG
+
+L5R, Genesys and Star Wars images are taken from [SkyJedi's Discord Roller](https://github.com/SkyJedi/FFGNDS-Discord-Dice-Roller)
+Vampire the Masquerade images are taken from and [Lumi#5953's Thirst Discord bot](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=2ahUKEwj-iKLCjNvmAhWOyqYKHaYEC7AQFjAAegQIAhAB&url=https%3A%2F%2Fdiscordapp.com%2Foauth2%2Fauthorize%3Fclient_id%3D475234745848954905%26scope%3Dbot%26permissions%3D0&usg=AOvVaw0fV9gFSh3hD3WQd2BwJKv7). 
 
 # Usage
 
@@ -13,6 +19,7 @@ You can roll a system by starting your message with the following string:
 * Legend of the 5 Rings: /l5r
 * FFG Star Wars: /sw
 * FFG Genesys: /gen
+* Vampire the Masquerade: /v5
 
 Then supply a dice formula separated with a space. The formula consists of dice letters that are optionally prefixed with a number.
 
@@ -44,3 +51,14 @@ Usage is similar to L5R but re-rolls and keeping dice is unsupported. Use the **
 * f: force (sw only)
 
 ![roller usage](docs/genroll.png)
+
+## Usage Vampire the Masquerade
+
+Usage is similar to L5R but keeping dice is unsupported. Use the **/v5** command using the following dice letters:
+
+* b, s: skill dice
+* h, r: hunger dice
+
+You can choose to re-roll certain dice. To do that, click on the dice to select them and hit the re-roll button. Re-rolled dice are removed from the roll and new rolls are attached at the end.
+
+![roller usage](docs/v5roll.png)

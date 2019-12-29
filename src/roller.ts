@@ -1,14 +1,23 @@
 import {Predicate} from './lang';
 import {RandomNumberGenerator} from './rng';
 import {shim} from 'array.prototype.flatmap';
+import {parseFormula, Parser} from './parser';
+import {escapeHtml} from './util';
 
 export class Roll<D, F> {
     constructor(public die: D, public face: F) {
     }
+
+    toString(): string {
+        return `die: ${this.die}, face: ${this.face}`
+    }
 }
 
-export abstract class Roller {
-    protected constructor(protected command: string) {
+export abstract class Roller<D, F, P> {
+    protected constructor(
+        protected command: string,
+        protected parsers: Parser<P>[]
+    ) {
     }
 
     handlesCommand(command: string): boolean {
@@ -21,7 +30,29 @@ export abstract class Roller {
         return this.rollFormula(formula);
     }
 
-    protected abstract rollFormula(formula: string): string
+    rollFormula(formula: string): string {
+        try {
+            const parsedFormula = parseFormula(formula, this.parsers);
+            const rolls = this.roll(parsedFormula);
+            console.log(`Rolled ${rolls} with formula ${parsedFormula}`);
+            return this.formatRolls(rolls);
+        } catch (e) {
+            return escapeHtml(e.message);
+        }
+    }
+
+    reRoll(keptResults: Roll<D, F>[], reRollResults: Roll<D, F>[]): Roll<D, F>[] {
+        const reRolledDice: D[] = reRollResults.map((roll) => roll.die);
+        const pool = this.toDicePool(reRolledDice);
+        const reRolls = this.roll(pool);
+        return [...keptResults, ...reRolls];
+    }
+
+    protected abstract toDicePool(faces: D[]): P
+
+    abstract roll(dicePool: P): Roll<D, F>[]
+
+    abstract formatRolls(rolls: Roll<D, F>[]): string
 }
 
 /**

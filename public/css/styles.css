@@ -1,4 +1,4 @@
-.l5r-roller form input[type=checkbox] {
+.special-dice-roller form input[type=checkbox] {
     border: 1px solid transparent;
     background-repeat: no-repeat;
     background-position: center;
@@ -12,19 +12,23 @@
     outline: none;
 }
 
-.l5r-roller form input[type=checkbox]:disabled {
+.special-dice-roller form input[type=checkbox]:disabled {
     cursor: default;
 }
 
-.l5r-roller form input[type=checkbox]:checked {
+.special-dice-roller form input[type=checkbox]:checked {
     outline: none;
     border: 1px solid #ac0f1a;
 }
 
-.l5r-roller-succeeded {
+.special-dice-roller-succeeded {
     color: darkgreen;
 }
 
-.l5r-roller-failed {
+.special-dice-roller-failed {
+    color: darkred;
+}
+
+.special-dice-roller-v5-messy-critical {
     color: darkred;
 }

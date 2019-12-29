@@ -1,20 +1,20 @@
-import {GenesysRoller} from './roller';
+import {genesysRoller} from './roller';
 import {makeRng} from '../rng';
-import {Dice, Faces, interpretRollResult, Rolls} from './dice';
+import {Dice, Faces, interpretResult, DicePool} from './dice';
 
 test('should react to gen command', () => {
-    const roller = new GenesysRoller(makeRng(0), 'gen');
+    const roller = genesysRoller(makeRng(0), 'gen');
     expect(roller.handlesCommand('/gen ')).toBe(true);
 });
 
 test('should react to sw command', () => {
-    const roller = new GenesysRoller(makeRng(0), 'sw');
+    const roller = genesysRoller(makeRng(0), 'sw');
     expect(roller.handlesCommand('/sw ')).toBe(true);
 });
 
 test('should roll various dice', () => {
-    const roller = new GenesysRoller(makeRng(1, 2, 3, 4, 5, 6, 7), 'gen');
-    const result = roller.roll(new Rolls(1, 1, 1, 1, 1, 1, 1));
+    const roller = genesysRoller(makeRng(1, 2, 3, 4, 5, 6, 7), 'gen');
+    const result = roller.roll(new DicePool(1, 1, 1, 1, 1, 1, 1));
 
     expect(result.length).toBe(7);
     expect(result[0].die).toBe(Dice.BOOST);
@@ -34,8 +34,8 @@ test('should roll various dice', () => {
 });
 
 test('should count results', () => {
-    const roller = new GenesysRoller(makeRng(1, 2, 3, 4, 5, 6, 7), 'gen');
-    const result = roller.roll(new Rolls(1, 1, 1, 1, 1, 1, 1));
+    const roller = genesysRoller(makeRng(1, 2, 3, 4, 5, 6, 7), 'gen');
+    const result = roller.roll(new DicePool(1, 1, 1, 1, 1, 1, 1));
     const combined = roller.combineRolls(result);
 
     expect(combined.blanks).toBe(1);
@@ -50,10 +50,10 @@ test('should count results', () => {
 });
 
 test('should interpret results', () => {
-    const roller = new GenesysRoller(makeRng(1, 2, 3, 4, 5, 6, 7), 'gen');
-    const result = roller.roll(new Rolls(1, 1, 1, 1, 1, 1, 1));
+    const roller = genesysRoller(makeRng(1, 2, 3, 4, 5, 6, 7), 'gen');
+    const result = roller.roll(new DicePool(1, 1, 1, 1, 1, 1, 1));
     const combined = roller.combineRolls(result);
-    const interpreted = interpretRollResult(combined);
+    const interpreted = interpretResult(combined);
 
     expect(interpreted.successes).toBe(1);
     expect(interpreted.advantages).toBe(0);
@@ -65,10 +65,10 @@ test('should interpret results', () => {
 });
 
 test('should interpret results for setback', () => {
-    const roller = new GenesysRoller(makeRng( 3), 'gen');
-    const result = roller.roll(new Rolls(0, 1, 0, 0, 0, 0, 0));
+    const roller = genesysRoller(makeRng( 3), 'gen');
+    const result = roller.roll(new DicePool(0, 1, 0, 0, 0, 0, 0));
     const combined = roller.combineRolls(result);
-    const interpreted = interpretRollResult(combined);
+    const interpreted = interpretResult(combined);
 
     expect(interpreted.successes).toBe(0);
     expect(interpreted.failures).toBe(1);
@@ -82,10 +82,10 @@ test('should interpret results for setback', () => {
 });
 
 test('should correctly calculate successes', () => {
-    const roller = new GenesysRoller(makeRng( 3, 11), 'gen');
-    const result = roller.roll(new Rolls(0, 0, 0, 0, 2, 0, 0));
+    const roller = genesysRoller(makeRng( 3, 11), 'gen');
+    const result = roller.roll(new DicePool(0, 0, 0, 0, 2, 0, 0));
     const combined = roller.combineRolls(result);
-    const interpreted = interpretRollResult(combined);
+    const interpreted = interpretResult(combined);
 
     expect(interpreted.successes).toBe(3);
     expect(interpreted.failures).toBe(0);
@@ -99,10 +99,10 @@ test('should correctly calculate successes', () => {
 });
 
 test('should correctly calculate failures', () => {
-    const roller = new GenesysRoller(makeRng( 3, 11), 'gen');
-    const result = roller.roll(new Rolls(0, 0, 0, 0, 0, 2, 0));
+    const roller = genesysRoller(makeRng( 3, 11), 'gen');
+    const result = roller.roll(new DicePool(0, 0, 0, 0, 0, 2, 0));
     const combined = roller.combineRolls(result);
-    const interpreted = interpretRollResult(combined);
+    const interpreted = interpretResult(combined);
 
     expect(interpreted.successes).toBe(0);
     expect(interpreted.failures).toBe(3);
