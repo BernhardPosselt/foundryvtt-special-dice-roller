@@ -2,11 +2,18 @@ import {rollDie, Roller} from '../roller';
 import {RandomNumberGenerator} from '../rng';
 import {
     ABILITY_ROLL_TABLE,
-    BOOST_ROLL_TABLE, CHALLENGE_ROLL_TABLE,
-    Dice, DIFFICULTY_ROLL_TABLE, FORCE_ROLL_TABLE,
+    BOOST_ROLL_TABLE,
+    CHALLENGE_ROLL_TABLE,
+    Dice,
+    DIFFICULTY_ROLL_TABLE,
+    FORCE_ROLL_TABLE,
     GenesysRoll,
-    interpretResult, PROFICIENCY_ROLL_TABLE, RollResult, rollResultMonoid,
-    Rolls, rollToRollResult,
+    interpretResult,
+    PROFICIENCY_ROLL_TABLE,
+    RollResult,
+    rollResultMonoid,
+    Rolls,
+    rollToRollResult,
     SETBACK_ROLL_TABLE,
 } from './dice';
 import {SimpleParser, SimpleSWParser} from './parser';
@@ -16,11 +23,11 @@ import {tpl} from './template';
 import {Parser} from '../parser';
 
 export function genesysRoller(rng: RandomNumberGenerator, command: string) {
-    return new GenesysRoller(rng, command, [new SimpleParser()])
+    return new GenesysRoller(rng, command, [new SimpleParser()]);
 }
 
 export function starWarsRoller(rng: RandomNumberGenerator, command: string) {
-    return new GenesysRoller(rng, command, [new SimpleSWParser()])
+    return new GenesysRoller(rng, command, [new SimpleSWParser()]);
 }
 
 export class GenesysRoller extends Roller<GenesysRoll, Rolls> {
@@ -62,7 +69,7 @@ export class GenesysRoller extends Roller<GenesysRoll, Rolls> {
         return combineAll(results, rollResultMonoid);
     }
 
-    protected formatRolls(rolls: GenesysRoll[]): string {
+    formatRolls(rolls: GenesysRoll[]): string {
         return Mustache.render(tpl(this.command), {
             rolls: rolls,
             results: interpretResult(this.combineRolls(rolls)),

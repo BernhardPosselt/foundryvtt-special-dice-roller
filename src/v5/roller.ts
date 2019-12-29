@@ -8,16 +8,16 @@ import {
     Rolls,
     rollToRollResult,
     SKILL_ROLL_TABLE,
-    HUNGER_ROLL_TABLE
+    HUNGER_ROLL_TABLE,
 } from './dice';
 import {countMatches} from '../arrays';
 import {combineAll} from '../lang';
-import {rollDie, Roller} from '../roller';
+import {CanReRoll, rollDie, Roller} from '../roller';
 import * as Mustache from 'mustache';
 import tpl from './template';
 import {SimpleParser} from './parser';
 
-export class V5Roller extends Roller<V5Roll, Rolls> {
+export class V5Roller extends Roller<V5Roll, Rolls> implements CanReRoll<V5Roll> {
     constructor(private rng: RandomNumberGenerator, command: string) {
         super(command, [new SimpleParser()]);
     }
@@ -44,7 +44,7 @@ export class V5Roller extends Roller<V5Roll, Rolls> {
         return combineAll(results, rollResultMonoid);
     }
 
-    protected formatRolls(rolls: V5Roll[]): string {
+    formatRolls(rolls: V5Roll[]): string {
         return Mustache.render(tpl, {
             rolls: rolls,
             results: interpretResult(this.combineRolls(rolls)),

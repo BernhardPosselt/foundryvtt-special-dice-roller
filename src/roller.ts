@@ -26,7 +26,7 @@ export abstract class Roller<R, RS> {
         return this.rollFormula(formula);
     }
 
-    protected rollFormula(formula: string): string {
+    rollFormula(formula: string): string {
         try {
             const parsedFormula = parseFormula(formula, this.parsers);
             const rolls = this.roll(parsedFormula);
@@ -36,17 +36,13 @@ export abstract class Roller<R, RS> {
         }
     }
 
-    renderNewRoll(rolls: R[]) {
-        const chatData: ChatData = {
-            user: game.user.id,
-            content: this.formatRolls(rolls),
-        };
-        ChatMessage.create(chatData, {displaySheet: false});
-    }
+    abstract roll(parsedFormula: RS): R[]
 
-    protected abstract roll(parsedFormula: RS): R[]
+    abstract formatRolls(rolls: R[]): string
+}
 
-    protected abstract formatRolls(rolls: R[]): string
+export interface CanReRoll<R> {
+    reRoll(keptResults: R[], reRollResults: R[]): R[]
 }
 
 /**

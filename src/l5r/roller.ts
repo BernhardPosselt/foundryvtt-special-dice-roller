@@ -1,7 +1,8 @@
 import {RandomNumberGenerator} from '../rng';
 import {
     Dice,
-    Faces, interpretResult,
+    Faces,
+    interpretResult,
     L5RRoll,
     RING_ROLL_TABLE,
     RollResult,
@@ -12,21 +13,21 @@ import {
 } from './dice';
 import {countMatches} from '../arrays';
 import {combineAll} from '../lang';
-import {rollDie, Roller} from '../roller';
+import {CanReRoll, rollDie, Roller} from '../roller';
 import * as Mustache from 'mustache';
 import tpl from './template';
 import {SimpleParser} from './parser';
 
-export class L5RRoller extends Roller<L5RRoll, Rolls> {
+export class L5RRoller extends Roller<L5RRoll, Rolls> implements CanReRoll<L5RRoll>{
 
     constructor(private rng: RandomNumberGenerator, command: string) {
         super(command, [new SimpleParser()]);
     }
 
     roll(rolls: Rolls): L5RRoll[] {
-        const rings = rollDie(rolls.rings, RING_ROLL_TABLE, L5RRoller.isExploding, this.rng)
+        const rings = rollDie(rolls.rings, RING_ROLL_TABLE, isExploding, this.rng)
             .map((face) => new L5RRoll(Dice.RING, face));
-        const skills = rollDie(rolls.skills, SKILL_ROLL_TABLE, L5RRoller.isExploding, this.rng)
+        const skills = rollDie(rolls.skills, SKILL_ROLL_TABLE, isExploding, this.rng)
             .map((face) => new L5RRoll(Dice.SKILL, face));
         return [...rings, ...skills];
     }
@@ -45,7 +46,7 @@ export class L5RRoller extends Roller<L5RRoll, Rolls> {
         return combineAll(results, rollResultMonoid);
     }
 
-    protected formatRolls(rolls: L5RRoll[]): string {
+    public formatRolls(rolls: L5RRoll[]): string {
         return Mustache.render(tpl, {
             rolls: rolls,
             results: interpretResult(this.combineRolls(rolls)),
@@ -55,10 +56,10 @@ export class L5RRoller extends Roller<L5RRoll, Rolls> {
             },
         });
     }
+}
 
-    private static isExploding(face: Faces): boolean {
-        return face === Faces.EXPLODING_STRIFE ||
-            face === Faces.EXPLODING_OPPORTUNITY ||
-            face === Faces.EXPLODING;
-    }
+function isExploding(face: Faces): boolean {
+    return face === Faces.EXPLODING_STRIFE ||
+        face === Faces.EXPLODING_OPPORTUNITY ||
+        face === Faces.EXPLODING;
 }
