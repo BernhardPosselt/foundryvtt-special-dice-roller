@@ -127,7 +127,7 @@ export function rollToRollResult(roll: Roll<Dice, Faces>): RollValues {
 }
 ```
 
-The last remaining part is a way to explain the dice result in our template. Let's say that rolling the same FACE1 and FACE2 values makes our check succeed:
+The last remaining part is a way to explain the dice result in our template. Let's say that rolling the same **FACE1** and **FACE2** values makes our check succeed:
 
 ```typescript
 export class InterpretedResult {
@@ -196,10 +196,10 @@ const tpl = `<div class="special-dice-roller">
             <li>Roll Succeded</li>
             {{/succeeded}}
             {{#face1}}
-            <li>Face 1's: {{face1}}</li>
+            <li>Face 1s: {{face1}}</li>
             {{/face1}}
             {{#face2}}
-            <li>Face 2's: {{face2}}</li>
+            <li>Face 2s: {{face2}}</li>
             {{/face2}}
         {{/results}}
         </ul>
@@ -258,3 +258,5 @@ rollers = [
     new D20Roller(secureRandomNumber, '/d20'),
 ]
 ```
+
+We should now be able to roll our first roll using the chat message **/d20 2f5s**
