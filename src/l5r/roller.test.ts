@@ -87,7 +87,7 @@ test('should roll a skill 1', () => {
 
 test('should roll a skill 2', () => {
     const roller = new L5RRoller(makeRng(1), '');
-    const result = roller.roll(new DicePool(0,1));
+    const result = roller.roll(new DicePool(0, 1));
 
     expect(result.length).toBe(1);
     expect(result[0].die).toBe(Dice.SKILL);
@@ -96,7 +96,7 @@ test('should roll a skill 2', () => {
 
 test('should roll a skill 3', () => {
     const roller = new L5RRoller(makeRng(2), '');
-    const result = roller.roll(new DicePool(0,1));
+    const result = roller.roll(new DicePool(0, 1));
 
     expect(result.length).toBe(1);
     expect(result[0].die).toBe(Dice.SKILL);
@@ -105,7 +105,7 @@ test('should roll a skill 3', () => {
 
 test('should roll a skill 4', () => {
     const roller = new L5RRoller(makeRng(3), '');
-    const result = roller.roll(new DicePool(0,1));
+    const result = roller.roll(new DicePool(0, 1));
 
     expect(result.length).toBe(1);
     expect(result[0].die).toBe(Dice.SKILL);
@@ -114,7 +114,7 @@ test('should roll a skill 4', () => {
 
 test('should roll a skill 5', () => {
     const roller = new L5RRoller(makeRng(4), '');
-    const result = roller.roll(new DicePool(0,1));
+    const result = roller.roll(new DicePool(0, 1));
 
     expect(result.length).toBe(1);
     expect(result[0].die).toBe(Dice.SKILL);
@@ -123,7 +123,7 @@ test('should roll a skill 5', () => {
 
 test('should roll a skill 6', () => {
     const roller = new L5RRoller(makeRng(5), '');
-    const result = roller.roll(new DicePool(0,1));
+    const result = roller.roll(new DicePool(0, 1));
 
     expect(result.length).toBe(1);
     expect(result[0].die).toBe(Dice.SKILL);
@@ -132,7 +132,7 @@ test('should roll a skill 6', () => {
 
 test('should roll a skill 7', () => {
     const roller = new L5RRoller(makeRng(6), '');
-    const result = roller.roll(new DicePool(0,1));
+    const result = roller.roll(new DicePool(0, 1));
 
     expect(result.length).toBe(1);
     expect(result[0].die).toBe(Dice.SKILL);
@@ -141,7 +141,7 @@ test('should roll a skill 7', () => {
 
 test('should roll a skill 8', () => {
     const roller = new L5RRoller(makeRng(7, 9), '');
-    const result = roller.roll(new DicePool(0,1));
+    const result = roller.roll(new DicePool(0, 1));
 
     expect(result.length).toBe(2);
     expect(result[0].die).toBe(Dice.SKILL);
@@ -153,7 +153,7 @@ test('should roll a skill 8', () => {
 
 test('should roll a skill 9', () => {
     const roller = new L5RRoller(makeRng(8, 7, 9), '');
-    const result = roller.roll(new DicePool(0,1));
+    const result = roller.roll(new DicePool(0, 1));
 
     expect(result.length).toBe(3);
     expect(result[0].die).toBe(Dice.SKILL);
@@ -166,7 +166,7 @@ test('should roll a skill 9', () => {
 
 test('should roll a skill 10', () => {
     const roller = new L5RRoller(makeRng(9), '');
-    const result = roller.roll(new DicePool(0,1));
+    const result = roller.roll(new DicePool(0, 1));
 
     expect(result.length).toBe(1);
     expect(result[0].face).toBe(Faces.OPPORTUNITY);
@@ -174,7 +174,7 @@ test('should roll a skill 10', () => {
 
 test('should roll a skill 11', () => {
     const roller = new L5RRoller(makeRng(10), '');
-    const result = roller.roll(new DicePool(0,1));
+    const result = roller.roll(new DicePool(0, 1));
 
     expect(result.length).toBe(1);
     expect(result[0].die).toBe(Dice.SKILL);
@@ -183,7 +183,7 @@ test('should roll a skill 11', () => {
 
 test('should roll a skill 12', () => {
     const roller = new L5RRoller(makeRng(11), '');
-    const result = roller.roll(new DicePool(0,1));
+    const result = roller.roll(new DicePool(0, 1));
 
     expect(result.length).toBe(1);
     expect(result[0].die).toBe(Dice.SKILL);
@@ -192,7 +192,7 @@ test('should roll a skill 12', () => {
 
 test('should count results', () => {
     const roller = new L5RRoller(makeRng(0, 2, 4, 5, 7, 0, 8, 0, 9), '');
-    const result = roller.roll(new DicePool(0,7));
+    const result = roller.roll(new DicePool(0, 7));
     const count = interpretResult(roller.combineRolls(result));
 
     expect(count.exploding).toBe(2);

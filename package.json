@@ -12,7 +12,8 @@
   "scripts": {
     "test": "./node_modules/.bin/jest",
     "build": "./node_modules/.bin/webpack --mode production",
-    "fix": "./node_modules/.bin/tslint --fix --project ."
+    "fix": "./node_modules/.bin/tslint --fix --project .",
+    "lint": "./node_modules/.bin/tslint --project ."
   },
   "devDependencies": {
     "@types/array.prototype.flatmap": "^1.2.0",
