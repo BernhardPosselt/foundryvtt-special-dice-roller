@@ -1,7 +1,7 @@
 import {Predicate} from './lang';
 import {RandomNumberGenerator} from './rng';
 import {shim} from 'array.prototype.flatmap';
-import {parseFormula, Parser} from './parser';
+import {IParser, parseFormula} from './parser';
 import {escapeHtml} from './util';
 
 export class Roll<D, F> {
@@ -13,10 +13,15 @@ export class Roll<D, F> {
     }
 }
 
-export abstract class Roller<D, F, P> {
+export interface IRoller {
+    handlesCommand(command: string): boolean
+    rollCommand(command: string): string
+}
+
+export abstract class Roller<D, F, P> implements IRoller {
     protected constructor(
         protected command: string,
-        protected parsers: Parser<P>[]
+        protected parsers: IParser<P>[]
     ) {
     }
 

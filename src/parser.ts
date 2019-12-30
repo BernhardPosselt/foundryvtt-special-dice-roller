@@ -1,6 +1,12 @@
 import {combineAll, Monoid} from './lang';
 
-export abstract class Parser<R> {
+export interface IParser<R> {
+    canParse(formula: string): boolean
+    parse(formula: string): R
+    help(): string
+}
+
+export abstract class Parser<R> implements IParser<R>{
     protected constructor(protected formulaRegex: RegExp) {
     }
 
@@ -13,7 +19,7 @@ export abstract class Parser<R> {
     abstract parse(formula: string): R
 }
 
-export function parseFormula<R>(formula: string, parsers: Parser<R>[]): R {
+export function parseFormula<R>(formula: string, parsers: IParser<R>[]): R {
     const trimmedFormula = formula.replace(/\s+/g, '')
         .toLowerCase();
     const helpMessages = [];
@@ -41,7 +47,7 @@ export class DefaultSimpleParser<R> extends Parser<R> {
     constructor(
         alphabet: string,
         private letterToRolls: (letter: string, number: number) => R,
-        private rollsMonoid: Monoid<R>,
+        private rollValuesMonoid: Monoid<R>,
         private letterExplanation: string[]
     ) {
         super(new RegExp(`^(?:(?:[1-9][0-9]*)?[${alphabet}])+$`));
@@ -75,7 +81,7 @@ export class DefaultSimpleParser<R> extends Parser<R> {
                 }
             }
         }
-        return combineAll(rolls, this.rollsMonoid);
+        return combineAll(rolls, this.rollValuesMonoid);
     }
 
     help(): string {

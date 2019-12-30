@@ -21,9 +21,9 @@ import {SimpleParser, SimpleSWParser} from './parser';
 import * as Mustache from 'mustache';
 import {combineAll} from '../lang';
 import {tpl} from './template';
-import {Parser} from '../parser';
 import {countMatches} from '../arrays';
 import {DieRollView} from '../view';
+import {IParser} from '../parser';
 
 export function genesysRoller(rng: RandomNumberGenerator, command: string) {
     return new GenesysRoller(rng, command, [new SimpleParser()]);
@@ -34,7 +34,7 @@ export function starWarsRoller(rng: RandomNumberGenerator, command: string) {
 }
 
 export class GenesysRoller extends Roller<Dice, Faces, DicePool> {
-    constructor(private rng: RandomNumberGenerator, command: string, parsers: Parser<DicePool>[]) {
+    constructor(private rng: RandomNumberGenerator, command: string, parsers: IParser<DicePool>[]) {
         super(command, parsers);
     }
 

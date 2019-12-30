@@ -146,7 +146,7 @@ export function interpretResult(result: RollValues): InterpretedResult {
 
 ## Parsing the Chat Message
 
-Now that we know what dice we have available, we need a way to parse the chat message that was sent by a user. To do that you can either subclass the **Parser** class for a more complicated roll formula or simply re-use the current convention which counts a single letter.
+Now that we know what dice we have available, we need a way to parse the chat message that was sent by a user. To do that you can either subclass the **Parser** class or implement **IParser** for a more complicated roll formula or simply re-use the current convention which counts a single letter.
 
 Let's use f(our) and s(ix) for d4 and d6 respectively
 

@@ -2,12 +2,12 @@ import {secureRandomNumber} from './rng';
 import {L5RRoller} from './l5r/roller';
 import {genesysRoller, starWarsRoller} from './genesys/roller';
 import {V5Roller} from './v5/roller';
-import {Roll, Roller} from './roller';
+import {IRoller, Roll, Roller} from './roller';
 
 
 Hooks.on('preCreateChatMessage', (_, data) => {
     const message = data.content;
-    const rollers = [
+    const rollers: IRoller[] = [
         new L5RRoller(secureRandomNumber, 'l5r'),
         new V5Roller(secureRandomNumber, 'v5'),
         genesysRoller(secureRandomNumber, 'gen'),
