@@ -1,5 +1,9 @@
-import {combineRolls, Roll, rollDie, Roller} from '../roller';
+import * as Mustache from 'mustache';
+import {countMatches} from '../arrays';
+import {IParser} from '../parser';
 import {RandomNumberGenerator} from '../rng';
+import {combineRolls, Roll, rollDie, Roller} from '../roller';
+import {DieRollView} from '../view';
 import {
     ABILITY_ROLL_TABLE,
     BOOST_ROLL_TABLE,
@@ -11,17 +15,13 @@ import {
     Faces,
     FORCE_ROLL_TABLE,
     interpretResult,
-    PROFICIENCY_ROLL_TABLE,
     parseRollValues,
+    PROFICIENCY_ROLL_TABLE,
     rollValuesMonoid,
     SETBACK_ROLL_TABLE,
 } from './dice';
 import {SimpleParser, SimpleSWParser} from './parser';
-import * as Mustache from 'mustache';
 import {tpl} from './template';
-import {countMatches} from '../arrays';
-import {DieRollView} from '../view';
-import {IParser} from '../parser';
 
 export function genesysRoller(rng: RandomNumberGenerator, command: string) {
     return new GenesysRoller(rng, command, [new SimpleParser()]);
@@ -32,11 +32,11 @@ export function starWarsRoller(rng: RandomNumberGenerator, command: string) {
 }
 
 export class GenesysRoller extends Roller<Dice, Faces, DicePool> {
-    constructor(private rng: RandomNumberGenerator, command: string, parsers: IParser<DicePool>[]) {
+    constructor(private rng: RandomNumberGenerator, command: string, parsers: Array<IParser<DicePool>>) {
         super(command, parsers);
     }
 
-    roll(pool: DicePool): Roll<Dice, Faces>[] {
+    public roll(pool: DicePool): Array<Roll<Dice, Faces>> {
         return [
             ...rollDie(pool.boost, Dice.BOOST, BOOST_ROLL_TABLE, this.rng),
             ...rollDie(pool.setback, Dice.SETBACK, SETBACK_ROLL_TABLE, this.rng),
@@ -48,12 +48,12 @@ export class GenesysRoller extends Roller<Dice, Faces, DicePool> {
         ];
     }
 
-    formatRolls(rolls: Roll<Dice, Faces>[]): string {
+    public formatRolls(rolls: Array<Roll<Dice, Faces>>): string {
         const combinedRolls = combineRolls(rolls, parseRollValues, rollValuesMonoid);
         return Mustache.render(tpl(this.command), {
             rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
             results: interpretResult(combinedRolls),
-            rollIndex: function () {
+            rollIndex() {
                 return rolls.indexOf(this);
             },
         });

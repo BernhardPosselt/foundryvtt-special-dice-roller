@@ -1,9 +1,8 @@
-import {secureRandomNumber} from './rng';
-import {L5RRoller} from './l5r/roller';
 import {genesysRoller, starWarsRoller} from './genesys/roller';
-import {V5Roller} from './v5/roller';
+import {L5RRoller} from './l5r/roller';
+import {secureRandomNumber} from './rng';
 import {IRoller, Roll, Roller} from './roller';
-
+import {V5Roller} from './v5/roller';
 
 Hooks.on('preCreateChatMessage', (_, data) => {
     const message = data.content;
@@ -14,7 +13,7 @@ Hooks.on('preCreateChatMessage', (_, data) => {
         starWarsRoller(secureRandomNumber, 'sw'),
     ];
     if (message !== undefined) {
-        for (let roller of rollers) {
+        for (const roller of rollers) {
             if (roller.handlesCommand(message)) {
                 data.content = roller.rollCommand(message);
             }
@@ -24,7 +23,7 @@ Hooks.on('preCreateChatMessage', (_, data) => {
 
 type NumericDieParser<D, F> = (die: number, face: number) => Roll<D, F>;
 
-function parseDice<D, F>(inputs: HTMLInputElement[], toDie: NumericDieParser<D, F>): Roll<D, F>[] {
+function parseDice<D, F>(inputs: HTMLInputElement[], toDie: NumericDieParser<D, F>): Array<Roll<D, F>> {
     return inputs
         .map((roll) => {
             const die = parseInt(roll.dataset.die ?? '0', 10);
@@ -69,7 +68,7 @@ function reRoll<D, F, P>(
     roller: Roller<D, F, P>,
     diceParser: NumericDieParser<D, F>,
     selectedRolls: HTMLInputElement[],
-    omittedRolls: HTMLInputElement[]
+    omittedRolls: HTMLInputElement[],
 ) {
     const reRolls = parseDice(selectedRolls, diceParser);
     const keptRolls = parseDice(omittedRolls, diceParser);

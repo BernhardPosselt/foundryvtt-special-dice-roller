@@ -1,9 +1,9 @@
-import {Monoid} from '../lang';
+import {IMonoid} from '../lang';
 import {Roll} from '../roller';
 
 export enum Dice {
     HUNGER,
-    SKILL
+    SKILL,
 }
 
 export enum Faces {
@@ -11,7 +11,7 @@ export enum Faces {
     FAILURE,
     SUCCESS,
     POTENTIAL_CRITICAL_SUCCESS,
-    HUNGER_POTENTIAL_CRITICAL_SUCCESS
+    HUNGER_POTENTIAL_CRITICAL_SUCCESS,
 }
 
 export const SKILL_ROLL_TABLE: Faces[] = [
@@ -47,7 +47,7 @@ export class DicePool {
     ) {
     }
 
-    toString(): string {
+    public toString(): string {
         return `skills: ${this.skills}, hunger: ${this.hunger}`;
     }
 }
@@ -124,7 +124,7 @@ export function toRollResult(partial: Partial<RollValues>): RollValues {
     return Object.assign(new RollValues(), partial);
 }
 
-export const rollValuesMonoid: Monoid<RollValues> = {
+export const rollValuesMonoid: IMonoid<RollValues> = {
     identity: new RollValues(),
     combine: (roll1: RollValues, roll2: RollValues) => new RollValues(
         roll1.successes + roll2.successes,
@@ -136,7 +136,7 @@ export const rollValuesMonoid: Monoid<RollValues> = {
     ),
 };
 
-export const dicePoolMonoid: Monoid<DicePool> = {
+export const dicePoolMonoid: IMonoid<DicePool> = {
     identity: new DicePool(),
     combine: (roll1: DicePool, roll2: DicePool) => new DicePool(
         roll1.skills + roll2.skills,

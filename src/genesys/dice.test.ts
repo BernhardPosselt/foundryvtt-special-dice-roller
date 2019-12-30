@@ -1,6 +1,6 @@
-import {Dice, dieRollImages, Faces, interpretResult, toRollResult} from './dice';
-import {Roll} from '../roller';
 import {getDieImage} from '../images';
+import {Roll} from '../roller';
+import {Dice, dieRollImages, Faces, interpretResult, toRollResult} from './dice';
 
 test('no successes count as a failed check', () => {
     const rollResult = toRollResult({});
@@ -19,7 +19,7 @@ test('no successes count as a failed check', () => {
 
 test('one success is a successful check', () => {
     const rollResult = toRollResult({
-        successes: 1
+        successes: 1,
     });
     const result = interpretResult(rollResult);
 
@@ -39,7 +39,7 @@ test('successes should cancel failures', () => {
         successes: 2,
         triumphs: 2,
         failures: 1,
-        despairs: 1
+        despairs: 1,
     });
     const result = interpretResult(rollResult);
 
@@ -59,7 +59,7 @@ test('failures should cancel successes', () => {
         successes: 1,
         triumphs: 1,
         failures: 2,
-        despairs: 2
+        despairs: 2,
     });
     const result = interpretResult(rollResult);
 
@@ -77,7 +77,7 @@ test('failures should cancel successes', () => {
 test('threats should cancel abilities', () => {
     const rollResult = toRollResult({
         advantages: 2,
-        threats: 1
+        threats: 1,
     });
     const result = interpretResult(rollResult);
 
@@ -95,7 +95,7 @@ test('threats should cancel abilities', () => {
 test('abilities should cancel threats', () => {
     const rollResult = toRollResult({
         advantages: 1,
-        threats: 2
+        threats: 2,
     });
     const result = interpretResult(rollResult);
 
@@ -113,7 +113,7 @@ test('abilities should cancel threats', () => {
 test('should map force dice', () => {
     const rollResult = toRollResult({
         force: 1,
-        darkForce: 2
+        darkForce: 2,
     });
     const result = interpretResult(rollResult);
 
@@ -148,7 +148,7 @@ test('should get a correct boost image', () => {
 
 test('should roll correct boost', () => {
     const rollResult = toRollResult({
-        failures: 1
+        failures: 1,
     });
     const result = interpretResult(rollResult);
 

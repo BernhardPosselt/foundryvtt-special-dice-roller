@@ -1,7 +1,7 @@
-import {genesysRoller} from './roller';
 import {makeRng} from '../rng';
-import {Dice, Faces, interpretResult, DicePool, rollValuesMonoid, parseRollValues} from './dice';
 import {combineRolls} from '../roller';
+import {Dice, DicePool, Faces, interpretResult, parseRollValues, rollValuesMonoid} from './dice';
+import {genesysRoller} from './roller';
 
 test('should react to gen command', () => {
     const roller = genesysRoller(makeRng(0), 'gen');

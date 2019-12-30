@@ -1,29 +1,29 @@
-import {combineAll, Monoid} from './lang';
+import {combineAll, IMonoid} from './lang';
 
 export interface IParser<R> {
-    canParse(formula: string): boolean
-    parse(formula: string): R
-    help(): string
+    canParse(formula: string): boolean;
+    parse(formula: string): R;
+    help(): string;
 }
 
-export abstract class Parser<R> implements IParser<R>{
+export abstract class Parser<R> implements IParser<R> {
     protected constructor(protected formulaRegex: RegExp) {
     }
 
-    canParse(formula: string): boolean {
-        return this.formulaRegex.test(formula)
+    public canParse(formula: string): boolean {
+        return this.formulaRegex.test(formula);
     }
 
-    abstract help(): string
+    public abstract help(): string;
 
-    abstract parse(formula: string): R
+    public abstract parse(formula: string): R;
 }
 
-export function parseFormula<R>(formula: string, parsers: IParser<R>[]): R {
+export function parseFormula<R>(formula: string, parsers: Array<IParser<R>>): R {
     const trimmedFormula = formula.replace(/\s+/g, '')
         .toLowerCase();
     const helpMessages = [];
-    for (let parser of parsers) {
+    for (const parser of parsers) {
         if (parser.canParse(trimmedFormula)) {
             return parser.parse(trimmedFormula);
         } else {
@@ -46,9 +46,9 @@ export class DefaultSimpleParser<R> extends Parser<R> {
 
     constructor(
         alphabet: string,
-        private letterToRolls: (letter: string, number: number) => R,
-        private rollValuesMonoid: Monoid<R>,
-        private letterExplanation: string[]
+        private letterToRolls: (letter: string, occurrences: number) => R,
+        private rollValuesMonoid: IMonoid<R>,
+        private letterExplanation: string[],
     ) {
         super(new RegExp(`^(?:(?:[1-9][0-9]*)?[${alphabet}])+$`));
         this.letters = alphabet.split('');
@@ -64,11 +64,11 @@ export class DefaultSimpleParser<R> extends Parser<R> {
         this.numbers.add('9');
     }
 
-    parse(formula: string): R {
+    public parse(formula: string): R {
         const letters = formula.split('');
         const rolls = [];
         let modifier = '';
-        for (let letter of letters) {
+        for (const letter of letters) {
             if (this.numbers.has(letter)) {
                 modifier += letter;
             } else {
@@ -84,7 +84,7 @@ export class DefaultSimpleParser<R> extends Parser<R> {
         return combineAll(rolls, this.rollValuesMonoid);
     }
 
-    help(): string {
+    public help(): string {
         const mappings = this.letterExplanation
             .map((explanation, index) => `${this.letters[index]} = ${explanation}`)
             .join(', ');

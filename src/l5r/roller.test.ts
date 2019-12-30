@@ -1,7 +1,7 @@
 import {makeRng} from '../rng';
-import {Dice, Faces, interpretResult, DicePool} from './dice';
-import {L5RRoller} from './roller';
 import {Roll} from '../roller';
+import {Dice, DicePool, Faces, interpretResult} from './dice';
+import {L5RRoller} from './roller';
 
 test('should react to l5r command', () => {
     const roller = new L5RRoller(makeRng(0), 'l5r');
@@ -25,7 +25,6 @@ test('should roll a ring 2', () => {
     expect(result[0].die).toBe(Dice.RING);
     expect(result[0].face).toBe(Faces.SUCCESS);
 });
-
 
 test('should roll a ring 3', () => {
     const roller = new L5RRoller(makeRng(2), '');
@@ -149,7 +148,6 @@ test('should roll a skill 8', () => {
     expect(result[1].die).toBe(Dice.SKILL);
     expect(result[1].face).toBe(Faces.OPPORTUNITY);
 });
-
 
 test('should roll a skill 9', () => {
     const roller = new L5RRoller(makeRng(8, 7, 9), '');

@@ -1,4 +1,4 @@
-import {Monoid} from '../lang';
+import {IMonoid} from '../lang';
 import {Roll} from '../roller';
 
 export enum Dice {
@@ -8,7 +8,7 @@ export enum Dice {
     DIFFICULTY,
     PROFICIENCY,
     CHALLENGE,
-    FORCE
+    FORCE,
 }
 
 export enum Faces {
@@ -28,7 +28,7 @@ export enum Faces {
     DARK_FORCE,
     DOUBLE_DARK_FORCE,
     FORCE,
-    DOUBLE_FORCE
+    DOUBLE_FORCE,
 }
 
 export const BOOST_ROLL_TABLE: Faces[] = [
@@ -124,12 +124,12 @@ export class DicePool {
         public difficulty = 0,
         public proficiency = 0,
         public challenge = 0,
-        public force = 0
+        public force = 0,
     ) {
     }
 
-    toString(): string {
-        return `boost: ${this.boost}, setback: ${this.setback}, ability: ${this.ability}, difficulty: ${this.difficulty}, difficulty: ${this.difficulty}, proficiency: ${this.proficiency}, challenge: ${this.challenge}, force: ${this.force}`
+    public toString(): string {
+        return `boost: ${this.boost}, setback: ${this.setback}, ability: ${this.ability}, difficulty: ${this.difficulty}, difficulty: ${this.difficulty}, proficiency: ${this.proficiency}, challenge: ${this.challenge}, force: ${this.force}`;
     }
 }
 
@@ -143,7 +143,7 @@ export class RollValues {
         public triumphs = 0,
         public despairs = 0,
         public force = 0,
-        public darkForce = 0
+        public darkForce = 0,
     ) {
     }
 }
@@ -251,7 +251,7 @@ export class InterpretedResult {
         public advantages = 0,
         public threats = 0,
         public force = 0,
-        public darkForce = 0
+        public darkForce = 0,
     ) {
     }
 }
@@ -273,11 +273,11 @@ export function interpretResult(result: RollValues): InterpretedResult {
         advantages,
         threats,
         result.force,
-        result.darkForce
+        result.darkForce,
     );
 }
 
-export const rollValuesMonoid: Monoid<RollValues> = {
+export const rollValuesMonoid: IMonoid<RollValues> = {
     identity: new RollValues(),
     combine: (roll1: RollValues, roll2: RollValues) => new RollValues(
         roll1.blanks + roll2.blanks,
@@ -292,7 +292,7 @@ export const rollValuesMonoid: Monoid<RollValues> = {
     ),
 };
 
-export const dicePoolMonoid: Monoid<DicePool> = {
+export const dicePoolMonoid: IMonoid<DicePool> = {
     identity: new DicePool(),
     combine: (roll1: DicePool, roll2: DicePool) => new DicePool(
         roll1.boost + roll2.boost,

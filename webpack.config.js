@@ -8,7 +8,9 @@ module.exports = {
                 use: [
                     {
                         loader: 'tslint-loader',
-                        options: {}
+                        options: {
+                            failOnHint: true,
+                        }
                     }
                 ]
             },

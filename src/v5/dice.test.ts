@@ -5,7 +5,7 @@ test('at least one critical hunger should make it messy', () => {
         successes: 1,
         failures: 2,
         hungerPotentialCriticals: 1,
-        potentialCriticals: 1
+        potentialCriticals: 1,
     });
     const result = interpretResult(rollResult);
 
@@ -20,7 +20,7 @@ test('hunger criticals count no matter what', () => {
         failures: 2,
         hungerPotentialCriticals: 1,
         potentialCriticals: 2,
-        hungerFailures1: 1
+        hungerFailures1: 1,
     });
     const result = interpretResult(rollResult);
 

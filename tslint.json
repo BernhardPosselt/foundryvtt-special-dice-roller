@@ -1,12 +1,18 @@
 {
-    "defaultSeverity": "error",
-    "extends": [
-        "tslint:recommended"
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended"
+  ],
+  "jsRules": {},
+  "rules": {
+    "quotemark": [
+      true,
+      "single",
+      "jsx-double"
     ],
-    "jsRules": {},
-    "rules": {
-        "quotemark": [true, "single", "jsx-double"],
-        "max-classes-per-file": false
-    },
-    "rulesDirectory": []
+    "max-classes-per-file": false,
+    "object-literal-sort-keys": false,
+    "no-console": false
+  },
+  "rulesDirectory": []
 }

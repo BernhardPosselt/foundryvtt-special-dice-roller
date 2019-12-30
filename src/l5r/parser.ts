@@ -1,11 +1,11 @@
-import {DicePool, dicePoolMonoid} from './dice';
 import {DefaultSimpleParser} from '../parser';
+import {DicePool, dicePoolMonoid} from './dice';
 
-function letterToRolls(letter: string, number: number): DicePool {
+function letterToRolls(letter: string, occurrences: number): DicePool {
     if (letter === 'r' || letter === 'b') {
-        return new DicePool(number, 0);
+        return new DicePool(occurrences, 0);
     } else if (letter === 's' || letter === 'w') {
-        return new DicePool(0, number);
+        return new DicePool(0, occurrences);
     } else {
         throw new Error(`Unknown letter ${letter}`);
     }

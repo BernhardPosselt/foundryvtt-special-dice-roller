@@ -84,6 +84,14 @@ Install **yarn** and run:
 Tests use Jest and are run via:
 
     yarn test
+    
+TSLint is used to lint files on build. You can run it separately via
+
+    yarn run lint
+
+and fix simple errors automatically via:
+
+    yarn run fix
 
 The relevant files and folders that need to be included in your (local) FoundryVTT module folder are:
 

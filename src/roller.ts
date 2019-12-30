@@ -1,41 +1,41 @@
-import {combineAll, Monoid, Predicate} from './lang';
-import {RandomNumberGenerator} from './rng';
 import {shim} from 'array.prototype.flatmap';
+import {combineAll, IMonoid, Predicate} from './lang';
 import {IParser, parseFormula} from './parser';
+import {RandomNumberGenerator} from './rng';
 import {escapeHtml} from './util';
 
 export class Roll<D, F> {
     constructor(public die: D, public face: F) {
     }
 
-    toString(): string {
-        return `die: ${this.die}, face: ${this.face}`
+    public toString(): string {
+        return `die: ${this.die}, face: ${this.face}`;
     }
 }
 
 export interface IRoller {
-    handlesCommand(command: string): boolean
-    rollCommand(command: string): string
+    handlesCommand(command: string): boolean;
+    rollCommand(command: string): string;
 }
 
 export abstract class Roller<D, F, P> implements IRoller {
     protected constructor(
         protected command: string,
-        protected parsers: IParser<P>[]
+        protected parsers: Array<IParser<P>>,
     ) {
     }
 
-    handlesCommand(command: string): boolean {
+    public handlesCommand(command: string): boolean {
         return command.startsWith(`/${this.command} `);
     }
 
-    rollCommand(command: string): string {
+    public rollCommand(command: string): string {
         const formula = command
             .replace(new RegExp(`/${this.command} `, 'g'), '');
         return this.rollFormula(formula);
     }
 
-    rollFormula(formula: string): string {
+    public rollFormula(formula: string): string {
         try {
             const parsedFormula = parseFormula(formula, this.parsers);
             const rolls = this.roll(parsedFormula);
@@ -46,18 +46,18 @@ export abstract class Roller<D, F, P> implements IRoller {
         }
     }
 
-    reRoll(keptResults: Roll<D, F>[], reRollResults: Roll<D, F>[]): Roll<D, F>[] {
+    public reRoll(keptResults: Array<Roll<D, F>>, reRollResults: Array<Roll<D, F>>): Array<Roll<D, F>> {
         const reRolledDice: D[] = reRollResults.map((roll) => roll.die);
         const pool = this.toDicePool(reRolledDice);
         const reRolls = this.roll(pool);
         return [...keptResults, ...reRolls];
     }
 
-    protected abstract toDicePool(faces: D[]): P
+    public abstract roll(dicePool: P): Array<Roll<D, F>>;
 
-    abstract roll(dicePool: P): Roll<D, F>[]
+    public abstract formatRolls(rolls: Array<Roll<D, F>>): string;
 
-    abstract formatRolls(rolls: Roll<D, F>[]): string
+    protected abstract toDicePool(faces: D[]): P;
 }
 
 /**
@@ -75,7 +75,7 @@ export function rollDie<D, F>(
     faces: F[],
     rng: RandomNumberGenerator,
     explodes: Predicate<F> = () => false,
-): Roll<D, F>[] {
+): Array<Roll<D, F>> {
     shim();
     return Array.from({length: times}, () => rng(faces.length))
         .map((randomNumber: number) => faces[randomNumber])
@@ -90,9 +90,9 @@ export function rollDie<D, F>(
 }
 
 export function combineRolls<D, F, R>(
-    rolls: Roll<D, F>[],
+    rolls: Array<Roll<D, F>>,
     rollToRollResult: (roll: Roll<D, F>) => R ,
-    rollValuesMonoid: Monoid<R>
+    rollValuesMonoid: IMonoid<R>,
 ): R {
     const results = rolls
         .map((roll) => rollToRollResult(roll));

@@ -8,7 +8,7 @@ export class DieRollView<D, F> {
 
     constructor(
         roll: Roll<D, F>,
-        images: Map<D, Map<F, string>>
+        images: Map<D, Map<F, string>>,
     ) {
         this.die = roll.die;
         this.face = roll.face;

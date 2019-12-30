@@ -1,9 +1,9 @@
-import {Monoid} from '../lang';
+import {IMonoid} from '../lang';
 import {Roll} from '../roller';
 
 export enum Dice {
     RING,
-    SKILL
+    SKILL,
 }
 
 export enum Faces {
@@ -49,8 +49,8 @@ export class DicePool {
     ) {
     }
 
-    toString(): string {
-        return `rings: ${this.rings}, skills: ${this.skills}`
+    public toString(): string {
+        return `rings: ${this.rings}, skills: ${this.skills}`;
     }
 }
 
@@ -103,8 +103,8 @@ export function interpretResult(result: RollValues): RollValues {
         result.failures,
         result.opportunity,
         result.exploding,
-        result.strife
-    )
+        result.strife,
+    );
 }
 
 export function parseRollValues(roll: Roll<Dice, Faces>): RollValues {
@@ -120,7 +120,7 @@ function toRollResult(partial: Partial<RollValues>): RollValues {
     return Object.assign(new RollValues(), partial);
 }
 
-export const rollValuesMonoid: Monoid<RollValues> = {
+export const rollValuesMonoid: IMonoid<RollValues> = {
     identity: new RollValues(),
     combine: (roll1: RollValues, roll2: RollValues) => new RollValues(
         roll1.successes + roll2.successes,
@@ -131,7 +131,7 @@ export const rollValuesMonoid: Monoid<RollValues> = {
     ),
 };
 
-export const dicePoolMonoid: Monoid<DicePool> = {
+export const dicePoolMonoid: IMonoid<DicePool> = {
     identity: new DicePool(),
     combine: (roll1: DicePool, roll2: DicePool) => new DicePool(
         roll1.rings + roll2.rings,

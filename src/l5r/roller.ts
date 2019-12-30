@@ -1,23 +1,23 @@
+import * as Mustache from 'mustache';
+import {countMatches} from '../arrays';
+import {combineAll} from '../lang';
 import {RandomNumberGenerator} from '../rng';
+import {Roll, rollDie, Roller} from '../roller';
+import {DieRollView} from '../view';
 import {
     Dice,
     DicePool,
     dieRollImages,
     Faces,
     interpretResult,
-    RING_ROLL_TABLE,
     parseRollValues,
+    RING_ROLL_TABLE,
     RollValues,
     rollValuesMonoid,
     SKILL_ROLL_TABLE,
 } from './dice';
-import {countMatches} from '../arrays';
-import {combineAll} from '../lang';
-import {Roll, rollDie, Roller} from '../roller';
-import * as Mustache from 'mustache';
-import tpl from './template';
 import {SimpleParser} from './parser';
-import {DieRollView} from '../view';
+import tpl from './template';
 
 export class L5RRoller extends Roller<Dice, Faces, DicePool> {
 
@@ -25,24 +25,24 @@ export class L5RRoller extends Roller<Dice, Faces, DicePool> {
         super(command, [new SimpleParser()]);
     }
 
-    roll(pool: DicePool): Roll<Dice, Faces>[] {
+    public roll(pool: DicePool): Array<Roll<Dice, Faces>> {
         return [
             ...rollDie(pool.rings, Dice.RING, RING_ROLL_TABLE, this.rng, isExploding),
             ...rollDie(pool.skills, Dice.SKILL, SKILL_ROLL_TABLE, this.rng, isExploding),
         ];
     }
 
-    combineRolls(rolls: Roll<Dice, Faces>[]): RollValues {
+    public combineRolls(rolls: Array<Roll<Dice, Faces>>): RollValues {
         const results = rolls
             .map((roll) => parseRollValues(roll));
         return combineAll(results, rollValuesMonoid);
     }
 
-    public formatRolls(rolls: Roll<Dice, Faces>[]): string {
+    public formatRolls(rolls: Array<Roll<Dice, Faces>>): string {
         return Mustache.render(tpl, {
             rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
             results: interpretResult(this.combineRolls(rolls)),
-            rollIndex: function () {
+            rollIndex() {
                 return rolls.indexOf(this);
             },
         });

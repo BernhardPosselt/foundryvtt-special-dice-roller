@@ -1,9 +1,9 @@
-export interface Monoid<T> {
+export interface IMonoid<T> {
     readonly combine: (x: T, y: T) => T;
     readonly identity: T;
 }
 
-export function combineAll<T>(values: T[], monoid: Monoid<T>) {
+export function combineAll<T>(values: T[], monoid: IMonoid<T>) {
     return values
         .reduce((prev, curr) => monoid.combine(prev, curr), monoid.identity);
 }
