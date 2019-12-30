@@ -225,16 +225,11 @@ export class D20Roller extends Roller<Dice, Faces, DicePool> {
         ];
     }
 
-    combineRolls(rolls: Roll<Dice, Faces>[]): RollValues {
-        const results = rolls
-            .map((roll) => parseRollValues(roll));
-        return combineAll(results, rollValuesMonoid);
-    }
-
     formatRolls(rolls: Roll<Dice, Faces>[]): string {
+        const combinedRolls = combineRolls(rolls, parseRollValues, rollValuesMonoid);
         return Mustache.render(tpl, {
             rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
-            results: interpretResult(this.combineRolls(rolls)),
+            results: interpretResult(combinedRolls),
             rollIndex: function () {
                 return rolls.indexOf(this);
             },

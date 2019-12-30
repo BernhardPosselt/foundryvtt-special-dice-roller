@@ -1,4 +1,4 @@
-import {Roll, rollDie, Roller} from '../roller';
+import {combineRolls, Roll, rollDie, Roller} from '../roller';
 import {RandomNumberGenerator} from '../rng';
 import {
     ABILITY_ROLL_TABLE,
@@ -12,14 +12,12 @@ import {
     FORCE_ROLL_TABLE,
     interpretResult,
     PROFICIENCY_ROLL_TABLE,
-    rollToRollResult,
-    RollValues,
+    parseRollValues,
     rollValuesMonoid,
     SETBACK_ROLL_TABLE,
 } from './dice';
 import {SimpleParser, SimpleSWParser} from './parser';
 import * as Mustache from 'mustache';
-import {combineAll} from '../lang';
 import {tpl} from './template';
 import {countMatches} from '../arrays';
 import {DieRollView} from '../view';
@@ -50,16 +48,11 @@ export class GenesysRoller extends Roller<Dice, Faces, DicePool> {
         ];
     }
 
-    combineRolls(rolls: Roll<Dice, Faces>[]): RollValues {
-        const results = rolls
-            .map((roll) => rollToRollResult(roll));
-        return combineAll(results, rollValuesMonoid);
-    }
-
     formatRolls(rolls: Roll<Dice, Faces>[]): string {
+        const combinedRolls = combineRolls(rolls, parseRollValues, rollValuesMonoid);
         return Mustache.render(tpl(this.command), {
             rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
-            results: interpretResult(this.combineRolls(rolls)),
+            results: interpretResult(combinedRolls),
             rollIndex: function () {
                 return rolls.indexOf(this);
             },

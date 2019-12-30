@@ -1,6 +1,7 @@
 import {genesysRoller} from './roller';
 import {makeRng} from '../rng';
-import {Dice, Faces, interpretResult, DicePool} from './dice';
+import {Dice, Faces, interpretResult, DicePool, rollValuesMonoid, parseRollValues} from './dice';
+import {combineRolls} from '../roller';
 
 test('should react to gen command', () => {
     const roller = genesysRoller(makeRng(0), 'gen');
@@ -36,7 +37,7 @@ test('should roll various dice', () => {
 test('should count results', () => {
     const roller = genesysRoller(makeRng(1, 2, 3, 4, 5, 6, 7), 'gen');
     const result = roller.roll(new DicePool(1, 1, 1, 1, 1, 1, 1));
-    const combined = roller.combineRolls(result);
+    const combined = combineRolls(result, parseRollValues, rollValuesMonoid);
 
     expect(combined.blanks).toBe(1);
     expect(combined.successes).toBe(2);
@@ -52,7 +53,7 @@ test('should count results', () => {
 test('should interpret results', () => {
     const roller = genesysRoller(makeRng(1, 2, 3, 4, 5, 6, 7), 'gen');
     const result = roller.roll(new DicePool(1, 1, 1, 1, 1, 1, 1));
-    const combined = roller.combineRolls(result);
+    const combined = combineRolls(result, parseRollValues, rollValuesMonoid);
     const interpreted = interpretResult(combined);
 
     expect(interpreted.successes).toBe(1);
@@ -67,7 +68,7 @@ test('should interpret results', () => {
 test('should interpret results for setback', () => {
     const roller = genesysRoller(makeRng( 3), 'gen');
     const result = roller.roll(new DicePool(0, 1, 0, 0, 0, 0, 0));
-    const combined = roller.combineRolls(result);
+    const combined = combineRolls(result, parseRollValues, rollValuesMonoid);
     const interpreted = interpretResult(combined);
 
     expect(interpreted.successes).toBe(0);
@@ -84,7 +85,7 @@ test('should interpret results for setback', () => {
 test('should correctly calculate successes', () => {
     const roller = genesysRoller(makeRng( 3, 11), 'gen');
     const result = roller.roll(new DicePool(0, 0, 0, 0, 2, 0, 0));
-    const combined = roller.combineRolls(result);
+    const combined = combineRolls(result, parseRollValues, rollValuesMonoid);
     const interpreted = interpretResult(combined);
 
     expect(interpreted.successes).toBe(3);
@@ -101,7 +102,7 @@ test('should correctly calculate successes', () => {
 test('should correctly calculate failures', () => {
     const roller = genesysRoller(makeRng( 3, 11), 'gen');
     const result = roller.roll(new DicePool(0, 0, 0, 0, 0, 2, 0));
-    const combined = roller.combineRolls(result);
+    const combined = combineRolls(result, parseRollValues, rollValuesMonoid);
     const interpreted = interpretResult(combined);
 
     expect(interpreted.successes).toBe(0);

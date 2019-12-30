@@ -228,7 +228,7 @@ rollToRollResultMapping.set(Faces.DOUBLE_DARK_FORCE, {darkForce: 2});
 rollToRollResultMapping.set(Faces.FORCE, {force: 1});
 rollToRollResultMapping.set(Faces.DOUBLE_FORCE, {force: 2});
 
-export function rollToRollResult(roll: Roll<Dice, Faces>): RollValues {
+export function parseRollValues(roll: Roll<Dice, Faces>): RollValues {
     const result = rollToRollResultMapping.get(roll.face);
     if (result !== undefined) {
         return toRollResult(result);

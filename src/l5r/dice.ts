@@ -107,7 +107,7 @@ export function interpretResult(result: RollValues): RollValues {
     )
 }
 
-export function rollToRollResult(roll: Roll<Dice, Faces>): RollValues {
+export function parseRollValues(roll: Roll<Dice, Faces>): RollValues {
     const result = rollToRollResultMapping.get(roll.face);
     if (result !== undefined) {
         return toRollResult(result);

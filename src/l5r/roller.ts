@@ -6,7 +6,7 @@ import {
     Faces,
     interpretResult,
     RING_ROLL_TABLE,
-    rollToRollResult,
+    parseRollValues,
     RollValues,
     rollValuesMonoid,
     SKILL_ROLL_TABLE,
@@ -34,7 +34,7 @@ export class L5RRoller extends Roller<Dice, Faces, DicePool> {
 
     combineRolls(rolls: Roll<Dice, Faces>[]): RollValues {
         const results = rolls
-            .map((roll) => rollToRollResult(roll));
+            .map((roll) => parseRollValues(roll));
         return combineAll(results, rollValuesMonoid);
     }
 

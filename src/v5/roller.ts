@@ -7,13 +7,11 @@ import {
     HUNGER_ROLL_TABLE,
     interpretResult,
     parseRollValues,
-    RollValues,
     rollValuesMonoid,
     SKILL_ROLL_TABLE,
 } from './dice';
 import {countMatches} from '../arrays';
-import {combineAll} from '../lang';
-import {Roll, rollDie, Roller} from '../roller';
+import {combineRolls, Roll, rollDie, Roller} from '../roller';
 import * as Mustache from 'mustache';
 import tpl from './template';
 import {SimpleParser} from './parser';
@@ -31,16 +29,11 @@ export class V5Roller extends Roller<Dice, Faces, DicePool> {
         ];
     }
 
-    combineRolls(rolls: Roll<Dice, Faces>[]): RollValues {
-        const results = rolls
-            .map((roll) => parseRollValues(roll));
-        return combineAll(results, rollValuesMonoid);
-    }
-
     formatRolls(rolls: Roll<Dice, Faces>[]): string {
+        const combinedRolls = combineRolls(rolls, parseRollValues, rollValuesMonoid);
         return Mustache.render(tpl, {
             rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
-            results: interpretResult(this.combineRolls(rolls)),
+            results: interpretResult(combinedRolls),
             rollIndex: function () {
                 return rolls.indexOf(this);
             },

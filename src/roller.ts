@@ -1,4 +1,4 @@
-import {Predicate} from './lang';
+import {combineAll, Monoid, Predicate} from './lang';
 import {RandomNumberGenerator} from './rng';
 import {shim} from 'array.prototype.flatmap';
 import {IParser, parseFormula} from './parser';
@@ -87,4 +87,14 @@ export function rollDie<D, F>(
                 return [result];
             }
         });
+}
+
+export function combineRolls<D, F, R>(
+    rolls: Roll<D, F>[],
+    rollToRollResult: (roll: Roll<D, F>) => R ,
+    rollValuesMonoid: Monoid<R>
+): R {
+    const results = rolls
+        .map((roll) => rollToRollResult(roll));
+    return combineAll(results, rollValuesMonoid);
 }
