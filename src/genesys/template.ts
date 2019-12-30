@@ -1,4 +1,4 @@
-export function tpl(system: string) {
+export function tpl(system: string): string {
     return `
     <div class="special-dice-roller">
         <div>

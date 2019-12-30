@@ -1,6 +1,6 @@
 export type DiceImageMappings<D, F> = Map<D, Map<F, string>>;
 
-export function getDieImage<D, F>(images: DiceImageMappings<D, F>, die: D, face: F) {
+export function getDieImage<D, F>(images: DiceImageMappings<D, F>, die: D, face: F): string {
     const dieImages = images.get(die);
     if (dieImages !== undefined) {
         const image = dieImages.get(face);

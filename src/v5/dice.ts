@@ -42,8 +42,8 @@ export const HUNGER_ROLL_TABLE: Faces[] = [
 
 export class DicePool {
     constructor(
-        public skills = 0,
-        public hunger = 0,
+        public skills: number = 0,
+        public hunger: number = 0,
     ) {
     }
 
@@ -54,11 +54,11 @@ export class DicePool {
 
 export class RollValues {
     constructor(
-        public successes = 0,
-        public failures = 0,
-        public potentialCriticals = 0,
-        public hungerFailures1 = 0,
-        public hungerPotentialCriticals = 0,
+        public successes: number = 0,
+        public failures: number = 0,
+        public potentialCriticals: number = 0,
+        public hungerFailures1: number = 0,
+        public hungerPotentialCriticals: number = 0,
     ) {
     }
 }
@@ -87,9 +87,9 @@ rollToRollResultMapping.set(Faces.HUNGER_POTENTIAL_CRITICAL_SUCCESS, {hungerPote
 
 export class InterpretedResult {
     constructor(
-        public successes = 0,
-        public messyCritical = false,
-        public bestialFailure = false,
+        public successes: number = 0,
+        public messyCritical: boolean = false,
+        public bestialFailure: boolean = false,
     ) {
     }
 }

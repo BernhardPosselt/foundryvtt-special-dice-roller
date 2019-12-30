@@ -118,13 +118,13 @@ export const FORCE_ROLL_TABLE: Faces[] = [
 
 export class DicePool {
     constructor(
-        public boost = 0,
-        public setback = 0,
-        public ability = 0,
-        public difficulty = 0,
-        public proficiency = 0,
-        public challenge = 0,
-        public force = 0,
+        public boost: number = 0,
+        public setback: number = 0,
+        public ability: number = 0,
+        public difficulty: number = 0,
+        public proficiency: number = 0,
+        public challenge: number = 0,
+        public force: number = 0,
     ) {
     }
 
@@ -135,15 +135,15 @@ export class DicePool {
 
 export class RollValues {
     constructor(
-        public blanks = 0,
-        public successes = 0,
-        public failures = 0,
-        public advantages = 0,
-        public threats = 0,
-        public triumphs = 0,
-        public despairs = 0,
-        public force = 0,
-        public darkForce = 0,
+        public blanks: number = 0,
+        public successes: number = 0,
+        public failures: number = 0,
+        public advantages: number = 0,
+        public threats: number = 0,
+        public triumphs: number = 0,
+        public despairs: number = 0,
+        public force: number = 0,
+        public darkForce: number = 0,
     ) {
     }
 }
@@ -244,14 +244,14 @@ export function toRollResult(partial: Partial<RollValues>): RollValues {
 export class InterpretedResult {
     constructor(
         public succeeded: boolean = false,
-        public despairs = 0,
-        public triumphs = 0,
-        public successes = 0,
-        public failures = 0,
-        public advantages = 0,
-        public threats = 0,
-        public force = 0,
-        public darkForce = 0,
+        public despairs: number = 0,
+        public triumphs: number = 0,
+        public successes: number = 0,
+        public failures: number = 0,
+        public advantages: number = 0,
+        public threats: number = 0,
+        public force: number = 0,
+        public darkForce: number = 0,
     ) {
     }
 }

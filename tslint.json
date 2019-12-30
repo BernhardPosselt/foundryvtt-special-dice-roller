@@ -12,7 +12,13 @@
     ],
     "max-classes-per-file": false,
     "object-literal-sort-keys": false,
-    "no-console": false
+    "no-console": false,
+    "typedef": [
+      true,
+      "call-signature",
+      "parameter",
+      "property-declaration"
+    ]
   },
   "rulesDirectory": []
 }

@@ -42,7 +42,7 @@ export class L5RRoller extends Roller<Dice, Faces, DicePool> {
         return Mustache.render(tpl, {
             rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
             results: interpretResult(this.combineRolls(rolls)),
-            rollIndex() {
+            rollIndex(): number {
                 return rolls.indexOf(this);
             },
         });

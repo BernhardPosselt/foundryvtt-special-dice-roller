@@ -69,14 +69,14 @@ function reRoll<D, F, P>(
     diceParser: NumericDieParser<D, F>,
     selectedRolls: HTMLInputElement[],
     omittedRolls: HTMLInputElement[],
-) {
+): void {
     const reRolls = parseDice(selectedRolls, diceParser);
     const keptRolls = parseDice(omittedRolls, diceParser);
     const reRolledDice = roller.reRoll(keptRolls, reRolls);
     renderNewRoll(roller.formatRolls(reRolledDice));
 }
 
-function renderNewRoll(rolls: string) {
+function renderNewRoll(rolls: string): void {
     const chatData: ChatData = {
         user: game.user.id,
         content: rolls,

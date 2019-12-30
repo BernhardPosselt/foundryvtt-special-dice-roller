@@ -23,11 +23,11 @@ import {
 import {SimpleParser, SimpleSWParser} from './parser';
 import {tpl} from './template';
 
-export function genesysRoller(rng: RandomNumberGenerator, command: string) {
+export function genesysRoller(rng: RandomNumberGenerator, command: string): GenesysRoller {
     return new GenesysRoller(rng, command, [new SimpleParser()]);
 }
 
-export function starWarsRoller(rng: RandomNumberGenerator, command: string) {
+export function starWarsRoller(rng: RandomNumberGenerator, command: string): GenesysRoller {
     return new GenesysRoller(rng, command, [new SimpleSWParser()]);
 }
 
@@ -53,7 +53,7 @@ export class GenesysRoller extends Roller<Dice, Faces, DicePool> {
         return Mustache.render(tpl(this.command), {
             rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
             results: interpretResult(combinedRolls),
-            rollIndex() {
+            rollIndex(): number {
                 return rolls.indexOf(this);
             },
         });

@@ -44,8 +44,8 @@ export const SKILL_ROLL_TABLE: Faces[] = [
 
 export class DicePool {
     constructor(
-        public rings = 0,
-        public skills = 0,
+        public rings: number = 0,
+        public skills: number = 0,
     ) {
     }
 
@@ -56,11 +56,11 @@ export class DicePool {
 
 export class RollValues {
     constructor(
-        public successes = 0,
-        public failures = 0,
-        public opportunity = 0,
-        public exploding = 0,
-        public strife = 0,
+        public successes: number = 0,
+        public failures: number = 0,
+        public opportunity: number = 0,
+        public exploding: number = 0,
+        public strife: number = 0,
     ) {
     }
 }

@@ -81,7 +81,7 @@ Now we need an object to describe the dice pool itself and a Monoid that describ
 
 ```typescript
 export class DicePool {
-    constructor(public d4 = 0, public d6 = 0) {
+    constructor(public d4: number = 0, public d6: number = 0) {
     }
 }
 
@@ -98,7 +98,7 @@ Next we need a way to count all results that were rolled. To do that create a Ro
 
 ```typescript
 export class RollValues {
-    constructor(public face1 = 0, public face2 = 0) { 
+    constructor(public face1: number = 0, public face2: number = 0) { 
     }
 } 
 
@@ -131,7 +131,7 @@ The last remaining part is a way to explain the dice result in our template. Let
 
 ```typescript
 export class InterpretedResult {
-    constructor(public face1: 0, public face2: 0, public succeeded: boolean) {
+    constructor(public face1: number = 0, public face2: number = 0, public succeeded: boolean = false) {
     }
 }
 
@@ -230,7 +230,7 @@ export class D20Roller extends Roller<Dice, Faces, DicePool> {
         return Mustache.render(tpl, {
             rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
             results: interpretResult(combinedRolls),
-            rollIndex: function () {
+            rollIndex: function (): number {
                 return rolls.indexOf(this);
             },
         });

@@ -3,7 +3,7 @@ export interface IMonoid<T> {
     readonly identity: T;
 }
 
-export function combineAll<T>(values: T[], monoid: IMonoid<T>) {
+export function combineAll<T>(values: T[], monoid: IMonoid<T>): T {
     return values
         .reduce((prev, curr) => monoid.combine(prev, curr), monoid.identity);
 }
