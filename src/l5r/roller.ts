@@ -2,7 +2,8 @@ import * as Mustache from 'mustache';
 import {countMatches} from '../arrays';
 import {combineAll} from '../lang';
 import {RandomNumberGenerator} from '../rng';
-import {Roll, rollDie, Roller} from '../roller';
+import {combineRolls, Roll, rollDie, Roller} from '../roller';
+import base from '../template';
 import {DieRollView} from '../view';
 import {
     Dice,
@@ -22,7 +23,7 @@ import tpl from './template';
 export class L5RRoller extends Roller<Dice, Faces, DicePool> {
 
     constructor(private rng: RandomNumberGenerator, command: string) {
-        super(command, [new SimpleParser()]);
+        super(command, [new SimpleParser()], true, true);
     }
 
     public roll(pool: DicePool): Array<Roll<Dice, Faces>> {
@@ -38,21 +39,34 @@ export class L5RRoller extends Roller<Dice, Faces, DicePool> {
         return combineAll(results, rollValuesMonoid);
     }
 
-    public formatRolls(rolls: Array<Roll<Dice, Faces>>): string {
-        return Mustache.render(tpl, {
-            rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
-            results: interpretResult(this.combineRolls(rolls)),
-            rollIndex(): number {
-                return rolls.indexOf(this);
-            },
-        });
+    public toRoll(die: number, face: number): Roll<Dice, Faces> {
+        return new Roll(die, face);
     }
 
-    protected toDicePool(faces: Dice[]): DicePool {
-        const rings = countMatches(faces, (die) => die === Dice.RING);
-        const skills = countMatches(faces, (die) => die === Dice.SKILL);
+    public formatRolls(rolls: Array<Roll<Dice, Faces>>): string {
+        const combinedRolls = combineRolls(rolls, parseRollValues, rollValuesMonoid);
+        return Mustache.render(
+            base,
+            {
+                system: this.command,
+                canReRoll: this.canReRoll,
+                canKeep: this.canKeep,
+                rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
+                results: interpretResult(combinedRolls),
+                rollIndex(): number {
+                    return rolls.indexOf(this);
+                },
+            },
+            {interpretation: tpl},
+        );
+    }
+
+    protected toDicePool(dice: Dice[]): DicePool {
+        const rings = countMatches(dice, (die) => die === Dice.RING);
+        const skills = countMatches(dice, (die) => die === Dice.SKILL);
         return new DicePool(rings, skills);
     }
+
 }
 
 function isExploding(face: Faces): boolean {

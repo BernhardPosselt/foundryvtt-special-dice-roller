@@ -2,11 +2,11 @@ import * as Mustache from 'mustache';
 import {countMatches} from '../arrays';
 import {RandomNumberGenerator} from '../rng';
 import {combineRolls, Roll, rollDie, Roller} from '../roller';
+import base from '../template';
 import {DieRollView} from '../view';
 import {
     Dice,
-    DicePool,
-    dieRollImages,
+    DicePool, dieRollImages,
     Faces,
     HUNGER_ROLL_TABLE,
     interpretResult,
@@ -19,7 +19,11 @@ import tpl from './template';
 
 export class V5Roller extends Roller<Dice, Faces, DicePool> {
     constructor(private rng: RandomNumberGenerator, command: string) {
-        super(command, [new SimpleParser()]);
+        super(
+            command,
+            [new SimpleParser()],
+            true,
+        );
     }
 
     public roll(rolls: DicePool): Array<Roll<Dice, Faces>> {
@@ -29,20 +33,32 @@ export class V5Roller extends Roller<Dice, Faces, DicePool> {
         ];
     }
 
-    public formatRolls(rolls: Array<Roll<Dice, Faces>>): string {
-        const combinedRolls = combineRolls(rolls, parseRollValues, rollValuesMonoid);
-        return Mustache.render(tpl, {
-            rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
-            results: interpretResult(combinedRolls),
-            rollIndex(): number {
-                return rolls.indexOf(this);
-            },
-        });
+    public toRoll(die: number, face: number): Roll<Dice, Faces> {
+        return new Roll(die, face);
     }
 
-    protected toDicePool(faces: Dice[]): DicePool {
-        const hunger = countMatches(faces, (die) => die === Dice.HUNGER);
-        const skills = countMatches(faces, (die) => die === Dice.SKILL);
+    public formatRolls(rolls: Array<Roll<Dice, Faces>>): string {
+        const combinedRolls = combineRolls(rolls, parseRollValues, rollValuesMonoid);
+        return Mustache.render(
+            base,
+            {
+                system: this.command,
+                canReRoll: this.canReRoll,
+                canKeep: this.canKeep,
+                rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
+                results: interpretResult(combinedRolls),
+                rollIndex(): number {
+                    return rolls.indexOf(this);
+                },
+            },
+            {interpretation: tpl},
+        );
+    }
+
+    protected toDicePool(dice: Dice[]): DicePool {
+        const hunger = countMatches(dice, (die) => die === Dice.HUNGER);
+        const skills = countMatches(dice, (die) => die === Dice.SKILL);
         return new DicePool(skills, hunger);
     }
+
 }
