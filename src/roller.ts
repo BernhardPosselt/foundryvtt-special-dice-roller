@@ -13,15 +13,31 @@ export class Roll<D, F> {
     }
 }
 
+type IndexedRolls = Array<[number, number]>;
+
 export interface IRoller {
+
+    command: string;
+
+    canReRoll: boolean;
+
+    canKeep: boolean;
+
     handlesCommand(command: string): boolean;
+
     rollCommand(command: string): string;
+
+    formatKeptRolls(keptRolls: IndexedRolls): string;
+
+    formatReRolls(keptRolls: IndexedRolls, reRolls: IndexedRolls): string;
 }
 
 export abstract class Roller<D, F, P> implements IRoller {
     protected constructor(
-        protected command: string,
+        public command: string,
         protected parsers: Array<IParser<P>>,
+        public canReRoll: boolean = false,
+        public canKeep: boolean = false,
     ) {
     }
 
@@ -53,11 +69,48 @@ export abstract class Roller<D, F, P> implements IRoller {
         return [...keptResults, ...reRolls];
     }
 
+    public formatKeptRolls(keptRolls: IndexedRolls): string {
+        const parsedRolls = keptRolls
+            .map((roll) => this.toRoll(roll[0], roll[1]));
+        return this.formatRolls(parsedRolls);
+    }
+
+    public formatReRolls(keptRolls: IndexedRolls, reRolls: IndexedRolls): string {
+        const parsedKeptRolls = keptRolls
+            .map((roll) => this.toRoll(roll[0], roll[1]));
+        const parsedReRollsFaces = reRolls
+            .map((roll) => this.toRoll(roll[0], roll[1]))
+            .map((roll) => roll.die);
+        const pool = this.toDicePool(parsedReRollsFaces);
+        const result = [...parsedKeptRolls, ...this.roll(pool)];
+        return this.formatRolls(result);
+    }
+
+    /**
+     * Take the enum indices of a die and face and turn it into a roll
+     * @param die
+     * @param face
+     */
+    public abstract toRoll(die: number, face: number): Roll<D, F>;
+
+    /**
+     * Roll a dice pool and return the result rolls
+     * @param dicePool
+     */
     public abstract roll(dicePool: P): Array<Roll<D, F>>;
 
+    /**
+     * Return a template that displays and explains the roll
+     * @param rolls
+     */
     public abstract formatRolls(rolls: Array<Roll<D, F>>): string;
 
-    protected abstract toDicePool(faces: D[]): P;
+    /**
+     * Create a dice pool from an array of different dice
+     * @param dice
+     */
+    protected abstract toDicePool(dice: D[]): P;
+
 }
 
 /**
@@ -91,7 +144,7 @@ export function rollDie<D, F>(
 
 export function combineRolls<D, F, R>(
     rolls: Array<Roll<D, F>>,
-    rollToRollResult: (roll: Roll<D, F>) => R ,
+    rollToRollResult: (roll: Roll<D, F>) => R,
     rollValuesMonoid: IMonoid<R>,
 ): R {
     const results = rolls

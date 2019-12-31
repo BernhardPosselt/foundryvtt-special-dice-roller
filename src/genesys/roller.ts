@@ -3,6 +3,7 @@ import {countMatches} from '../arrays';
 import {IParser} from '../parser';
 import {RandomNumberGenerator} from '../rng';
 import {combineRolls, Roll, rollDie, Roller} from '../roller';
+import base from '../template';
 import {DieRollView} from '../view';
 import {
     ABILITY_ROLL_TABLE,
@@ -21,7 +22,7 @@ import {
     SETBACK_ROLL_TABLE,
 } from './dice';
 import {SimpleParser, SimpleSWParser} from './parser';
-import {tpl} from './template';
+import tpl from './template';
 
 export function genesysRoller(rng: RandomNumberGenerator, command: string): GenesysRoller {
     return new GenesysRoller(rng, command, [new SimpleParser()]);
@@ -48,25 +49,36 @@ export class GenesysRoller extends Roller<Dice, Faces, DicePool> {
         ];
     }
 
-    public formatRolls(rolls: Array<Roll<Dice, Faces>>): string {
-        const combinedRolls = combineRolls(rolls, parseRollValues, rollValuesMonoid);
-        return Mustache.render(tpl(this.command), {
-            rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
-            results: interpretResult(combinedRolls),
-            rollIndex(): number {
-                return rolls.indexOf(this);
-            },
-        });
+    public toRoll(die: number, face: number): Roll<Dice, Faces> {
+        return new Roll(die, face);
     }
 
-    protected toDicePool(faces: Dice[]): DicePool {
-        const boost = countMatches(faces, (die) => die === Dice.BOOST);
-        const setback = countMatches(faces, (die) => die === Dice.SETBACK);
-        const ability = countMatches(faces, (die) => die === Dice.ABILITY);
-        const difficulty  = countMatches(faces, (die) => die === Dice.DIFFICULTY);
-        const proficiency = countMatches(faces, (die) => die === Dice.PROFICIENCY);
-        const challenge  = countMatches(faces, (die) => die === Dice.CHALLENGE);
-        const force = countMatches(faces, (die) => die === Dice.FORCE);
+    public formatRolls(rolls: Array<Roll<Dice, Faces>>): string {
+        const combinedRolls = combineRolls(rolls, parseRollValues, rollValuesMonoid);
+        return Mustache.render(
+            base,
+            {
+                system: this.command,
+                canReRoll: this.canReRoll,
+                canKeep: this.canKeep,
+                rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
+                results: interpretResult(combinedRolls),
+                rollIndex(): number {
+                    return rolls.indexOf(this);
+                },
+            },
+            {interpretation: tpl},
+        );
+    }
+
+    protected toDicePool(dice: Dice[]): DicePool {
+        const boost = countMatches(dice, (die) => die === Dice.BOOST);
+        const setback = countMatches(dice, (die) => die === Dice.SETBACK);
+        const ability = countMatches(dice, (die) => die === Dice.ABILITY);
+        const difficulty = countMatches(dice, (die) => die === Dice.DIFFICULTY);
+        const proficiency = countMatches(dice, (die) => die === Dice.PROFICIENCY);
+        const challenge = countMatches(dice, (die) => die === Dice.CHALLENGE);
+        const force = countMatches(dice, (die) => die === Dice.FORCE);
         return new DicePool(boost, setback, ability, difficulty, proficiency, challenge, force);
     }
 }

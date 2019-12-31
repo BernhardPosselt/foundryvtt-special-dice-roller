@@ -1,17 +1,18 @@
 import {genesysRoller, starWarsRoller} from './genesys/roller';
 import {L5RRoller} from './l5r/roller';
 import {secureRandomNumber} from './rng';
-import {IRoller, Roll, Roller} from './roller';
+import {IRoller} from './roller';
 import {V5Roller} from './v5/roller';
+
+const rollers: IRoller[] = [
+    new L5RRoller(secureRandomNumber, 'l5r'),
+    new V5Roller(secureRandomNumber, 'v5'),
+    genesysRoller(secureRandomNumber, 'gen'),
+    starWarsRoller(secureRandomNumber, 'sw'),
+];
 
 Hooks.on('preCreateChatMessage', (_, data) => {
     const message = data.content;
-    const rollers: IRoller[] = [
-        new L5RRoller(secureRandomNumber, 'l5r'),
-        new V5Roller(secureRandomNumber, 'v5'),
-        genesysRoller(secureRandomNumber, 'gen'),
-        starWarsRoller(secureRandomNumber, 'sw'),
-    ];
     if (message !== undefined) {
         for (const roller of rollers) {
             if (roller.handlesCommand(message)) {
@@ -21,14 +22,12 @@ Hooks.on('preCreateChatMessage', (_, data) => {
     }
 });
 
-type NumericDieParser<D, F> = (die: number, face: number) => Roll<D, F>;
-
-function parseDice<D, F>(inputs: HTMLInputElement[], toDie: NumericDieParser<D, F>): Array<Roll<D, F>> {
+function parseDice(inputs: HTMLInputElement[]): Array<[number, number]> {
     return inputs
         .map((roll) => {
             const die = parseInt(roll.dataset.die ?? '0', 10);
-            const faces = parseInt(roll.dataset.face ?? '0', 10);
-            return toDie(die, faces);
+            const face = parseInt(roll.dataset.face ?? '0', 10);
+            return [die, face];
         });
 }
 
@@ -37,44 +36,29 @@ Hooks.on('renderChatLog', () => {
         event.preventDefault();
 
         const button = event.target as HTMLButtonElement;
-        const form = button.parentElement as HTMLFormElement;
         const rollerKey = button.dataset.roller;
+        const form = button.parentElement as HTMLFormElement;
         const rolls = Array.from(form.querySelectorAll('input'));
         const selectedRolls = rolls.filter((roll) => roll.checked);
 
-        if (selectedRolls.length > 0) {
-            if (button.classList.contains('special-dice-roller-keep')) {
-                if (rollerKey === 'l5r') {
-                    const roller = new L5RRoller(secureRandomNumber, 'l5r');
-                    const keptRolls = parseDice(selectedRolls, (die, face) => new Roll(die, face));
-                    renderNewRoll(roller.formatRolls(keptRolls));
+        for (const roller of rollers) {
+            if (selectedRolls.length > 0 && roller.command === rollerKey) {
+                if (button.classList.contains('special-dice-roller-keep') && roller.canKeep) {
+                    const keptRolls = parseDice(selectedRolls);
+                    const result = roller.formatKeptRolls(keptRolls);
+                    renderNewRoll(result);
+                } else if (roller.canReRoll) {
+                    const omittedRolls = rolls.filter((roll) => !roll.checked);
+                    const reRolls = parseDice(selectedRolls);
+                    const keptRolls = parseDice(omittedRolls);
+                    const result = roller.formatReRolls(keptRolls, reRolls);
+                    renderNewRoll(result);
                 }
-            } else {
-                const omittedRolls = rolls.filter((roll) => !roll.checked);
-                if (rollerKey === 'v5') {
-                    const roller = new V5Roller(secureRandomNumber, 'v5');
-                    reRoll(roller, (die, face) => new Roll(die, face), selectedRolls, omittedRolls);
-                } else if (rollerKey === 'l5r') {
-                    const roller = new L5RRoller(secureRandomNumber, 'l5r');
-                    reRoll(roller, (die, face) => new Roll(die, face), selectedRolls, omittedRolls);
-                }
+                selectedRolls.forEach((elem) => elem.checked = false);
             }
-            selectedRolls.forEach((elem) => elem.checked = false);
         }
     });
 });
-
-function reRoll<D, F, P>(
-    roller: Roller<D, F, P>,
-    diceParser: NumericDieParser<D, F>,
-    selectedRolls: HTMLInputElement[],
-    omittedRolls: HTMLInputElement[],
-): void {
-    const reRolls = parseDice(selectedRolls, diceParser);
-    const keptRolls = parseDice(omittedRolls, diceParser);
-    const reRolledDice = roller.reRoll(keptRolls, reRolls);
-    renderNewRoll(roller.formatRolls(reRolledDice));
-}
 
 function renderNewRoll(rolls: string): void {
     const chatData: ChatData = {

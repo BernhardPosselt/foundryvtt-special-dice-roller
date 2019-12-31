@@ -177,34 +177,24 @@ export class SimpleParser extends DefaultSimpleParser<DicePool> {
 
 ## Creating the Template
 
-You can use any template language that you want or re-use the shipped Mustache engine. Our roll template would look something like this in Mustache:
+You can use any template language that you want or re-use the shipped Mustache engine. Our roll template partial would look something like this in Mustache:
 
 ```typescript
-const tpl = `<div class="special-dice-roller">
-    <div>
-        <form>
-            {{#rolls}}
-            <input type="checkbox" style="background-image: url('modules/special-dice-roller/public/images/d20/{{imageName}}.png')" name="roll{{rollIndex}}" data-die="{{die}}" data-face="{{face}}"/>
-            {{/rolls}}
-        </form>
-    </div>
-    <hr>
-    <div>
-        <ul>
-        {{#results}}
-            {{#succeeded}}
-            <li>Roll Succeded</li>
-            {{/succeeded}}
-            {{#face1}}
-            <li>Face 1s: {{face1}}</li>
-            {{/face1}}
-            {{#face2}}
-            <li>Face 2s: {{face2}}</li>
-            {{/face2}}
-        {{/results}}
-        </ul>
-    </div>
-</div>`
+const tpl = `
+<ul>
+{{#results}}
+    {{#succeeded}}
+    <li>Roll Succeded</li>
+    {{/succeeded}}
+    {{#face1}}
+    <li>Face 1s: {{face1}}</li>
+    {{/face1}}
+    {{#face2}}
+    <li>Face 2s: {{face2}}</li>
+    {{/face2}}
+{{/results}}
+</ul>
+`;
 export default tpl;
 ```
 
@@ -225,30 +215,44 @@ export class D20Roller extends Roller<Dice, Faces, DicePool> {
         ];
     }
 
-    formatRolls(rolls: Roll<Dice, Faces>[]): string {
+    public formatRolls(rolls: Array<Roll<Dice, Faces>>): string {
         const combinedRolls = combineRolls(rolls, parseRollValues, rollValuesMonoid);
-        return Mustache.render(tpl, {
-            rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
-            results: interpretResult(combinedRolls),
-            rollIndex: function (): number {
-                return rolls.indexOf(this);
+        return Mustache.render(
+            base,
+            {
+                system: this.command,
+                canReRoll: this.canReRoll,
+                canKeep: this.canKeep,
+                rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
+                results: interpretResult(combinedRolls),
+                rollIndex(): number {
+                    return rolls.indexOf(this);
+                },
             },
-        });
+            {interpretation: tpl},
+        );
     }
 
-    protected toDicePool(faces: Dice[]): DicePool {
-        const d4 = countMatches(faces, (die) => die === Dice.D4);
-        const d6 = countMatches(faces, (die) => die === Dice.D6);
+    protected toDicePool(dice: Dice[]): DicePool {
+        const d4 = countMatches(dice, (die) => die === Dice.D4);
+        const d6 = countMatches(dice, (die) => die === Dice.D6);
         return new DicePool(d4, d6);
     }
+
+    public toRoll(die: number, face: number): Roll<Dice, Faces> {
+        return new Roll(die, face);
+    }
+
 }
 ```
+
+The roller base class accepts two additional boolean parameters to enable re-rolling and keeping dice. The templates are also aware of it so to make use of it, passing the flags is the only thing that you have to do.
 
 ## Adding the Roller
 
 To wire everything up we just need to add our Roller to the list of available rollers in **index.ts**
 ```typescript
-rollers = [
+const rollers = [
     // ...
     new D20Roller(secureRandomNumber, '/d20'),
 ]
