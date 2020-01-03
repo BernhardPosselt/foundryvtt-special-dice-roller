@@ -6,7 +6,8 @@ import base from '../template';
 import {DieRollView} from '../view';
 import {
     Dice,
-    DicePool, dieRollImages,
+    DicePool,
+    dieRollImages,
     Faces,
     HUNGER_ROLL_TABLE,
     interpretResult,
@@ -45,7 +46,10 @@ export class V5Roller extends Roller<Dice, Faces, DicePool> {
                 system: this.command,
                 canReRoll: this.canReRoll,
                 canKeep: this.canKeep,
-                rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
+                rolls: rolls.map((roll) => {
+                    const isHungerDie = roll.die === Dice.HUNGER;
+                    return new DieRollView(roll, dieRollImages, isHungerDie);
+                }),
                 results: interpretResult(combinedRolls),
                 rollIndex(): number {
                     return rolls.indexOf(this);

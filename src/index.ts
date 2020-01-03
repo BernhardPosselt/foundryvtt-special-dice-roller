@@ -1,7 +1,7 @@
 import {genesysRoller, starWarsRoller} from './genesys/roller';
 import {L5RRoller} from './l5r/roller';
 import {secureRandomNumber} from './rng';
-import {IRoller} from './roller';
+import {IndexedRoll, IRoller, ReRoll} from './roller';
 import {V5Roller} from './v5/roller';
 
 const rollers: IRoller[] = [
@@ -22,13 +22,10 @@ Hooks.on('preCreateChatMessage', (_, data) => {
     }
 });
 
-function parseDice(inputs: HTMLInputElement[]): Array<[number, number]> {
-    return inputs
-        .map((roll) => {
-            const die = parseInt(roll.dataset.die ?? '0', 10);
-            const face = parseInt(roll.dataset.face ?? '0', 10);
-            return [die, face];
-        });
+function parseRoll(input: HTMLInputElement): IndexedRoll {
+    const die = parseInt(input.dataset.die ?? '0', 10);
+    const face = parseInt(input.dataset.face ?? '0', 10);
+    return [die, face];
 }
 
 Hooks.on('renderChatLog', () => {
@@ -44,14 +41,16 @@ Hooks.on('renderChatLog', () => {
         for (const roller of rollers) {
             if (selectedRolls.length > 0 && roller.command === rollerKey) {
                 if (button.classList.contains('special-dice-roller-keep') && roller.canKeep) {
-                    const keptRolls = parseDice(selectedRolls);
+                    const keptRolls = selectedRolls.map((roll) => parseRoll(roll));
                     const result = roller.formatKeptRolls(keptRolls);
                     renderNewRoll(result);
                 } else if (roller.canReRoll) {
-                    const omittedRolls = rolls.filter((roll) => !roll.checked);
-                    const reRolls = parseDice(selectedRolls);
-                    const keptRolls = parseDice(omittedRolls);
-                    const result = roller.formatReRolls(keptRolls, reRolls);
+                    const parsedRolls = rolls
+                        .map((rollInput) => {
+                            const roll = parseRoll(rollInput);
+                            return new ReRoll(roll, rollInput.checked);
+                        });
+                    const result = roller.formatReRolls(parsedRolls);
                     renderNewRoll(result);
                 }
                 selectedRolls.forEach((elem) => elem.checked = false);

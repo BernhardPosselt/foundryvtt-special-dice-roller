@@ -5,15 +5,27 @@ import {RandomNumberGenerator} from './rng';
 import {escapeHtml} from './util';
 
 export class Roll<D, F> {
-    constructor(public die: D, public face: F) {
+    constructor(
+        public die: D,
+        public face: F,
+        public wasReRoll: boolean = false,
+    ) {
     }
 
     public toString(): string {
-        return `die: ${this.die}, face: ${this.face}`;
+        return `die: ${this.die}, face: ${this.face}, wasReRoll: ${this.wasReRoll}`;
     }
 }
 
-type IndexedRolls = Array<[number, number]>;
+export class ReRoll {
+    constructor(public indexedRoll: IndexedRoll, public shouldReRoll: boolean) {
+    }
+
+}
+
+export type IndexedRoll = [number, number];
+
+type IndexedRolls = IndexedRoll[];
 
 export interface IRoller {
 
@@ -29,7 +41,7 @@ export interface IRoller {
 
     formatKeptRolls(keptRolls: IndexedRolls): string;
 
-    formatReRolls(keptRolls: IndexedRolls, reRolls: IndexedRolls): string;
+    formatReRolls(reRolls: ReRoll[]): string;
 }
 
 export abstract class Roller<D, F, P> implements IRoller {
@@ -75,15 +87,25 @@ export abstract class Roller<D, F, P> implements IRoller {
         return this.formatRolls(parsedRolls);
     }
 
-    public formatReRolls(keptRolls: IndexedRolls, reRolls: IndexedRolls): string {
-        const parsedKeptRolls = keptRolls
-            .map((roll) => this.toRoll(roll[0], roll[1]));
-        const parsedReRollsFaces = reRolls
-            .map((roll) => this.toRoll(roll[0], roll[1]))
-            .map((roll) => roll.die);
-        const pool = this.toDicePool(parsedReRollsFaces);
-        const result = [...parsedKeptRolls, ...this.roll(pool)];
-        return this.formatRolls(result);
+    public formatReRolls(rolls: ReRoll[]): string {
+        shim();
+        const reRolls = rolls
+            .flatMap((roll: ReRoll) => {
+                const die = roll.indexedRoll[0];
+                const face = roll.indexedRoll[1];
+                const typedRoll = this.toRoll(die, face);
+                if (roll.shouldReRoll) {
+                    const pool = this.toDicePool([typedRoll.die]);
+                    return this.roll(pool)
+                        .map((reRoll) => {
+                            reRoll.wasReRoll = true;
+                            return reRoll;
+                        });
+                } else {
+                    return [typedRoll];
+                }
+            });
+        return this.formatRolls(reRolls);
     }
 
     /**

@@ -1,9 +1,9 @@
 {
   "name": "special-dice-roller",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/main.js",
   "author": "Bernhard Posselt",
-  "license": "APL",
+  "license": "AGPL",
   "private": true,
   "dependencies": {
     "array.prototype.flatmap": "^1.2.3",
@@ -13,7 +13,8 @@
     "test": "./node_modules/.bin/jest",
     "build": "./node_modules/.bin/webpack --mode production",
     "fix": "./node_modules/.bin/tslint --fix --project .",
-    "lint": "./node_modules/.bin/tslint --project ."
+    "lint": "./node_modules/.bin/tslint --project .",
+    "update": "rm -rf /home/bernhard/.local/share/FoundryVTT/Data/modules/special-dice-roller/* && cp -R ./{module.json,public,dist} /home/bernhard/.local/share/FoundryVTT/Data/modules/special-dice-roller/"
   },
   "devDependencies": {
     "@types/array.prototype.flatmap": "^1.2.0",
