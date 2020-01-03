@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.6.0] - 2020-01-03
 ### Changed
 - Re-rolls are now printed in the original order and highlighted as re-rolled.
+- Switch to AGPL license
 
 ## [0.5.0] - 2019-12-28
 ### Added
