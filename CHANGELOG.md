@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Renamed module to Special Dice Roller
 
+## [0.6.0] - 2020-01-03
+### Changed
+- Re-rolls are now printed in the original order and highlighted as re-rolled.
+
 ## [0.4.0] - 2019-12-28
 ### Added
 - Accept numbers for simple formulas: wwbb can now be written as 2w2b

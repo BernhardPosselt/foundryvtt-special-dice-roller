@@ -88,10 +88,11 @@ export abstract class Roller<D, F, P> implements IRoller {
     }
 
     public formatReRolls(rolls: ReRoll[]): string {
+        shim();
         const reRolls = rolls
             .flatMap((roll: ReRoll) => {
-                const face = roll.indexedRoll[0];
                 const die = roll.indexedRoll[0];
+                const face = roll.indexedRoll[1];
                 const typedRoll = this.toRoll(die, face);
                 if (roll.shouldReRoll) {
                     const pool = this.toDicePool([typedRoll.die]);

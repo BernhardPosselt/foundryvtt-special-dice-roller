@@ -55,13 +55,13 @@ export class GenesysRoller extends Roller<Dice, Faces, DicePool> {
 
     public formatRolls(rolls: Array<Roll<Dice, Faces>>): string {
         const combinedRolls = combineRolls(rolls, parseRollValues, rollValuesMonoid);
-        return Mustache.render(
+        const res = Mustache.render(
             base,
             {
                 system: this.command,
                 canReRoll: this.canReRoll,
                 canKeep: this.canKeep,
-                rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
+                rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages, true)),
                 results: interpretResult(combinedRolls),
                 rollIndex(): number {
                     return rolls.indexOf(this);
@@ -69,6 +69,8 @@ export class GenesysRoller extends Roller<Dice, Faces, DicePool> {
             },
             {interpretation: tpl},
         );
+        console.log(res);
+        return res;
     }
 
     protected toDicePool(dice: Dice[]): DicePool {

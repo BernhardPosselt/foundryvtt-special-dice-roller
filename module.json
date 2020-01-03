@@ -2,7 +2,7 @@
   "name": "special-dice-roller",
   "title": "Special Dice Roller",
   "description": "Supports rolling dice for: Legend of the 5 Rings 5th edition, Genesys, Vampire the Masquerade 5th edition, FFG's Star Wars TTRPG. Check out the README.md on the homepage for a guide on how to roll various dice.",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "author": "Bernhard Posselt",
   "scripts": ["./dist/main.js"],
   "styles": ["./public/css/styles.css"],

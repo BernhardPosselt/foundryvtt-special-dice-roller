@@ -32,3 +32,7 @@
 .special-dice-roller-v5-messy-critical {
     color: darkred;
 }
+
+.special-dice-roller form input[type=checkbox].special-dice-roller-was-re-roll {
+    border-bottom: 1px solid green;
+}
