@@ -208,7 +208,7 @@ export class D20Roller extends Roller<Dice, Faces, DicePool> {
         super(command, [new SimpleParser()]);
     }
 
-    roll(rolls: DicePool): Roll<Dice, Faces>[] {
+    public roll(rolls: DicePool): Roll<Dice, Faces>[] {
         return [
             ...rollDie(rolls.d4, Dice.D4, D4_ROLL_TABLE, this.rng),
             ...rollDie(rolls.d6, Dice.D6, D6_ROLL_TABLE, this.rng),
