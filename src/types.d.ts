@@ -3,7 +3,7 @@ interface MessageContents {
 }
 
 interface Hooks {
-    on(event: string, callback: (message_class: string, msg: MessageContents) => void): void;
+    on(event: string, callback: (msg: MessageContents) => void): void;
 }
 
 interface ChatData {

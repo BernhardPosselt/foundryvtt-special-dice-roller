@@ -11,7 +11,7 @@ const rollers: IRoller[] = [
     starWarsRoller(secureRandomNumber, 'sw'),
 ];
 
-Hooks.on('preCreateChatMessage', (_, data) => {
+Hooks.on('preCreateChatMessage', (data) => {
     const message = data.content;
     if (message !== undefined) {
         for (const roller of rollers) {
