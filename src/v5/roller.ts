@@ -38,7 +38,7 @@ export class V5Roller extends Roller<Dice, Faces, DicePool> {
         return new Roll(die, face);
     }
 
-    public formatRolls(rolls: Array<Roll<Dice, Faces>>): string {
+    public formatRolls(rolls: Array<Roll<Dice, Faces>>, flavorText?: string): string {
         const combinedRolls = combineRolls(rolls, parseRollValues, rollValuesMonoid);
         return Mustache.render(
             base,
@@ -46,6 +46,7 @@ export class V5Roller extends Roller<Dice, Faces, DicePool> {
                 system: this.command,
                 canReRoll: this.canReRoll,
                 canKeep: this.canKeep,
+                flavorText,
                 rolls: rolls.map((roll) => {
                     const isHungerDie = roll.die === Dice.HUNGER;
                     return new DieRollView(roll, dieRollImages, isHungerDie);

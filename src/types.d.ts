@@ -20,8 +20,16 @@ interface User {
     id: string;
 }
 
+interface ExportedRollers {
+    l5r: any;
+    v5: any;
+    genesys: any;
+    starWars: any;    
+}
+
 interface Game {
     user: User
+    specialDiceRoller: ExportedRollers
 }
 
 declare var Hooks: Hooks;
