@@ -85,6 +85,33 @@ export const FLUCH_ROLL_TABLE: Faces [] = [
 	Faces.FLUCH_DREI,
 ];
 
+export class DicePool {
+	constructor(
+		public HEXXEN: number = 0,
+		public JANUS: number = 0,
+		public SEGNUNG: number = 0,
+		public BLUT: number = 0,
+		public ELIXIR: number = 0,
+		public FLUCH: number = 0
+	) {
+	}
+
+	public toString(): stirng {
+		return `HeXXenwürfel: ${this.HEXXEN}, Januswürfel: ${this.JANUS}, Segnungswürfel: ${this.SEGNUNG}, Blutwürfel: ${this.BLUT}, Elixirwürfel: ${this.ELIXIR}, Fluchwürfel: ${this.FLUCH}`;
+}
+
+export class RollValues {
+	constructor(
+		public ERFOLGE: number = 0,
+		public ESPRIT: number = 0,
+		public JANUS: number = 0,
+		public BLUT: number = 0,
+		public ELIXIR: number = 0,
+		public FLUCH: numer = 0,
+	) {
+	}
+}
+
 const HEXXENImages = new Map<Faces, string>();
 HEXXENImages.set(Faces.ESPRITSTERN, 'hesprit');
 HEXXENImages.set(Faces.LEER, 'hblank');
@@ -119,3 +146,70 @@ FLUCHImages.set(Faces.FLUCH_ZWEI, 'fzwei');
 FLUCHImages.set(Faces.FLUCH_DREI, 'fdrei');
 FLUCHImages.set(Faces.FLUCH_VIER, 'fvier');
 FLUCHImages.set(Faces.FLUCH_FUENF, 'ffuenf');
+
+const rollToRollResultMapping = new Map<Faces, Partial<RollValues>>();
+rollToRollResultMapping.set(Faces.ERFOLG, {ERFOLGE: 1});
+rollToRollResultMapping.set(Faces.DOPPELERFOLG, {ERFOLGE: 2});
+rollToRollResultMapping.set(Faces.ESPRITSTERN, {ESPRIT: 1});
+rollToRollResultMapping.set(Faces.DOPPELKOPF, {JANUS: 1});
+rollToRollResultMapping.set(Faces.BLUT_EINS, {BLUT: 1});
+rollToRollResultMapping.set(Faces.BLUT_ZWEI, {BLUT: 2});
+rollToRollResultMapping.set(Faces.BLUT_DREI, {BLUT: 3});
+rollToRollResultMapping.set(Faces.ELIXIR_EINS, {ELIXIR: 1});
+rollToRollResultMapping.set(Faces.ELIXIR_ZWEI, {ELIXIR: 2});
+rollToRollResultMapping.set(Faces.ELIXIR_DREI, {ELIXIR: 3});
+rollToRollResultMapping.set(Faces.ELIXIR_VIER, {ELIXIR: 4});
+rollToRollResultMapping.set(Faces.ELIXIR_FUENF, {ELIXIR: 5});
+rollToRollResultMapping.set(Faces.FLUCH_EINS, {FLUCH: 1});
+rollToRollResultMapping.set(Faces.FLUCH_ZWEI, {FLUCH: 2});
+rollToRollResultMapping.set(Faces.FLUCH_DREI, {FLUCH: 3});
+rollToRollResultMapping.set(Faces.FLUCH_VIER, {FLUCH: 4});
+rollToRollResultMapping.set(Faces.FLUCH_FUENF, {FLUCH: 5});
+
+export function interpretResult(result: RollValues): RollValues {
+    return new RollValues(
+        result.ERFOLGE,
+        result.ESPRIT,
+        result.JANUS,
+        result.BLUT,
+        result.ELIXIR,
+        result.FLUCH,
+    );
+}
+
+export function parseRollValues(roll: Roll<Dice, Faces>): RollValues {
+    const result = rollToRollResultMapping.get(roll.face);
+    if (result !== undefined) {
+        return toRollResult(result);
+    } else {
+        throw new Error(`Unhandled Face ${roll.face}`);
+    }
+}
+
+function toRollResult(partial: Partial<RollValues>): RollValues {
+    return Object.assign(new RollValues(), partial);
+}
+
+export const rollValuesMonoid: IMonoid<RollValues> = {
+    identity: new RollValues(),
+    combine: (roll1: RollValues, roll2: RollValues) => new RollValues(
+        roll1.ERFOLGE + roll2.ERFOLGE,
+        roll1.ESPRIT + roll2.ESPRIT,
+        roll1.JANUS + roll2.JANUS,
+        roll1.BLUT + roll2.BLUT,
+        roll1.ELIXIR + roll2.ELIXIR,
+        roll1.FLUCH + roll2.FLUCH,
+    ),
+};
+
+export const dicePoolMonoid: IMonoid<DicePool> = {
+    identity: new DicePool(),
+    combine: (roll1: DicePool, roll2: DicePool) => new DicePool(
+        roll1.HEXXEN + roll2.HEXXEN,
+        roll1.JANUS + roll2.JANUS,
+        roll1.SEGNUNG + roll2.SEGNUNG,
+        roll1.BLUT + roll2.BLUT,
+        roll1.ELIXIR + roll2.ELIXIR,
+        roll1.FLUCH + roll2.FLUCH,
+    ),
+};
