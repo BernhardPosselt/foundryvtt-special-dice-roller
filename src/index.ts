@@ -5,6 +5,7 @@ import {IndexedRoll, IRoller, ReRoll} from './roller';
 import {V5Roller} from './v5/roller';
 
 const rollers: IRoller[] = [
+    new HEXRoller(secureRandomNumber, 'hex'),
     new L5RRoller(secureRandomNumber, 'l5r'),
     new V5Roller(secureRandomNumber, 'v5'),
     genesysRoller(secureRandomNumber, 'gen'),

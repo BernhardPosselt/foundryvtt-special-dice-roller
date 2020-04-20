@@ -147,6 +147,14 @@ FLUCHImages.set(Faces.FLUCH_DREI, 'fdrei');
 FLUCHImages.set(Faces.FLUCH_VIER, 'fvier');
 FLUCHImages.set(Faces.FLUCH_FUENF, 'ffuenf');
 
+export const dieRollImages = new Map<Dice, Map<Faces, string>>();
+dieRollImages.set(Dice.HEXXEN, HEXXENImages);
+dieRollImages.set(Dice.JANUS, JANUSImages);
+dieRollImages.set(Dice.SEGNUNG, SEGNUNGImages);
+dieRollImages.set(Dice.BLUT, BLUTImages);
+dieRollImages.set(Dice.ELIXIR, ELIXIRImages);
+dieRollImages.set(Dice.FLUCH, FLUCHImages);
+
 const rollToRollResultMapping = new Map<Faces, Partial<RollValues>>();
 rollToRollResultMapping.set(Faces.ERFOLG, {ERFOLGE: 1});
 rollToRollResultMapping.set(Faces.DOPPELERFOLG, {ERFOLGE: 2});
