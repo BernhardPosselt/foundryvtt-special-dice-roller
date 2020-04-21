@@ -36,3 +36,8 @@
 .special-dice-roller form input[type=checkbox].special-dice-roller-was-re-roll {
     border-bottom: 1px solid green;
 }
+
+.special-dice-roller .flavor-text {
+    color: #444;
+    font-size: 85%;
+}

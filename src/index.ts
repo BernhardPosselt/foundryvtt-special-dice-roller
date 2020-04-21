@@ -11,6 +11,15 @@ const rollers: IRoller[] = [
     starWarsRoller(secureRandomNumber, 'sw'),
 ];
 
+Hooks.on('init', () => {
+    game.specialDiceRoller = {
+        l5r: rollers[0],
+        v5: rollers[1],
+        genesys: rollers[2],
+        starWars: rollers[3],
+    };
+});
+
 Hooks.on('preCreateChatMessage', (data) => {
     const message = data.content;
     if (message !== undefined) {
