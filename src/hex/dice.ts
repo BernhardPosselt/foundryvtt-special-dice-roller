@@ -109,6 +109,7 @@ export class RollValues {
     public BLUT: number = 0,
     public ELIXIR: number = 0,
     public FLUCH: number = 0,
+    public LEER: number = 0,
   ) {
   }
 }
@@ -174,6 +175,7 @@ rollToRollResultMapping.set(Faces.FLUCH_ZWEI, {FLUCH: 2});
 rollToRollResultMapping.set(Faces.FLUCH_DREI, {FLUCH: 3});
 rollToRollResultMapping.set(Faces.FLUCH_VIER, {FLUCH: 4});
 rollToRollResultMapping.set(Faces.FLUCH_FUENF, {FLUCH: 5});
+rollToRollResultMapping.set(Faces.LEER, {LEER: 1});
 
 export function interpretResult(result: RollValues): RollValues {
     return new RollValues(
@@ -183,6 +185,7 @@ export function interpretResult(result: RollValues): RollValues {
         result.BLUT,
         result.ELIXIR,
         result.FLUCH,
+        result.LEER,
     );
 }
 
@@ -208,6 +211,7 @@ export const rollValuesMonoid: IMonoid<RollValues> = {
         roll1.BLUT + roll2.BLUT,
         roll1.ELIXIR + roll2.ELIXIR,
         roll1.FLUCH + roll2.FLUCH,
+        roll1.LEER + roll2.LEER,
     ),
 };
 
