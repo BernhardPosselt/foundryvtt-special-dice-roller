@@ -1,5 +1,5 @@
-import {HEXRoller} from './hex/roller';
 import {genesysRoller, starWarsRoller} from './genesys/roller';
+import {HEXRoller} from './hex/roller';
 import {L5RRoller} from './l5r/roller';
 import {secureRandomNumber} from './rng';
 import {IndexedRoll, IRoller, ReRoll} from './roller';

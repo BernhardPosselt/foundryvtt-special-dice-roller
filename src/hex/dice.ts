@@ -2,114 +2,115 @@ import {IMonoid} from '../lang';
 import {Roll} from '../roller';
 
 export enum Dice {
-	HEXXEN,
-	JANUS,
-	SEGNUNG,
-	BLUT,
-	ELIXIR,
-	FLUCH,
+  HEXXEN,
+  JANUS,
+  SEGNUNG,
+  BLUT,
+  ELIXIR,
+  FLUCH,
 }
 
 export enum Faces {
-	ERFOLG,
-	ESPRITSTERN,
-	LEER,
-	DOPPELKOPF,
-	DOPPELERFOLG,
-	BLUT_EINS,
-	BLUT_ZWEI,
-	BLUT_DREI,
-	ELIXIR_EINS,
-	ELIXIR_ZWEI,
-	ELIXIR_DREI,
-	ELIXIR_VIER,
-	ELIXIR_FUENF,
-	FLUCH_EINS,
-	FLUCH_ZWEI,
-	FLUCH_DREI,
-	FLUCH_VIER,
-	FLUCH_FUENF,
+  ERFOLG,
+  ESPRITSTERN,
+  LEER,
+  DOPPELKOPF,
+  DOPPELERFOLG,
+  BLUT_EINS,
+  BLUT_ZWEI,
+  BLUT_DREI,
+  ELIXIR_EINS,
+  ELIXIR_ZWEI,
+  ELIXIR_DREI,
+  ELIXIR_VIER,
+  ELIXIR_FUENF,
+  FLUCH_EINS,
+  FLUCH_ZWEI,
+  FLUCH_DREI,
+  FLUCH_VIER,
+  FLUCH_FUENF,
 }
 
 export const HEXXEN_ROLL_TABLE: Faces[] = [
-	Faces.ESPRITSTERN,
-	Faces.LEER,
-	Faces.LEER,
-	Faces.LEER,
-	Faces.ERFOLG,
-	Faces.ERFOLG,
+  Faces.ESPRITSTERN,
+  Faces.LEER,
+  Faces.LEER,
+  Faces.LEER,
+  Faces.ERFOLG,
+  Faces.ERFOLG,
 ];
 
 export const JANUS_ROLL_TABLE: Faces[] = [
-	Faces.LEER,
-	Faces.LEER,
-	Faces.LEER,
-	Faces.DOPPELKOPF,
-	Faces.DOPPELKOPF,
-	Faces.DOPPELKOPF,
+  Faces.LEER,
+  Faces.LEER,
+  Faces.LEER,
+  Faces.DOPPELKOPF,
+  Faces.DOPPELKOPF,
+  Faces.DOPPELKOPF,
 ];
 
 export const SEGNUNG_ROLL_TABLE: Faces[] = [
-	Faces.ESPRITSTERN,
-	Faces.ESPRITSTERN,
-	Faces.LEER,
-	Faces.ERFOLG,
-	Faces.ERFOLG,
-	Faces.DOPPELERFOLG,
+  Faces.ESPRITSTERN,
+  Faces.ESPRITSTERN,
+  Faces.LEER,
+  Faces.ERFOLG,
+  Faces.ERFOLG,
+  Faces.DOPPELERFOLG,
 ];
 
 export const BLUT_ROLL_TABLE: Faces [] = [
-	Faces.LEER,
-	Faces.BLUT_EINS,
-	Faces.BLUT_EINS,
-	Faces.BLUT_ZWEI,
-	Faces.BLUT_ZWEI,
-	Faces.BLUT_DREI,
+  Faces.LEER,
+  Faces.BLUT_EINS,
+  Faces.BLUT_EINS,
+  Faces.BLUT_ZWEI,
+  Faces.BLUT_ZWEI,
+  Faces.BLUT_DREI,
 ];
 
 export const ELIXIR_ROLL_TABLE: Faces [] = [
-	Faces.ELIXIR_EINS,
-	Faces.ELIXIR_ZWEI,
-	Faces.ELIXIR_DREI,
-	Faces.ELIXIR_VIER,
-	Faces.ELIXIR_FUENF,
-	Faces.ELIXIR_DREI,
+  Faces.ELIXIR_EINS,
+  Faces.ELIXIR_ZWEI,
+  Faces.ELIXIR_DREI,
+  Faces.ELIXIR_VIER,
+  Faces.ELIXIR_FUENF,
+  Faces.ELIXIR_DREI,
 ];
 
 export const FLUCH_ROLL_TABLE: Faces [] = [
-	Faces.FLUCH_EINS,
-	Faces.FLUCH_ZWEI,
-	Faces.FLUCH_DREI,
-	Faces.FLUCH_VIER,
-	Faces.FLUCH_FUENF,
-	Faces.FLUCH_DREI,
+  Faces.FLUCH_EINS,
+  Faces.FLUCH_ZWEI,
+  Faces.FLUCH_DREI,
+  Faces.FLUCH_VIER,
+  Faces.FLUCH_FUENF,
+  Faces.FLUCH_DREI,
 ];
 
 export class DicePool {
-	constructor(
-		public HEXXEN: number = 0,
-		public JANUS: number = 0,
-		public SEGNUNG: number = 0,
-		public BLUT: number = 0,
-		public ELIXIR: number = 0,
-		public FLUCH: number = 0
-	) {
-	}
+  constructor(
+    public HEXXEN: number = 0,
+    public JANUS: number = 0,
+    public SEGNUNG: number = 0,
+    public BLUT: number = 0,
+    public ELIXIR: number = 0,
+    public FLUCH: number = 0,
+  ) {
+  }
 
-	public toString(): stirng {
-		return `HeXXenwürfel: ${this.HEXXEN}, Januswürfel: ${this.JANUS}, Segnungswürfel: ${this.SEGNUNG}, Blutwürfel: ${this.BLUT}, Elixirwürfel: ${this.ELIXIR}, Fluchwürfel: ${this.FLUCH}`;
+  public toString(): string {
+    return `HeXXenwürfel: ${this.HEXXEN}, Januswürfel: ${this.JANUS}, Segnungswürfel: ${this.SEGNUNG}, Blutwürfel: ${this.BLUT}, Elixirwürfel: ${this.ELIXIR}, Fluchwürfel: ${this.FLUCH}`;
+  }
 }
 
 export class RollValues {
-	constructor(
-		public ERFOLGE: number = 0,
-		public ESPRIT: number = 0,
-		public JANUS: number = 0,
-		public BLUT: number = 0,
-		public ELIXIR: number = 0,
-		public FLUCH: numer = 0,
-	) {
-	}
+  constructor(
+    public ERFOLGE: number = 0,
+    public ESPRIT: number = 0,
+    public JANUS: number = 0,
+    public BLUT: number = 0,
+    public ELIXIR: number = 0,
+    public FLUCH: number = 0,
+  ) {
+  }
 }
 
 const HEXXENImages = new Map<Faces, string>();

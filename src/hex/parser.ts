@@ -1,3 +1,6 @@
+import {DefaultSimpleParser} from '../parser';
+import {DicePool, dicePoolMonoid} from './dice';
+
 function letterToRolls(letter: string, occurrences: number): DicePool {
     if (letter === 'h') {
         return new DicePool(occurrences, 0);

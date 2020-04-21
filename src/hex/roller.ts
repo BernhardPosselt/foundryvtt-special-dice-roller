@@ -1,4 +1,4 @@
-mport * as Mustache from 'mustache';
+import * as Mustache from 'mustache';
 import {countMatches} from '../arrays';
 import {combineAll} from '../lang';
 import {RandomNumberGenerator} from '../rng';
@@ -6,20 +6,20 @@ import {combineRolls, Roll, rollDie, Roller} from '../roller';
 import base from '../template';
 import {DieRollView} from '../view';
 import {
+    BLUT_ROLL_TABLE,
     Dice,
     DicePool,
     dieRollImages,
+    ELIXIR_ROLL_TABLE,
     Faces,
+    FLUCH_ROLL_TABLE,
+    HEXXEN_ROLL_TABLE,
     interpretResult,
+    JANUS_ROLL_TABLE,
     parseRollValues,
     RollValues,
     rollValuesMonoid,
-    HEXXEN_ROLL_TABLE,
-    JANUS_ROLL_TABLE,
     SEGNUNG_ROLL_TABLE,
-    BLUT_ROLL_TABLE,
-    ELIXIR_ROLL_TABLE,
-    FLUCH_ROLL_TABLE,
 } from './dice';
 import {SimpleParser} from './parser';
 import tpl from './template';
