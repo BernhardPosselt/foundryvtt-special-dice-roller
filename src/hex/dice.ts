@@ -198,7 +198,7 @@ export function parseRollValues(roll: Roll<Dice, Faces>): RollValues {
     }
 }
 
-function toRollResult(partial: Partial<RollValues>): RollValues {
+export function toRollResult(partial: Partial<RollValues>): RollValues {
     return Object.assign(new RollValues(), partial);
 }
 
