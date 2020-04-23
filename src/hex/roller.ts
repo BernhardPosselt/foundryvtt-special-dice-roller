@@ -32,6 +32,13 @@ export class HEXRoller extends Roller<Dice, Faces, DicePool> {
     }
 
     public roll(pool: DicePool): Array<Roll<Dice, Faces>> {
+        if (pool.BONUS > pool.MALUS) {
+          pool.BONUS = pool.BONUS - pool.MALUS;
+          pool.MALUS = 0;
+        } else if (pool.MALUS > pool.BONUS) {
+          pool.MALUS = pool.MALUS - pool.BONUS;
+          pool.BONUS = 0;
+        }
         return [
             ...rollDie(pool.HEXXEN, Dice.HEXXEN, HEXXEN_ROLL_TABLE, this.rng),
             ...rollDie(pool.BONUS, Dice.BONUS, BONUS_ROLL_TABLE, this.rng),
