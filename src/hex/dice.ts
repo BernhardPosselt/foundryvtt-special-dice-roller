@@ -3,7 +3,8 @@ import {Roll} from '../roller';
 
 export enum Dice {
   HEXXEN,
-  JANUS,
+  BONUS,
+  MALUS,
   SEGNUNG,
   BLUT,
   ELIXIR,
@@ -14,7 +15,8 @@ export enum Faces {
   ERFOLG,
   ESPRITSTERN,
   LEER,
-  DOPPELKOPF,
+  BONUS,
+  MALUS,
   DOPPELERFOLG,
   BLUT_EINS,
   BLUT_ZWEI,
@@ -40,13 +42,22 @@ export const HEXXEN_ROLL_TABLE: Faces[] = [
   Faces.ERFOLG,
 ];
 
-export const JANUS_ROLL_TABLE: Faces[] = [
+export const BONUS_ROLL_TABLE: Faces[] = [
   Faces.LEER,
   Faces.LEER,
   Faces.LEER,
-  Faces.DOPPELKOPF,
-  Faces.DOPPELKOPF,
-  Faces.DOPPELKOPF,
+  Faces.BONUS,
+  Faces.BONUS,
+  Faces.BONUS,
+];
+
+export const MALUS_ROLL_TABLE: Faces[] = [
+  Faces.LEER,
+  Faces.LEER,
+  Faces.LEER,
+  Faces.MALUS,
+  Faces.MALUS,
+  Faces.MALUS,
 ];
 
 export const SEGNUNG_ROLL_TABLE: Faces[] = [
@@ -88,7 +99,8 @@ export const FLUCH_ROLL_TABLE: Faces [] = [
 export class DicePool {
   constructor(
     public HEXXEN: number = 0,
-    public JANUS: number = 0,
+    public BONUS: number = 0,
+    public MALUS: number = 0,
     public SEGNUNG: number = 0,
     public BLUT: number = 0,
     public ELIXIR: number = 0,
@@ -97,7 +109,7 @@ export class DicePool {
   }
 
   public toString(): string {
-    return `HeXXenwürfel: ${this.HEXXEN}, Januswürfel: ${this.JANUS}, Segnungswürfel: ${this.SEGNUNG}, Blutwürfel: ${this.BLUT}, Elixirwürfel: ${this.ELIXIR}, Fluchwürfel: ${this.FLUCH}`;
+    return `HeXXenwürfel: ${this.HEXXEN}, Bonuswürfel: ${this.BONUS}, Maluswürfel: ${this.MALUS}, Segnungswürfel: ${this.SEGNUNG}, Blutwürfel: ${this.BLUT}, Elixirwürfel: ${this.ELIXIR}, Fluchwürfel: ${this.FLUCH}`;
   }
 }
 
@@ -105,7 +117,6 @@ export class RollValues {
   constructor(
     public ERFOLGE: number = 0,
     public ESPRIT: number = 0,
-    public JANUS: number = 0,
     public BLUT: number = 0,
     public ELIXIR: number = 0,
     public FLUCH: number = 0,
@@ -119,9 +130,13 @@ HEXXENImages.set(Faces.ESPRITSTERN, 'hesprit');
 HEXXENImages.set(Faces.LEER, 'hblank');
 HEXXENImages.set(Faces.ERFOLG, 'herfolg');
 
-const JANUSImages = new Map<Faces, string>();
-JANUSImages.set(Faces.LEER, 'jblank');
-JANUSImages.set(Faces.DOPPELKOPF, 'jdoppelkopf');
+const BONUSImages = new Map<Faces, string>();
+BONUSImages.set(Faces.LEER, 'jblank');
+BONUSImages.set(Faces.BONUS, 'jdoppelkopf');
+
+const MALUSImages = new Map<Faces, string>();
+MALUSImages.set(Faces.LEER, 'jblank');
+MALUSImages.set(Faces.MALUS, 'jdoppelkopf');
 
 const SEGNUNGImages = new Map<Faces, string>();
 SEGNUNGImages.set(Faces.ESPRITSTERN, 'sesprit');
@@ -151,7 +166,8 @@ FLUCHImages.set(Faces.FLUCH_FUENF, 'ffuenf');
 
 export const dieRollImages = new Map<Dice, Map<Faces, string>>();
 dieRollImages.set(Dice.HEXXEN, HEXXENImages);
-dieRollImages.set(Dice.JANUS, JANUSImages);
+dieRollImages.set(Dice.BONUS, BONUSImages);
+dieRollImages.set(Dice.MALUS, MALUSImages);
 dieRollImages.set(Dice.SEGNUNG, SEGNUNGImages);
 dieRollImages.set(Dice.BLUT, BLUTImages);
 dieRollImages.set(Dice.ELIXIR, ELIXIRImages);
@@ -161,7 +177,8 @@ const rollToRollResultMapping = new Map<Faces, Partial<RollValues>>();
 rollToRollResultMapping.set(Faces.ERFOLG, {ERFOLGE: 1});
 rollToRollResultMapping.set(Faces.DOPPELERFOLG, {ERFOLGE: 2});
 rollToRollResultMapping.set(Faces.ESPRITSTERN, {ESPRIT: 1});
-rollToRollResultMapping.set(Faces.DOPPELKOPF, {JANUS: 1});
+rollToRollResultMapping.set(Faces.BONUS, {ERFOLGE: 1});
+rollToRollResultMapping.set(Faces.MALUS, {ERFOLGE: -1});
 rollToRollResultMapping.set(Faces.BLUT_EINS, {BLUT: 1});
 rollToRollResultMapping.set(Faces.BLUT_ZWEI, {BLUT: 2});
 rollToRollResultMapping.set(Faces.BLUT_DREI, {BLUT: 3});
@@ -181,7 +198,6 @@ export function interpretResult(result: RollValues): RollValues {
     return new RollValues(
         result.ERFOLGE,
         result.ESPRIT,
-        result.JANUS,
         result.BLUT,
         result.ELIXIR,
         result.FLUCH,
@@ -207,7 +223,6 @@ export const rollValuesMonoid: IMonoid<RollValues> = {
     combine: (roll1: RollValues, roll2: RollValues) => new RollValues(
         roll1.ERFOLGE + roll2.ERFOLGE,
         roll1.ESPRIT + roll2.ESPRIT,
-        roll1.JANUS + roll2.JANUS,
         roll1.BLUT + roll2.BLUT,
         roll1.ELIXIR + roll2.ELIXIR,
         roll1.FLUCH + roll2.FLUCH,
@@ -219,7 +234,8 @@ export const dicePoolMonoid: IMonoid<DicePool> = {
     identity: new DicePool(),
     combine: (roll1: DicePool, roll2: DicePool) => new DicePool(
         roll1.HEXXEN + roll2.HEXXEN,
-        roll1.JANUS + roll2.JANUS,
+        roll1.BONUS + roll2.BONUS,
+        roll1.MALUS + roll2.MALUS,
         roll1.SEGNUNG + roll2.SEGNUNG,
         roll1.BLUT + roll2.BLUT,
         roll1.ELIXIR + roll2.ELIXIR,

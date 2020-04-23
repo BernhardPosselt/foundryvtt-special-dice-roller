@@ -7,9 +7,6 @@ const tpl = `
     {{#ESPRIT}}
     <li>Esprit: {{ESPRIT}}</li>
     {{/ESPRIT}}
-    {{#JANUS}}
-    <li>Janusköpfe: {{JANUS}}</li>
-    {{/JANUS}}
     {{#BLUT}}
     <li>Blutstropfen: {{BLUT}}</li>
     {{/BLUT}}

@@ -7,6 +7,7 @@ import base from '../template';
 import {DieRollView} from '../view';
 import {
     BLUT_ROLL_TABLE,
+    BONUS_ROLL_TABLE,
     Dice,
     DicePool,
     dieRollImages,
@@ -15,7 +16,7 @@ import {
     FLUCH_ROLL_TABLE,
     HEXXEN_ROLL_TABLE,
     interpretResult,
-    JANUS_ROLL_TABLE,
+    MALUS_ROLL_TABLE,
     parseRollValues,
     RollValues,
     rollValuesMonoid,
@@ -33,7 +34,8 @@ export class HEXRoller extends Roller<Dice, Faces, DicePool> {
     public roll(pool: DicePool): Array<Roll<Dice, Faces>> {
         return [
             ...rollDie(pool.HEXXEN, Dice.HEXXEN, HEXXEN_ROLL_TABLE, this.rng),
-            ...rollDie(pool.JANUS, Dice.JANUS, JANUS_ROLL_TABLE, this.rng),
+            ...rollDie(pool.BONUS, Dice.BONUS, BONUS_ROLL_TABLE, this.rng),
+            ...rollDie(pool.MALUS, Dice.MALUS, MALUS_ROLL_TABLE, this.rng),
             ...rollDie(pool.SEGNUNG, Dice.SEGNUNG, SEGNUNG_ROLL_TABLE, this.rng),
             ...rollDie(pool.BLUT, Dice.BLUT, BLUT_ROLL_TABLE, this.rng),
             ...rollDie(pool.ELIXIR, Dice.ELIXIR, ELIXIR_ROLL_TABLE, this.rng),
@@ -69,12 +71,13 @@ export class HEXRoller extends Roller<Dice, Faces, DicePool> {
 
     protected toDicePool(dice: Dice[]): DicePool {
         const HEXXEN = countMatches(dice, (die) => die === Dice.HEXXEN);
-        const JANUS = countMatches(dice, (die) => die === Dice.JANUS);
+        const BONUS = countMatches(dice, (die) => die === Dice.BONUS);
+        const MALUS = countMatches(dice, (die) => die === Dice.MALUS);
         const SEGNUNG = countMatches(dice, (die) => die === Dice.SEGNUNG);
         const BLUT = countMatches(dice, (die) => die === Dice.BLUT);
         const ELIXIR = countMatches(dice, (die) => die === Dice.ELIXIR);
         const FLUCH = countMatches(dice, (die) => die === Dice.FLUCH);
-        return new DicePool(HEXXEN, JANUS, SEGNUNG, BLUT, ELIXIR, FLUCH);
+        return new DicePool(HEXXEN, BONUS, MALUS, SEGNUNG, BLUT, ELIXIR, FLUCH);
     }
 
 }
