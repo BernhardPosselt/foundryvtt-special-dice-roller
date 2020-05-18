@@ -68,7 +68,7 @@ export abstract class Roller<D, F, P> implements IRoller {
             .replace(new RegExp(`/${this.command} `, 'g'), '');
         let result = this.rollFormula(formula);
         if (comment !== '') {
-          result = '<div>comment</div>\n' + result;
+          result = `<div>%{comment}</div>\n` + result;
         }
         return result;
     }
