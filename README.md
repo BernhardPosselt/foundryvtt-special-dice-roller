@@ -63,6 +63,12 @@ Usage is similar to L5R but re-rolls and keeping dice is unsupported. Use the **
 
 ![roller usage](docs/genroll.png)
 
+## Usage HeroQuest
+
+Use **/hq** to roll dice using the following dice letters:
+
+* d: die
+
 ## Usage Vampire the Masquerade
 
 Usage is similar to L5R but keeping dice is unsupported. Use the **/v5** command using the following dice letters:

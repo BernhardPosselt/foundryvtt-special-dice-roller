@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.0] - 2020-05-18
+### Changed
+- Make compatible with 0.5.7
+- Genesys dice are now show in the following order: boost, ability, proficiency, setback, difficulty, challenge, force 
+
+### Added
+
+- Support HeroQuest dice
+
 ## [0.8.0] - 2020-04-17
 ### Changed
 - Make compatible with 0.5.5
