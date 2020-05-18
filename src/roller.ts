@@ -59,16 +59,16 @@ export abstract class Roller<D, F, P> implements IRoller {
 
     public rollCommand(command: string): string {
         const parts = command.split('#');
-        let comment = "";
+        let comment = '';
         if (parts.length > 1) {
-          command = parts.shift().trim();
-          comment = parts.join('#').trim();
+          command = '' + parts.shift();
+          comment = '' + parts.join('#');
         }
         const formula = command
             .replace(new RegExp(`/${this.command} `, 'g'), '');
         let result = this.rollFormula(formula);
-        if (comment !== "") {
-          result = "<div>comment</div>\n" + result;
+        if (comment !== '') {
+          result = '<div>comment</div>\n' + result;
         }
         return result;
     }
