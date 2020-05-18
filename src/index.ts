@@ -19,6 +19,7 @@ Hooks.on('init', () => {
         v5: rollers[1],
         genesys: rollers[2],
         starWars: rollers[3],
+        heroQuest: rollers[4],
     };
 });
 

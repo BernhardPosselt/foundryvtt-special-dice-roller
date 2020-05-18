@@ -24,7 +24,8 @@ interface ExportedRollers {
     l5r: any;
     v5: any;
     genesys: any;
-    starWars: any;    
+    starWars: any;
+    heroQuest: any;
 }
 
 interface Game {
