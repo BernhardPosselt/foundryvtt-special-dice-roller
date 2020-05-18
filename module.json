@@ -1,15 +1,16 @@
 {
-  "name": "special-dice-roller",
-  "title": "Special Dice Roller",
+  "name": "special-dice-roller-test",
+  "title": "Special Dice Roller with comment",
   "description": "Supports rolling dice for: Legend of the 5 Rings 5th edition, Genesys, Vampire the Masquerade 5th edition, FFG's Star Wars TTRPG. Check out the README.md on the homepage for a guide on how to roll various dice.",
   "version": "0.8.1",
-  "author": "Bernhard Posselt",
-  "scripts": ["./dist/main.js"],
+  "author": "Bernhard Posselt, Martin Brunninger",
+  "scripts": [],
+  "esmodules": [ "./src/index.ts" ],
   "styles": ["./public/css/styles.css"],
   "packs": [],
   "minimumCoreVersion": "0.5.5",
   "compatibleCoreVersion": "0.5.5",
-  "url": "https://github.com/Bapf/foundryvtt-special-dice-roller",
-  "manifest": "https://github.com/Bapf/foundryvtt-special-dice-roller/raw/master/module.json",
-  "download": "https://github.com/Bapf/foundryvtt-special-dice-roller/archive/master.zip"
+  "url": "https://github.com/gizmo2342/foundryvtt-special-dice-roller",
+  "manifest": "https://github.com/gizmo2342/foundryvtt-special-dice-roller/raw/master/module.json",
+  "download": "https://github.com/gizmo2342/foundryvtt-special-dice-roller/archive/master.zip"
 }
