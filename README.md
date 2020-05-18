@@ -127,10 +127,10 @@ Each roller object has a rollFormula method:
 ```ts
 class Roller {
     /**
-      * @param fomula essentially the command without the roller prefix (e.g. wwbb instead of /l5r wwbb)
-      * @param flavorText? flavor text to display above the roll
-      * @return the HTML for the chat window
-      */
+     * @param fomula essentially the command without the roller prefix (e.g. wwbb instead of /l5r wwbb)
+     * @param flavorText? flavor text to display above the roll
+     * @return the HTML for the chat window
+     */
     rollFormula(formula: string, flavorText?: string): string {
         // etc
     }
