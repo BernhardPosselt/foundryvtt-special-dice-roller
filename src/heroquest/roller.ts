@@ -40,7 +40,7 @@ export class HeroQuestRoller extends Roller<Dice, Faces, DicePool> {
         return new Roll(die, face);
     }
 
-    public formatRolls(rolls: Array<Roll<Dice, Faces>>): string {
+    public formatRolls(rolls: Array<Roll<Dice, Faces>>, flavorText?: string): string {
         const combinedRolls = combineRolls(rolls, parseRollValues, rollValuesMonoid);
         return Mustache.render(
             base,
@@ -48,6 +48,7 @@ export class HeroQuestRoller extends Roller<Dice, Faces, DicePool> {
                 system: this.command,
                 canReRoll: this.canReRoll,
                 canKeep: this.canKeep,
+                flavorText,
                 rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
                 results: interpretResult(combinedRolls),
                 rollIndex(): number {

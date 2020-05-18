@@ -109,3 +109,32 @@ The relevant files and folders that need to be included in your (local) FoundryV
 * public/
 
 Further development documentation is included in the docs/ folder.
+
+# Rolling Dice Programmatically
+
+You can access the dice roller API via the game object:
+
+```js
+game.specialDiceRoller.l5r
+game.specialDiceRoller.v5
+game.specialDiceRoller.genesys
+game.specialDiceRoller.starWars
+game.specialDiceRoller.heroQuest
+```
+
+Each roller object has a rollFormula method:
+
+```ts
+class Roller {
+    /**
+      * @param fomula essentially the command without the roller prefix (e.g. wwbb instead of /l5r wwbb)
+      * @param flavorText? flavor text to display above the roll
+      * @return the HTML for the chat window
+      */
+    rollFormula(formula: string, flavorText?: string): string {
+        // etc
+    }
+}
+```
+
+This method returns the formatted HTML for a roll. You can insert that into the chat log content.
