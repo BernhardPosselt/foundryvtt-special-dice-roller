@@ -67,7 +67,8 @@ Usage is similar to L5R but re-rolls and keeping dice is unsupported. Use the **
 
 Use **/hq** to roll dice using the following dice letters:
 
-* d: die
+* h: hero
+* m: monster
 
 ![roller usage](docs/hq.png)
 

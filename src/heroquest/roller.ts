@@ -8,10 +8,9 @@ import {
     Dice,
     DicePool,
     dieRollImages,
-    Faces,
-    interpretResult,
+    Faces, HERO_TABLE,
+    interpretResult, MONSTER_TABLE,
     parseRollValues,
-    ROLL_TABLE,
     RollValues,
     rollValuesMonoid,
 } from './dice';
@@ -26,7 +25,8 @@ export class HeroQuestRoller extends Roller<Dice, Faces, DicePool> {
 
     public roll(pool: DicePool): Array<Roll<Dice, Faces>> {
         return [
-            ...rollDie(pool.dice, Dice.DIE, ROLL_TABLE, this.rng),
+            ...rollDie(pool.hero, Dice.HERO, HERO_TABLE, this.rng),
+            ...rollDie(pool.monster, Dice.MONSTER, MONSTER_TABLE, this.rng),
         ];
     }
 
