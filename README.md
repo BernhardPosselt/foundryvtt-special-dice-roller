@@ -69,6 +69,8 @@ Use **/hq** to roll dice using the following dice letters:
 
 * d: die
 
+![roller usage](docs/hq.png)
+
 ## Usage Vampire the Masquerade
 
 Usage is similar to L5R but keeping dice is unsupported. Use the **/v5** command using the following dice letters:
