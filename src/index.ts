@@ -1,27 +1,63 @@
-import {genesysRoller, starWarsRoller} from './genesys/roller';
+import {GenesysRoller, genesysRoller, starWarsRoller} from './genesys/roller';
 import {HeroQuestRoller} from './heroquest/roller';
 import {L5RRoller} from './l5r/roller';
 import {secureRandomNumber} from './rng';
 import {IndexedRoll, IRoller, ReRoll} from './roller';
 import {V5Roller} from './v5/roller';
 
-const rollers: IRoller[] = [
-    new L5RRoller(secureRandomNumber, 'l5r'),
-    new V5Roller(secureRandomNumber, 'v5'),
-    genesysRoller(secureRandomNumber, 'gen'),
-    starWarsRoller(secureRandomNumber, 'sw'),
-    new HeroQuestRoller(secureRandomNumber, 'hq'),
-];
+// begin foundry types
+interface IMessageContents {
+    content: string;
+}
+
+interface IHooks {
+    on(event: string, callback: (msg: IMessageContents) => void): void;
+}
+
+interface IChatData {
+    user: string;
+    content: string;
+}
+
+interface IChatMessage {
+    create(template: IChatData, options: object): void;
+}
+
+interface IUser {
+    id: string;
+}
+
+interface IGame {
+    user: IUser;
+    specialDiceRoller: IExportedRollers;
+}
+
+declare var Hooks: IHooks;
+declare var ChatMessage: IChatMessage;
+declare var game: IGame;
+// end foundry types
+
+interface IExportedRollers {
+    l5r: L5RRoller;
+    v5: V5Roller;
+    genesys: GenesysRoller;
+    starWars: GenesysRoller;
+    heroQuest: HeroQuestRoller;
+}
+
+const specialDiceRoller = {
+    l5r: new L5RRoller(secureRandomNumber, 'l5r'),
+    v5: new V5Roller(secureRandomNumber, 'v5'),
+    genesys: genesysRoller(secureRandomNumber, 'gen'),
+    starWars: starWarsRoller(secureRandomNumber, 'sw'),
+    heroQuest: new HeroQuestRoller(secureRandomNumber, 'hq'),
+};
 
 Hooks.on('init', () => {
-    game.specialDiceRoller = {
-        l5r: rollers[0],
-        v5: rollers[1],
-        genesys: rollers[2],
-        starWars: rollers[3],
-        heroQuest: rollers[4],
-    };
+    game.specialDiceRoller = specialDiceRoller;
 });
+
+const rollers: IRoller[] = Object.values(specialDiceRoller);
 
 Hooks.on('preCreateChatMessage', (data) => {
     const message = data.content;
@@ -72,7 +108,7 @@ Hooks.on('renderChatLog', () => {
 });
 
 function renderNewRoll(rolls: string): void {
-    const chatData: ChatData = {
+    const chatData: IChatData = {
         user: game.user.id,
         content: rolls,
     };
