@@ -32,6 +32,7 @@ You can roll a system by starting your message with the following string:
 * FFG Star Wars: /sw
 * FFG Genesys: /gen
 * Vampire the Masquerade: /v5
+* HeroQuest: /hq
 
 Then supply a dice formula separated with a space. The formula consists of dice letters that are optionally prefixed with a number.
 
