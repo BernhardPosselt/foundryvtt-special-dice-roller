@@ -9,6 +9,7 @@
     -webkit-appearance: none;
     appearance: none;
     outline: none;
+    margin: 0;
 }
 
 .special-dice-roller form input[type=checkbox]:disabled {
