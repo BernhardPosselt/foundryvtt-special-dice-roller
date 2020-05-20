@@ -11,7 +11,7 @@ const tpl = `
     <li>Blutstropfen: {{BLUT}}</li>
     {{/BLUT}}
     {{#ELIXIR}}
-    <li>Exlixire: {{ELIXIR}}</li>
+    <li>Elixire: {{ELIXIR}}</li>
     {{/ELIXIR}}
     {{#FLUCH}}
     <li>Flüche: {{FLUCH}}</li>
