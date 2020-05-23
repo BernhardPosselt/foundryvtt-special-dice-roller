@@ -59,26 +59,26 @@ export abstract class Roller<D, F, P> implements IRoller {
 
     public rollCommand(command: string): string {
         const parts = command.split('#');
-        let comment = "";
+        let comment = '';
         if (parts.length > 1) {
-          command = parts.shift().trim();
-          comment = parts.join('#').trim();
+          command = '' + parts.shift();
+          comment = '' + parts.join('#');
         }
         const formula = command
             .replace(new RegExp(`/${this.command} `, 'g'), '');
         let result = this.rollFormula(formula);
-        if (comment !== "") {
-          result = "<div>comment</div>\n" + result;
+        if (comment !== '') {
+          result = `<div>${comment}</div>\n` + result;
         }
         return result;
     }
 
-    public rollFormula(formula: string): string {
+    public rollFormula(formula: string, flavorText?: string): string {
         try {
             const parsedFormula = parseFormula(formula, this.parsers);
             const rolls = this.roll(parsedFormula);
             console.log(`Rolled ${rolls} with formula ${parsedFormula}`);
-            return this.formatRolls(rolls);
+            return this.formatRolls(rolls, flavorText);
         } catch (e) {
             return escapeHtml(e.message);
         }
@@ -134,8 +134,9 @@ export abstract class Roller<D, F, P> implements IRoller {
     /**
      * Return a template that displays and explains the roll
      * @param rolls
+     * @param flavorText an option description of the roll
      */
-    public abstract formatRolls(rolls: Array<Roll<D, F>>): string;
+    public abstract formatRolls(rolls: Array<Roll<D, F>>, flavorText?: string): string;
 
     /**
      * Create a dice pool from an array of different dice

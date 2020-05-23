@@ -1,6 +1,9 @@
 const base = `
 <div class="special-dice-roller">
     <div>
+        {{#flavorText}}
+        <span class="flavor-text">{{flavorText}}</span>
+        {{/flavorText}}
         <form>
             {{#rolls}}
             <input

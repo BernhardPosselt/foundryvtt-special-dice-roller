@@ -1,9 +1,7 @@
 const tpl = `
 <ul>
 {{#results}}
-    {{#ERFOLGE}}
     <li>Erfolge: {{ERFOLGE}}</li>
-    {{/ERFOLGE}}
     {{#ESPRIT}}
     <li>Esprit: {{ESPRIT}}</li>
     {{/ESPRIT}}
@@ -11,7 +9,7 @@ const tpl = `
     <li>Blutstropfen: {{BLUT}}</li>
     {{/BLUT}}
     {{#ELIXIR}}
-    <li>Exlixire: {{ELIXIR}}</li>
+    <li>Elixire: {{ELIXIR}}</li>
     {{/ELIXIR}}
     {{#FLUCH}}
     <li>Flüche: {{FLUCH}}</li>

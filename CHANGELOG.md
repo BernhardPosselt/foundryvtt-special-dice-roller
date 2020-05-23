@@ -4,9 +4,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.8.1] - 2020-04-21
+## [0.11.0] - 2020-05-23
 ### Added
 - Added support for rolling HeXXen 1733 dice
+
+## [0.10.1] - 2020-05-19
+### Fixed
+
+- Improve HeroQuest monster die images
+- Reduce margin to 0 for dice images
+
+## [0.10.0] - 2020-05-18
+### Changed
+
+- Depend on 0.5.7 because of style changes
+
+### Fixed
+- Increase die size from 25x25 to 40x40 pixels for better readability
+- Genesys dice are now show in the following order: proficiency, ability, challenge, difficulty, boost, setback, force
+
+## [0.9.0] - 2020-05-18
+### Changed
+- Make compatible with 0.5.7
+- Genesys dice are now show in the following order: boost, ability, proficiency, setback, difficulty, challenge, force 
+
+### Added
+
+- Support HeroQuest dice
+>>>>>>> upstream/master
 
 ## [0.8.0] - 2020-04-17
 ### Changed
