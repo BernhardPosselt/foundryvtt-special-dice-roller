@@ -21,7 +21,7 @@ Go to your setup page and click on the **Add-on Modules** Tab.
 
 Hit the button **Install Module** at the bottom.
 
-Insert the module URL https://github.com/Bapf/foundryvtt-special-dice-roller/raw/master/module.json and click **Install**.
+Insert the module URL https://github.com/BernhardPosselt/foundryvtt-special-dice-roller/raw/master/module.json and click **Install**.
 
 After you've launched your game, go to the Game Settings page and click on **Manage Modules**. Enable the Special Dice Roller app and hit **Save Module Settings**.
 
