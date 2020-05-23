@@ -66,6 +66,7 @@ export class HEXRoller extends Roller<Dice, Faces, DicePool> {
             base,
             {
                 system: this.command,
+                flavorText,
                 rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
                 results: interpretResult(combinedRolls),
                 rollIndex(): number {
