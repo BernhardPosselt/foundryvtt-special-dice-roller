@@ -39,12 +39,12 @@ export class GenesysRoller extends Roller<Dice, Faces, DicePool> {
 
     public roll(pool: DicePool): Array<Roll<Dice, Faces>> {
         return [
+            ...rollDie(pool.proficiency, Dice.PROFICIENCY, PROFICIENCY_ROLL_TABLE, this.rng),
+            ...rollDie(pool.ability, Dice.ABILITY, ABILITY_ROLL_TABLE, this.rng),
+            ...rollDie(pool.challenge, Dice.CHALLENGE, CHALLENGE_ROLL_TABLE, this.rng),
+            ...rollDie(pool.difficulty, Dice.DIFFICULTY, DIFFICULTY_ROLL_TABLE, this.rng),
             ...rollDie(pool.boost, Dice.BOOST, BOOST_ROLL_TABLE, this.rng),
             ...rollDie(pool.setback, Dice.SETBACK, SETBACK_ROLL_TABLE, this.rng),
-            ...rollDie(pool.ability, Dice.ABILITY, ABILITY_ROLL_TABLE, this.rng),
-            ...rollDie(pool.difficulty, Dice.DIFFICULTY, DIFFICULTY_ROLL_TABLE, this.rng),
-            ...rollDie(pool.proficiency, Dice.PROFICIENCY, PROFICIENCY_ROLL_TABLE, this.rng),
-            ...rollDie(pool.challenge, Dice.CHALLENGE, CHALLENGE_ROLL_TABLE, this.rng),
             ...rollDie(pool.force, Dice.FORCE, FORCE_ROLL_TABLE, this.rng),
         ];
     }
@@ -53,7 +53,7 @@ export class GenesysRoller extends Roller<Dice, Faces, DicePool> {
         return new Roll(die, face);
     }
 
-    public formatRolls(rolls: Array<Roll<Dice, Faces>>): string {
+    public formatRolls(rolls: Array<Roll<Dice, Faces>>, flavorText?: string): string {
         const combinedRolls = combineRolls(rolls, parseRollValues, rollValuesMonoid);
         const res = Mustache.render(
             base,
@@ -61,6 +61,7 @@ export class GenesysRoller extends Roller<Dice, Faces, DicePool> {
                 system: this.command,
                 canReRoll: this.canReRoll,
                 canKeep: this.canKeep,
+                flavorText,
                 rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages, true)),
                 results: interpretResult(combinedRolls),
                 rollIndex(): number {
@@ -69,7 +70,6 @@ export class GenesysRoller extends Roller<Dice, Faces, DicePool> {
             },
             {interpretation: tpl},
         );
-        console.log(res);
         return res;
     }
 

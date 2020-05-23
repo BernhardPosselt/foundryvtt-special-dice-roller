@@ -8,9 +8,12 @@ Supports rolling dice in your chat window for various non regular dice systems:
 * Vampire the Masquerade 5th edition
 * Genesys
 * FFG's Star Wars TTRPG
+* HeroQuest
+* HeXXen 1733
 
 L5R, Genesys and Star Wars images are taken from [SkyJedi's Discord Roller](https://github.com/SkyJedi/FFGNDS-Discord-Dice-Roller)
-Vampire the Masquerade images are taken from and [Lumi#5953's Thirst Discord bot](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=2ahUKEwj-iKLCjNvmAhWOyqYKHaYEC7AQFjAAegQIAhAB&url=https%3A%2F%2Fdiscordapp.com%2Foauth2%2Fauthorize%3Fclient_id%3D475234745848954905%26scope%3Dbot%26permissions%3D0&usg=AOvVaw0fV9gFSh3hD3WQd2BwJKv7). 
+Vampire the Masquerade images are taken from and [Lumi#5953's Thirst Discord bot](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=2ahUKEwj-iKLCjNvmAhWOyqYKHaYEC7AQFjAAegQIAhAB&url=https%3A%2F%2Fdiscordapp.com%2Foauth2%2Fauthorize%3Fclient_id%3D475234745848954905%26scope%3Dbot%26permissions%3D0&usg=AOvVaw0fV9gFSh3hD3WQd2BwJKv7).
+HeXXen 1733 images a taken from the pysical dice with permissin from Ulissis Spiele.
 
 # Installation
 
@@ -31,6 +34,8 @@ You can roll a system by starting your message with the following string:
 * FFG Star Wars: /sw
 * FFG Genesys: /gen
 * Vampire the Masquerade: /v5
+* HeroQuest: /hq
+* HeXXen 1733: /hex
 
 Then supply a dice formula separated with a space. The formula consists of dice letters that are optionally prefixed with a number.
 
@@ -63,6 +68,15 @@ Usage is similar to L5R but re-rolls and keeping dice is unsupported. Use the **
 
 ![roller usage](docs/genroll.png)
 
+## Usage HeroQuest
+
+Use **/hq** to roll dice using the following dice letters:
+
+* h: hero
+* m: monster
+
+![roller usage](docs/hq.png)
+
 ## Usage Vampire the Masquerade
 
 Usage is similar to L5R but keeping dice is unsupported. Use the **/v5** command using the following dice letters:
@@ -73,6 +87,22 @@ Usage is similar to L5R but keeping dice is unsupported. Use the **/v5** command
 You can choose to re-roll certain dice. To do that, click on the dice to select them and hit the re-roll button. Re-rolled dice are highlighted with a green border.
 
 ![roller usage](docs/v5roll.png)
+
+## Usage HexXen 1733
+
+Use **/hex** to roll dice using the following dice letters:
+
+* h: HeXXen dice
+* +: Janus dice as bonus
+* -: Janus dice as malus
+* s: Segnung dice
+* e: Elixir dice
+* b: Blut dice
+* f: Fouch dice
+
+Bonus and malus are automatically calculated according to the rules.
+
+![roller usage](docs/hexroll.png)
 
 # Building the Project
 
@@ -100,3 +130,33 @@ The relevant files and folders that need to be included in your (local) FoundryV
 * public/
 
 Further development documentation is included in the docs/ folder.
+
+# Rolling Dice Programmatically
+
+You can access the dice roller API via the game object:
+
+```js
+game.specialDiceRoller.l5r
+game.specialDiceRoller.v5
+game.specialDiceRoller.genesys
+game.specialDiceRoller.starWars
+game.specialDiceRoller.heroQuest
+game.specialDiceRoller.HeXXen
+```
+
+Each roller object has a rollFormula method:
+
+```ts
+class Roller {
+    /**
+     * @param fomula essentially the command without the roller prefix (e.g. wwbb instead of /l5r wwbb)
+     * @param flavorText? flavor text to display above the roll
+     * @return the HTML for the chat window
+     */
+    rollFormula(formula: string, flavorText?: string): string {
+        // etc
+    }
+}
+```
+
+This method returns the formatted HTML for a roll. You can insert that into the chat log content.

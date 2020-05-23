@@ -1,5 +1,5 @@
 import * as Mustache from 'mustache';
-import {countMatches} from '../arrays';
+import {combineAll} from '../lang';
 import {RandomNumberGenerator} from '../rng';
 import {combineRolls, Roll, rollDie, Roller} from '../roller';
 import base from '../template';
@@ -8,30 +8,32 @@ import {
     Dice,
     DicePool,
     dieRollImages,
-    Faces,
-    HUNGER_ROLL_TABLE,
-    interpretResult,
+    Faces, HERO_TABLE,
+    interpretResult, MONSTER_TABLE,
     parseRollValues,
+    RollValues,
     rollValuesMonoid,
-    SKILL_ROLL_TABLE,
 } from './dice';
 import {SimpleParser} from './parser';
 import tpl from './template';
 
-export class V5Roller extends Roller<Dice, Faces, DicePool> {
+export class HeroQuestRoller extends Roller<Dice, Faces, DicePool> {
+
     constructor(private rng: RandomNumberGenerator, command: string) {
-        super(
-            command,
-            [new SimpleParser()],
-            true,
-        );
+        super(command, [new SimpleParser()], false, false);
     }
 
-    public roll(rolls: DicePool): Array<Roll<Dice, Faces>> {
+    public roll(pool: DicePool): Array<Roll<Dice, Faces>> {
         return [
-            ...rollDie(rolls.hunger, Dice.HUNGER, HUNGER_ROLL_TABLE, this.rng),
-            ...rollDie(rolls.skills, Dice.SKILL, SKILL_ROLL_TABLE, this.rng),
+            ...rollDie(pool.hero, Dice.HERO, HERO_TABLE, this.rng),
+            ...rollDie(pool.monster, Dice.MONSTER, MONSTER_TABLE, this.rng),
         ];
+    }
+
+    public combineRolls(rolls: Array<Roll<Dice, Faces>>): RollValues {
+        const results = rolls
+            .map((roll) => parseRollValues(roll));
+        return combineAll(results, rollValuesMonoid);
     }
 
     public toRoll(die: number, face: number): Roll<Dice, Faces> {
@@ -47,10 +49,7 @@ export class V5Roller extends Roller<Dice, Faces, DicePool> {
                 canReRoll: this.canReRoll,
                 canKeep: this.canKeep,
                 flavorText,
-                rolls: rolls.map((roll) => {
-                    const isHungerDie = roll.die === Dice.HUNGER;
-                    return new DieRollView(roll, dieRollImages, isHungerDie);
-                }),
+                rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
                 results: interpretResult(combinedRolls),
                 rollIndex(): number {
                     return rolls.indexOf(this);
@@ -61,9 +60,6 @@ export class V5Roller extends Roller<Dice, Faces, DicePool> {
     }
 
     protected toDicePool(dice: Dice[]): DicePool {
-        const hunger = countMatches(dice, (die) => die === Dice.HUNGER);
-        const skills = countMatches(dice, (die) => die === Dice.SKILL);
-        return new DicePool(skills, hunger);
+        return new DicePool(dice.length);
     }
-
 }
