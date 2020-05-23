@@ -60,7 +60,7 @@ export class HEXRoller extends Roller<Dice, Faces, DicePool> {
         return new Roll(die, face);
     }
 
-    public formatRolls(rolls: Array<Roll<Dice, Faces>>): string {
+    public formatRolls(rolls: Array<Roll<Dice, Faces>>, flavorText?: string): string {
         const combinedRolls = combineRolls(rolls, parseRollValues, rollValuesMonoid);
         return Mustache.render(
             base,

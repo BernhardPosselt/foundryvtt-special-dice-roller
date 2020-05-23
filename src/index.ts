@@ -44,7 +44,7 @@ interface IExportedRollers {
     genesys: GenesysRoller;
     starWars: GenesysRoller;
     heroQuest: HeroQuestRoller;
-    HeXXen: HEXRoller;
+    heXXen: HEXRoller;
 }
 
 const specialDiceRoller = {
@@ -53,7 +53,7 @@ const specialDiceRoller = {
     genesys: genesysRoller(secureRandomNumber, 'gen'),
     starWars: starWarsRoller(secureRandomNumber, 'sw'),
     heroQuest: new HeroQuestRoller(secureRandomNumber, 'hq'),
-    HeXXen: new HEXRoller(secureRandomNumber, 'hex'),
+    heXXen: new HEXRoller(secureRandomNumber, 'hex'),
 };
 
 Hooks.on('init', () => {

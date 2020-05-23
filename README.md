@@ -141,7 +141,7 @@ game.specialDiceRoller.v5
 game.specialDiceRoller.genesys
 game.specialDiceRoller.starWars
 game.specialDiceRoller.heroQuest
-game.specialDiceRoller.HeXXen
+game.specialDiceRoller.heXXen
 ```
 
 Each roller object has a rollFormula method:
