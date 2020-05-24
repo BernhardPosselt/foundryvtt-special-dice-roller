@@ -215,7 +215,7 @@ export class D20Roller extends Roller<Dice, Faces, DicePool> {
         ];
     }
 
-    public formatRolls(rolls: Array<Roll<Dice, Faces>>): string {
+    public formatRolls(rolls: Array<Roll<Dice, Faces>>, flavorText?: string): string {
         const combinedRolls = combineRolls(rolls, parseRollValues, rollValuesMonoid);
         return Mustache.render(
             base,
@@ -223,6 +223,7 @@ export class D20Roller extends Roller<Dice, Faces, DicePool> {
                 system: this.command,
                 canReRoll: this.canReRoll,
                 canKeep: this.canKeep,
+                flavorText,
                 rolls: rolls.map((roll) => new DieRollView(roll, dieRollImages)),
                 results: interpretResult(combinedRolls),
                 rollIndex(): number {
@@ -250,12 +251,17 @@ The roller base class accepts two additional boolean parameters to enable re-rol
 
 ## Adding the Roller
 
-To wire everything up we just need to add our Roller to the list of available rollers in **index.ts**
+To wire everything up we just need to add our Roller to the list of available rollers in **index.ts**. The object key is the name of the property, under which it can be accessed under **game.specialDiceRoller**, e.g. **d20** would make it available at **game.specialDiceRoller.d20**
 ```typescript
-const rollers = [
+interface IExportedRollers {
     // ...
-    new D20Roller(secureRandomNumber, 'd20'),
-]
+    d20: D20Roller;
+}
+
+const specialDiceRoller = {
+    // ...
+    d20: new D20Roller(secureRandomNumber, 'd20'),
+};
 ```
 
 We should now be able to roll our first roll using the chat message **/d20 2f5s**
