@@ -58,19 +58,10 @@ export abstract class Roller<D, F, P> implements IRoller {
     }
 
     public rollCommand(command: string): string {
-        const parts = command.split('#');
-        let comment = '';
-        if (parts.length > 1) {
-          command = '' + parts.shift();
-          comment = '' + parts.join('#');
-        }
-        const formula = command
-            .replace(new RegExp(`/${this.command} `, 'g'), '');
-        let result = this.rollFormula(formula);
-        if (comment !== '') {
-          result = `<div>${comment}</div>\n` + result;
-        }
-        return result;
+        // try to match "/{command} {formula} # {flavourText}" pattern
+        const matches = command
+            .match(new RegExp(`^/${this.command} (.*?)(?:\\s*#\\s*([^]+)?)?$`)) || [];
+        return this.rollFormula(matches[1] || '', matches[2]);
     }
 
     public rollFormula(formula: string, flavorText?: string): string {

@@ -254,7 +254,7 @@ To wire everything up we just need to add our Roller to the list of available ro
 ```typescript
 const rollers = [
     // ...
-    new D20Roller(secureRandomNumber, '/d20'),
+    new D20Roller(secureRandomNumber, 'd20'),
 ]
 ```
 

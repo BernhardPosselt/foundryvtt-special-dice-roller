@@ -39,7 +39,11 @@ You can roll a system by starting your message with the following string:
 
 Then supply a dice formula separated with a space. The formula consists of dice letters that are optionally prefixed with a number.
 
+The roll can also contain an optional flavour text by adding a #. Everything behind the first # will be treated as flavour text.
+
 A full roll example would be **/l5r rrs** or **/l5r 2rs**.
+
+An example with flavour text would be **/l5r rss # comment**.
 
 ## Usage L5R
 
