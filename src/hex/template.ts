@@ -1,7 +1,9 @@
 const tpl = `
 <ul>
 {{#results}}
+    {{#ERFOLGE}}
     <li>Erfolge: {{ERFOLGE}}</li>
+    {{/ERFOLGE}}
     {{#ESPRIT}}
     <li>Esprit: {{ESPRIT}}</li>
     {{/ESPRIT}}

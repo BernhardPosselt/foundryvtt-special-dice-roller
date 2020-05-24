@@ -196,7 +196,7 @@ rollToRollResultMapping.set(Faces.LEER, {LEER: 1});
 
 export function interpretResult(result: RollValues): RollValues {
     return new RollValues(
-        result.ERFOLGE > 0 ? result.ERFOLGE : 0,
+        result.ERFOLGE,
         result.ESPRIT,
         result.BLUT,
         result.ELIXIR,
