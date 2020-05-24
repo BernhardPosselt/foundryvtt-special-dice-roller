@@ -7,6 +7,14 @@ test('should react to hex command', () => {
     expect(roller.handlesCommand('/hex ')).toBe(true);
 });
 
+test('should roll hex command', () => {
+    let roller;
+    roller = new HEXRoller(makeRng(0, 0, 0, 0), 'hex');
+    expect(roller.rollCommand('/hex 4h')).toBeTruthy();
+    roller = new HEXRoller(makeRng(0, 0, 0, 0), 'hex');
+    expect(roller.rollCommand('/hex 4h # myFlavourText')).toContain("myFlavourText");
+});
+
 test('should roll a Espritstern on a HeXXen die', () => {
     const roller = new HEXRoller(makeRng(0), '');
     const result = roller.roll(new DicePool(1));
