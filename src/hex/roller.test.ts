@@ -261,3 +261,16 @@ test('should roll a Espritstern and two Blutstropfen', () => {
     expect(result[1].die).toBe(Dice.BLUT);
     expect(result[1].face).toBe(Faces.BLUT_ZWEI);
 });
+
+test('should clear Bonus vs. Malus', () => {
+    let roller = new HEXRoller(makeRng(0, 3), '');
+    let result = roller.roll(new DicePool(0, 3, 2));
+    expect(result.length).toBe(1);
+    expect(result[0].die).toBe(Dice.BONUS);
+
+    roller = new HEXRoller(makeRng(0, 3), '');
+    result = roller.roll(new DicePool(0, 2, 4));
+    expect(result.length).toBe(2);
+    expect(result[0].die).toBe(Dice.MALUS);
+    expect(result[1].die).toBe(Dice.MALUS);
+})

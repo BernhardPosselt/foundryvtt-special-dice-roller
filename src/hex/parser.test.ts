@@ -24,3 +24,9 @@ test('it should parse a simple counted roll formula', () => {
     expect(result.HEXXEN).toBe(3);
     expect(result.MALUS).toBe(2);
 });
+
+test('should cap bonus and malus to a maximum of 5', () => {
+    const result = parseFormula('8+7-', parsers);
+    expect(result.BONUS).toBe(5);
+    expect(result.MALUS).toBe(5);
+});
