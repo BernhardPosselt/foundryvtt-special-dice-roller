@@ -102,7 +102,7 @@ Use **/hex** to roll dice using the following dice letters:
 * s: Segnung dice
 * e: Elixir dice
 * b: Blut dice
-* f: Fouch dice
+* f: Fluch dice
 
 Bonus and malus are automatically calculated according to the rules.
 
