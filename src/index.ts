@@ -1,5 +1,6 @@
 import {GenesysRoller, genesysRoller, starWarsRoller} from './genesys/roller';
 import {HeroQuestRoller} from './heroquest/roller';
+import {HEXRoller} from './hex/roller';
 import {L5RRoller} from './l5r/roller';
 import {secureRandomNumber} from './rng';
 import {IndexedRoll, IRoller, ReRoll} from './roller';
@@ -43,6 +44,7 @@ interface IExportedRollers {
     genesys: GenesysRoller;
     starWars: GenesysRoller;
     heroQuest: HeroQuestRoller;
+    heXXen: HEXRoller;
 }
 
 const specialDiceRoller = {
@@ -51,6 +53,7 @@ const specialDiceRoller = {
     genesys: genesysRoller(secureRandomNumber, 'gen'),
     starWars: starWarsRoller(secureRandomNumber, 'sw'),
     heroQuest: new HeroQuestRoller(secureRandomNumber, 'hq'),
+    heXXen: new HEXRoller(secureRandomNumber, 'hex'),
 };
 
 Hooks.on('init', () => {

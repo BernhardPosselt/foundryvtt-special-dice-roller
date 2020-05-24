@@ -58,9 +58,10 @@ export abstract class Roller<D, F, P> implements IRoller {
     }
 
     public rollCommand(command: string): string {
-        const formula = command
-            .replace(new RegExp(`/${this.command} `, 'g'), '');
-        return this.rollFormula(formula);
+        // try to match "/{command} {formula} # {flavourText}" pattern
+        const matches = command
+            .match(new RegExp(`^/${this.command} (.*?)(?:\\s*#\\s*([^]+)?)?$`)) || [];
+        return this.rollFormula(matches[1] || '', matches[2]);
     }
 
     public rollFormula(formula: string, flavorText?: string): string {

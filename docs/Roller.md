@@ -260,7 +260,7 @@ interface IExportedRollers {
 
 const specialDiceRoller = {
     // ...
-    d20: new D20Roller(secureRandomNumber, '/d20'),
+    d20: new D20Roller(secureRandomNumber, 'd20'),
 };
 ```
 
