@@ -12,7 +12,7 @@ test('should roll hex command', () => {
     roller = new HEXRoller(makeRng(0, 0, 0, 0), 'hex');
     expect(roller.rollCommand('/hex 4h')).toBeTruthy();
     roller = new HEXRoller(makeRng(0, 0, 0, 0), 'hex');
-    expect(roller.rollCommand('/hex 4h # myFlavourText')).toContain("myFlavourText");
+    expect(roller.rollCommand('/hex 4h # myFlavourText')).toContain('myFlavourText');
 });
 
 test('should roll a Espritstern on a HeXXen die', () => {
@@ -273,4 +273,4 @@ test('should clear Bonus vs. Malus', () => {
     expect(result.length).toBe(2);
     expect(result[0].die).toBe(Dice.MALUS);
     expect(result[1].die).toBe(Dice.MALUS);
-})
+});

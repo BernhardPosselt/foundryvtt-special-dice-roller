@@ -40,6 +40,10 @@ export class FormulaParseError extends Error {
     }
 }
 
+function escapeRegExp(value: string): string {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
+
 export class DefaultSimpleParser<R> extends Parser<R> {
     private readonly letters: string[];
     private numbers = new Set<string>();
@@ -50,7 +54,7 @@ export class DefaultSimpleParser<R> extends Parser<R> {
         private rollValuesMonoid: IMonoid<R>,
         private letterExplanation: string[],
     ) {
-        super(new RegExp(`^(?:(?:[1-9][0-9]*)?[${alphabet}])+$`));
+        super(new RegExp(`^(?:(?:[1-9][0-9]*)?[${escapeRegExp(alphabet)}])+$`));
         this.letters = alphabet.split('');
         this.numbers.add('0');
         this.numbers.add('1');
