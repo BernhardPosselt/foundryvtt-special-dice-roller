@@ -5,6 +5,7 @@ import {L5RRoller} from './l5r/roller';
 import {secureRandomNumber} from './rng';
 import {IndexedRoll, IRoller, ReRoll} from './roller';
 import {V5Roller} from './v5/roller';
+import { warhammerRoller } from './wfrp3/roller';
 
 // begin foundry types
 interface IMessageContents {
@@ -54,6 +55,7 @@ const specialDiceRoller = {
     starWars: starWarsRoller(secureRandomNumber, 'sw'),
     heroQuest: new HeroQuestRoller(secureRandomNumber, 'hq'),
     heXXen: new HEXRoller(secureRandomNumber, 'hex'),
+    warhammer: warhammerRoller(secureRandomNumber, 'wfrp3'),
 };
 
 Hooks.on('init', () => {
