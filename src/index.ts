@@ -5,7 +5,7 @@ import {L5RRoller} from './l5r/roller';
 import {secureRandomNumber} from './rng';
 import {IndexedRoll, IRoller, ReRoll} from './roller';
 import {V5Roller} from './v5/roller';
-import { warhammerRoller } from './wfrp3/roller';
+import { warhammerRoller, WarhammerRoller } from './wfrp3/roller';
 
 // begin foundry types
 interface IMessageContents {
@@ -46,6 +46,7 @@ interface IExportedRollers {
     starWars: GenesysRoller;
     heroQuest: HeroQuestRoller;
     heXXen: HEXRoller;
+    warhammer: WarhammerRoller;
 }
 
 const specialDiceRoller = {
