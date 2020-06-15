@@ -206,7 +206,7 @@ rollToRollResultMapping.set(Faces.SUCCESS_BOON, {successes: 1, boons: 1});
 rollToRollResultMapping.set(Faces.SUCCESS_PLUS, {successes: 1});
 rollToRollResultMapping.set(Faces.COMET, {comets: 1});
 rollToRollResultMapping.set(Faces.BANE, {banes: 1});
-rollToRollResultMapping.set(Faces.DOUBLE_BANE, {banes: 1});
+rollToRollResultMapping.set(Faces.DOUBLE_BANE, {banes: 2});
 rollToRollResultMapping.set(Faces.CHAOS_STAR, {stars: 1});
 
 export function parseRollValues(roll: Roll<Dice, Faces>): RollValues {

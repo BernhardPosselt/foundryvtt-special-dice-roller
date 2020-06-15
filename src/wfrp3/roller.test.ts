@@ -31,6 +31,25 @@ test('should roll various dice', () => {
     expect(result[6].face).toBe(Faces.BLANK);
 });
 
+test('should roll 3 bane', () => {
+    const roller = warhammerRoller(makeRng(0, 1, 2), 'wfrp3');
+    const result = roller.roll(new DicePool(0, 0, 0, 0, 0, 0, 3));
+
+    expect(result.length).toBe(3);
+
+    expect(result[0].die).toBe(Dice.CHALLENGE);
+    expect(result[0].face).toBe(Faces.BLANK);
+    expect(result[1].die).toBe(Dice.CHALLENGE);
+    expect(result[1].face).toBe(Faces.BANE);
+    expect(result[2].die).toBe(Dice.CHALLENGE);
+    expect(result[2].face).toBe(Faces.DOUBLE_BANE);
+
+    const combined = combineRolls(result, parseRollValues, rollValuesMonoid);
+    const interpreted = interpretResult(combined);
+
+    expect(interpreted.banes).toBe(3);
+});
+
 test('should count results', () => {
     const roller = warhammerRoller(makeRng(1, 4, 4, 6, 6, 5, 3, 3, 3, 6), 'wfrp3');
     const result = roller.roll(new DicePool(1, 2, 2, 1, 1, 1, 2));
