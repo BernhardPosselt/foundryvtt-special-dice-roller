@@ -7,17 +7,17 @@ import {IndexedRoll, IRoller, ReRoll} from './roller';
 import {V5Roller} from './v5/roller';
 
 // begin foundry types
-interface IMessageContents {
-    content: string;
-}
-
 interface IHooks {
-    on(event: string, callback: (msg: IMessageContents) => void): void;
+    on(event: string, callback: (chatLog: IChatLog, messageText: string, msg: IChatData) => void): void;
 }
 
 interface IChatData {
     user: string;
     content: string;
+}
+
+interface IChatLog {
+    tabName: string;
 }
 
 interface IChatMessage {
@@ -36,6 +36,7 @@ interface IGame {
 declare var Hooks: IHooks;
 declare var ChatMessage: IChatMessage;
 declare var game: IGame;
+
 // end foundry types
 
 interface IExportedRollers {
@@ -62,15 +63,16 @@ Hooks.on('init', () => {
 
 const rollers: IRoller[] = Object.values(specialDiceRoller);
 
-Hooks.on('preCreateChatMessage', (data) => {
-    const message = data.content;
-    if (message !== undefined) {
+Hooks.on('chatMessage', (_: IChatLog, messageText: string, data: IChatData) => {
+    if (messageText !== undefined) {
         for (const roller of rollers) {
-            if (roller.handlesCommand(message)) {
-                data.content = roller.rollCommand(message);
+            if (roller.handlesCommand(messageText)) {
+                data.content = roller.rollCommand(messageText);
             }
         }
     }
+    ChatMessage.create(data, {});
+    return false;
 });
 
 function parseRoll(input: HTMLInputElement): IndexedRoll {

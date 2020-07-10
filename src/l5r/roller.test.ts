@@ -39,11 +39,9 @@ test('should roll a ring 4', () => {
     const roller = new L5RRoller(makeRng(3, 2), '');
     const result = roller.roll(new DicePool(1, 0));
 
-    expect(result.length).toBe(2);
+    expect(result.length).toBe(1);
     expect(result[0].die).toBe(Dice.RING);
     expect(result[0].face).toBe(Faces.EXPLODING_STRIFE);
-    expect(result[1].die).toBe(Dice.RING);
-    expect(result[1].face).toBe(Faces.SUCCESS_STRIFE);
 });
 
 test('should roll a ring 5', () => {
@@ -142,24 +140,18 @@ test('should roll a skill 8', () => {
     const roller = new L5RRoller(makeRng(7, 9), '');
     const result = roller.roll(new DicePool(0, 1));
 
-    expect(result.length).toBe(2);
+    expect(result.length).toBe(1);
     expect(result[0].die).toBe(Dice.SKILL);
     expect(result[0].face).toBe(Faces.EXPLODING);
-    expect(result[1].die).toBe(Dice.SKILL);
-    expect(result[1].face).toBe(Faces.OPPORTUNITY);
 });
 
 test('should roll a skill 9', () => {
     const roller = new L5RRoller(makeRng(8, 7, 9), '');
     const result = roller.roll(new DicePool(0, 1));
 
-    expect(result.length).toBe(3);
+    expect(result.length).toBe(1);
     expect(result[0].die).toBe(Dice.SKILL);
     expect(result[0].face).toBe(Faces.EXPLODING_STRIFE);
-    expect(result[1].die).toBe(Dice.SKILL);
-    expect(result[1].face).toBe(Faces.EXPLODING);
-    expect(result[2].die).toBe(Dice.SKILL);
-    expect(result[2].face).toBe(Faces.OPPORTUNITY);
 });
 
 test('should roll a skill 10', () => {
@@ -196,8 +188,8 @@ test('should count results', () => {
     expect(count.exploding).toBe(2);
     expect(count.strife).toBe(2);
     expect(count.successes).toBe(5);
-    expect(count.failures).toBe(3);
-    expect(count.opportunity).toBe(2);
+    expect(count.failures).toBe(2);
+    expect(count.opportunity).toBe(1);
 });
 
 test('it should re-roll a result', () => {

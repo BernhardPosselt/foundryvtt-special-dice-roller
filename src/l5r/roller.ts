@@ -28,8 +28,8 @@ export class L5RRoller extends Roller<Dice, Faces, DicePool> {
 
     public roll(pool: DicePool): Array<Roll<Dice, Faces>> {
         return [
-            ...rollDie(pool.rings, Dice.RING, RING_ROLL_TABLE, this.rng, isExploding),
-            ...rollDie(pool.skills, Dice.SKILL, SKILL_ROLL_TABLE, this.rng, isExploding),
+            ...rollDie(pool.rings, Dice.RING, RING_ROLL_TABLE, this.rng),
+            ...rollDie(pool.skills, Dice.SKILL, SKILL_ROLL_TABLE, this.rng),
         ];
     }
 
@@ -68,10 +68,4 @@ export class L5RRoller extends Roller<Dice, Faces, DicePool> {
         return new DicePool(rings, skills);
     }
 
-}
-
-function isExploding(face: Faces): boolean {
-    return face === Faces.EXPLODING_STRIFE ||
-        face === Faces.EXPLODING_OPPORTUNITY ||
-        face === Faces.EXPLODING;
 }

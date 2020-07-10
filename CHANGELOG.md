@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.2] - 2020-06-10
+### Fixed
+- Do not explode l5r dice since dice only explode when you keep them. Future implementation will add a way to automatically roll on keep, #13
+- Fix compatibility with 0.6.5, #12
+
 ## [0.11.1] - 2020-05-31
 ### Fixed
 - Fix + and - in HeXXen 1733 dice
