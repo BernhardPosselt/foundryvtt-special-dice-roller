@@ -68,11 +68,12 @@ Hooks.on('chatMessage', (_: IChatLog, messageText: string, data: IChatData) => {
         for (const roller of rollers) {
             if (roller.handlesCommand(messageText)) {
                 data.content = roller.rollCommand(messageText);
+                ChatMessage.create(data, {});
+                return false;
             }
         }
     }
-    ChatMessage.create(data, {});
-    return false;
+    return true;
 });
 
 function parseRoll(input: HTMLInputElement): IndexedRoll {
