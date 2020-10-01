@@ -29,11 +29,11 @@ export function warhammerRoller(rng: RandomNumberGenerator, command: string): Wa
 }
 
 export class WarhammerRoller extends Roller<Dice, Faces, DicePool> {
-    constructor(private rng: RandomNumberGenerator, command: string, parsers: Array<IParser<DicePool>>) {
+    constructor(private rng: RandomNumberGenerator, command: string, parsers: IParser<DicePool>[]) {
         super(command, parsers);
     }
 
-    public roll(pool: DicePool): Array<Roll<Dice, Faces>> {
+    public roll(pool: DicePool): Roll<Dice, Faces>[] {
         return [
             ...rollDie(pool.characteristics, Dice.CHAR, CHARACTERISTIC_ROLL_TABLE, this.rng),
             ...rollDie(pool.conservative, Dice.CONSERVATIVE, CONSERVATIVE_ROLL_TABLE, this.rng),
@@ -49,7 +49,7 @@ export class WarhammerRoller extends Roller<Dice, Faces, DicePool> {
         return new Roll(die, face);
     }
 
-    public formatRolls(rolls: Array<Roll<Dice, Faces>>): string {
+    public formatRolls(rolls: Roll<Dice, Faces>[]): string {
         const combinedRolls = combineRolls(rolls, parseRollValues, rollValuesMonoid);
         const res = Mustache.render(
             base,

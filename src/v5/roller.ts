@@ -27,7 +27,7 @@ export class V5Roller extends Roller<Dice, Faces, DicePool> {
         );
     }
 
-    public roll(rolls: DicePool): Array<Roll<Dice, Faces>> {
+    public roll(rolls: DicePool): Roll<Dice, Faces>[] {
         return [
             ...rollDie(rolls.hunger, Dice.HUNGER, HUNGER_ROLL_TABLE, this.rng),
             ...rollDie(rolls.skills, Dice.SKILL, SKILL_ROLL_TABLE, this.rng),
@@ -38,7 +38,7 @@ export class V5Roller extends Roller<Dice, Faces, DicePool> {
         return new Roll(die, face);
     }
 
-    public formatRolls(rolls: Array<Roll<Dice, Faces>>, flavorText?: string): string {
+    public formatRolls(rolls: Roll<Dice, Faces>[], flavorText?: string): string {
         const combinedRolls = combineRolls(rolls, parseRollValues, rollValuesMonoid);
         return Mustache.render(
             base,

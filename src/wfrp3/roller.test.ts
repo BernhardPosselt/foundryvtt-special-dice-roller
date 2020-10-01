@@ -15,7 +15,7 @@ test('should roll various dice', () => {
 
     expect(result.length).toBe(7);
 
-    expect(result[0].die).toBe(Dice.CHAR); 
+    expect(result[0].die).toBe(Dice.CHAR);
     expect(result[0].face).toBe(Faces.BLANK);
     expect(result[1].die).toBe(Dice.CONSERVATIVE);
     expect(result[1].face).toBe(Faces.BLANK);

@@ -33,11 +33,11 @@ export function starWarsRoller(rng: RandomNumberGenerator, command: string): Gen
 }
 
 export class GenesysRoller extends Roller<Dice, Faces, DicePool> {
-    constructor(private rng: RandomNumberGenerator, command: string, parsers: Array<IParser<DicePool>>) {
+    constructor(private rng: RandomNumberGenerator, command: string, parsers: IParser<DicePool>[]) {
         super(command, parsers);
     }
 
-    public roll(pool: DicePool): Array<Roll<Dice, Faces>> {
+    public roll(pool: DicePool): Roll<Dice, Faces>[] {
         return [
             ...rollDie(pool.proficiency, Dice.PROFICIENCY, PROFICIENCY_ROLL_TABLE, this.rng),
             ...rollDie(pool.ability, Dice.ABILITY, ABILITY_ROLL_TABLE, this.rng),
@@ -53,7 +53,7 @@ export class GenesysRoller extends Roller<Dice, Faces, DicePool> {
         return new Roll(die, face);
     }
 
-    public formatRolls(rolls: Array<Roll<Dice, Faces>>, flavorText?: string): string {
+    public formatRolls(rolls: Roll<Dice, Faces>[], flavorText?: string): string {
         const combinedRolls = combineRolls(rolls, parseRollValues, rollValuesMonoid);
         const res = Mustache.render(
             base,
