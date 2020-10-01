@@ -110,10 +110,10 @@ successImages.set(Faces.FIVESUC, 'fivesuc');
 successImages.set(Faces.SIXSUC, 'sixsuc');
 
 const shadowImages = new Map<Faces, string>();
-successImages.set(Faces.SHADOW, 'shadow');
+shadowImages.set(Faces.SHADOW, 'shadow');
 
 const tiredImages = new Map<Faces, string>();
-successImages.set(Faces.TIRED, 'tired');
+tiredImages.set(Faces.TIRED, 'tired');
 
 export const dieRollImages = new Map<Dice, Map<Faces, string>>();
 dieRollImages.set(Dice.FEAT, featImages);
