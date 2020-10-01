@@ -10,10 +10,12 @@ Supports rolling dice in your chat window for various non regular dice systems:
 * FFG's Star Wars TTRPG
 * HeroQuest
 * HeXXen 1733
+* FFG's Warhammer 3rd
 
 L5R, Genesys and Star Wars images are taken from [SkyJedi's Discord Roller](https://github.com/SkyJedi/FFGNDS-Discord-Dice-Roller)
 Vampire the Masquerade images are taken from and [Lumi#5953's Thirst Discord bot](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=2ahUKEwj-iKLCjNvmAhWOyqYKHaYEC7AQFjAAegQIAhAB&url=https%3A%2F%2Fdiscordapp.com%2Foauth2%2Fauthorize%3Fclient_id%3D475234745848954905%26scope%3Dbot%26permissions%3D0&usg=AOvVaw0fV9gFSh3hD3WQd2BwJKv7).
 HeXXen 1733 images a taken from the pysical dice with permissin from Ulissis Spiele.
+Warhammer 3rd images created by [Alex Valiushko](https://github.com/illotum)
 
 # Installation
 
@@ -36,6 +38,7 @@ You can roll a system by starting your message with the following string:
 * Vampire the Masquerade: /v5
 * HeroQuest: /hq
 * HeXXen 1733: /hex
+* Warhammer 3rd /wfrp3
 
 Then supply a dice formula separated with a space. The formula consists of dice letters that are optionally prefixed with a number.
 
