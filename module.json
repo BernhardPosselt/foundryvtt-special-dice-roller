@@ -9,7 +9,7 @@
   "packs": [],
   "minimumCoreVersion": "0.5.7",
   "compatibleCoreVersion": "0.6.5",
-  "url": "https://github.com/gblosser42/foundryvtt-special-dice-roller",
-  "manifest": "https://github.com/gblosser42/foundryvtt-special-dice-roller/raw/master/module.json",
-  "download": "https://github.com/gblosser42/foundryvtt-special-dice-roller/archive/master.zip"
+  "url": "https://github.com/BernhardPosselt/foundryvtt-special-dice-roller",
+  "manifest": "https://github.com/BernhardPosselt/foundryvtt-special-dice-roller/raw/master/module.json",
+  "download": "https://github.com/BernhardPosselt/foundryvtt-special-dice-roller/archive/master.zip"
 }
