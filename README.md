@@ -39,7 +39,8 @@ You can roll a system by starting your message with the following string:
 * Vampire the Masquerade: /v5
 * HeroQuest: /hq
 * HeXXen 1733: /hex
-* Warhammer 3rd /wfrp3
+* Warhammer 3rd: /wfrp3
+* The One Ring: /tor
 
 Then supply a dice formula separated with a space. The formula consists of dice letters that are optionally prefixed with a number.
 
