@@ -21,6 +21,9 @@ export enum Faces {
     NINE,
     TEN,
     GANDALF,
+    ONESUC,
+    TWOSUC,
+    THREESUC,
     FOURSUC,
     FIVESUC,
     SIXSUC,
@@ -44,9 +47,9 @@ export const FEAT_ROLL_TABLE: Faces[] = [
 ];
 
 export const SUCCESS_ROLL_TABLE: Faces[] = [
-    Faces.ONE,
-    Faces.TWO,
-    Faces.THREE,
+    Faces.ONESUC,
+    Faces.TWOSUC,
+    Faces.THREESUC,
     Faces.FOURSUC,
     Faces.FIVESUC,
     Faces.SIXSUC,
@@ -102,9 +105,9 @@ featImages.set(Faces.NINE, 'nine');
 featImages.set(Faces.TEN, 'ten');
 
 const successImages = new Map<Faces, string>();
-successImages.set(Faces.ONE, 'one');
-successImages.set(Faces.TWO, 'two');
-successImages.set(Faces.THREE, 'three');
+successImages.set(Faces.ONESUC, 'onesuc');
+successImages.set(Faces.TWOSUC, 'twosuc');
+successImages.set(Faces.THREESUC, 'threesuc');
 successImages.set(Faces.FOURSUC, 'foursuc');
 successImages.set(Faces.FIVESUC, 'fivesuc');
 successImages.set(Faces.SIXSUC, 'sixsuc');
@@ -134,9 +137,12 @@ rollToRollResultMapping.set(Faces.SEVEN, {total: 7, tiredtotal: 7});
 rollToRollResultMapping.set(Faces.EIGHT, {total: 8, tiredtotal: 8});
 rollToRollResultMapping.set(Faces.NINE, {total: 9, tiredtotal: 9});
 rollToRollResultMapping.set(Faces.TEN, {total: 10, tiredtotal: 10});
-rollToRollResultMapping.set(Faces.FOURSUC, {total: 4});
-rollToRollResultMapping.set(Faces.FIVESUC, {total: 5});
-rollToRollResultMapping.set(Faces.SIXSUC, {total: 6, great: 1});
+rollToRollResultMapping.set(Faces.ONESUC, {total: 4});
+rollToRollResultMapping.set(Faces.TWOSUC, {total: 5});
+rollToRollResultMapping.set(Faces.THREESUC, {total: 6});
+rollToRollResultMapping.set(Faces.FOURSUC, {total: 4, tiredtotal: 4});
+rollToRollResultMapping.set(Faces.FIVESUC, {total: 5, tiredtotal: 5});
+rollToRollResultMapping.set(Faces.SIXSUC, {total: 6, tiredtotal: 6, great: 1});
 rollToRollResultMapping.set(Faces.SHADOW, {shadow: 1});
 rollToRollResultMapping.set(Faces.TIRED, {tired: 1});
 
