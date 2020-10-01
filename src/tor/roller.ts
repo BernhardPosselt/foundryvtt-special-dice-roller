@@ -25,7 +25,7 @@ export class TorRoller extends Roller<Dice, Faces, DicePool> {
         super(command, [new SimpleParser()]);
     }
 
-    public roll(pool: DicePool): Array<Roll<Dice, Faces>> {
+    public roll(pool: DicePool): Roll<Dice, Faces>[] {
         return [
             ...rollDie(pool.feat, Dice.FEAT, FEAT_ROLL_TABLE, this.rng),
             ...rollDie(pool.success, Dice.SUCCESS, SUCCESS_ROLL_TABLE, this.rng),
@@ -38,7 +38,7 @@ export class TorRoller extends Roller<Dice, Faces, DicePool> {
         return new Roll(die, face);
     }
 
-    public formatRolls(rolls: Array<Roll<Dice, Faces>>, flavorText?: string): string {
+    public formatRolls(rolls: Roll<Dice, Faces>[], flavorText?: string): string {
         const combinedRolls = combineRolls(rolls, parseRollValues, rollValuesMonoid);
         const res = Mustache.render(
             base,

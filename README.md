@@ -109,6 +109,8 @@ Use **/hex** to roll dice using the following dice letters:
 
 Bonus and malus are automatically calculated according to the rules.
 
+![roller usage](docs/hexroll.png)
+
 ## Usage Warhammer Fantasy Role Play 3rd
 
 Use **/wfrp3** to roll dice using the following dice letters:
@@ -120,6 +122,19 @@ Use **/wfrp3** to roll dice using the following dice letters:
 * f: fortune
 * m: misfortune
 * x: challenge
+
+![roller usage](docs/wfrp3.png)
+
+## Usage The One Ring
+
+Use **/tor** to roll dice using the following dice letters:
+
+* d: success
+* s: shadow
+* t, w: weary
+* f: just feat
+
+![roller usage](docs/tor.png)
 
 # Building the Project
 
@@ -160,6 +175,7 @@ game.specialDiceRoller.starWars
 game.specialDiceRoller.heroQuest
 game.specialDiceRoller.heXXen
 game.specialDiceRoller.warhammer3
+game.specialDiceRoller.tor
 ```
 
 Each roller object has a rollFormula method:
