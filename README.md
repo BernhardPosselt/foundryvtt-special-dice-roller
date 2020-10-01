@@ -109,7 +109,17 @@ Use **/hex** to roll dice using the following dice letters:
 
 Bonus and malus are automatically calculated according to the rules.
 
-![roller usage](docs/hexroll.png)
+## Usage Warhammer Fantasy Role Play 3rd
+
+Use **/wfrp3** to roll dice using the following dice letters:
+
+* a: characteristics
+* c: conservative
+* r: reckless
+* e: expertise
+* f: fortune
+* m: misfortune
+* x: challenge
 
 # Building the Project
 
@@ -149,6 +159,7 @@ game.specialDiceRoller.genesys
 game.specialDiceRoller.starWars
 game.specialDiceRoller.heroQuest
 game.specialDiceRoller.heXXen
+game.specialDiceRoller.warhammer3
 ```
 
 Each roller object has a rollFormula method:

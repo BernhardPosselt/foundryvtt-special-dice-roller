@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.12.0] - 2020-10-02
 ### Added
-- WFRPG3 roller, #10, thanks @silentmark, @illotum!
+- WFRP3 roller, #10, thanks @silentmark, @illotum!
 
 ## [0.11.3] - 2020-06-13
 ### Fixed
