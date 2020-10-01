@@ -12,7 +12,7 @@ const tpl = `
     <li class="special-dice-roller-failed">Adversary Roll</li>
     {{/adversary}}
     {{#tired}}
-    <li class="special-dice-roller-failed">Tired</li>
+    <li class="special-dice-roller-failed">Weary</li>
     {{/tired}}
 {{/results}}
 </ul>
