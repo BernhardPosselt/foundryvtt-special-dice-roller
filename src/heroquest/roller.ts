@@ -23,14 +23,14 @@ export class HeroQuestRoller extends Roller<Dice, Faces, DicePool> {
         super(command, [new SimpleParser()], false, false);
     }
 
-    public roll(pool: DicePool): Array<Roll<Dice, Faces>> {
+    public roll(pool: DicePool): Roll<Dice, Faces>[] {
         return [
             ...rollDie(pool.hero, Dice.HERO, HERO_TABLE, this.rng),
             ...rollDie(pool.monster, Dice.MONSTER, MONSTER_TABLE, this.rng),
         ];
     }
 
-    public combineRolls(rolls: Array<Roll<Dice, Faces>>): RollValues {
+    public combineRolls(rolls: Roll<Dice, Faces>[]): RollValues {
         const results = rolls
             .map((roll) => parseRollValues(roll));
         return combineAll(results, rollValuesMonoid);
@@ -40,7 +40,7 @@ export class HeroQuestRoller extends Roller<Dice, Faces, DicePool> {
         return new Roll(die, face);
     }
 
-    public formatRolls(rolls: Array<Roll<Dice, Faces>>, flavorText?: string): string {
+    public formatRolls(rolls: Roll<Dice, Faces>[], flavorText?: string): string {
         const combinedRolls = combineRolls(rolls, parseRollValues, rollValuesMonoid);
         return Mustache.render(
             base,

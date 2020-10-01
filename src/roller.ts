@@ -47,7 +47,7 @@ export interface IRoller {
 export abstract class Roller<D, F, P> implements IRoller {
     protected constructor(
         public command: string,
-        protected parsers: Array<IParser<P>>,
+        protected parsers: IParser<P>[],
         public canReRoll: boolean = false,
         public canKeep: boolean = false,
     ) {
@@ -75,7 +75,7 @@ export abstract class Roller<D, F, P> implements IRoller {
         }
     }
 
-    public reRoll(keptResults: Array<Roll<D, F>>, reRollResults: Array<Roll<D, F>>): Array<Roll<D, F>> {
+    public reRoll(keptResults: Roll<D, F>[], reRollResults: Roll<D, F>[]): Roll<D, F>[] {
         const reRolledDice: D[] = reRollResults.map((roll) => roll.die);
         const pool = this.toDicePool(reRolledDice);
         const reRolls = this.roll(pool);
@@ -120,14 +120,14 @@ export abstract class Roller<D, F, P> implements IRoller {
      * Roll a dice pool and return the result rolls
      * @param dicePool
      */
-    public abstract roll(dicePool: P): Array<Roll<D, F>>;
+    public abstract roll(dicePool: P): Roll<D, F>[];
 
     /**
      * Return a template that displays and explains the roll
      * @param rolls
      * @param flavorText an option description of the roll
      */
-    public abstract formatRolls(rolls: Array<Roll<D, F>>, flavorText?: string): string;
+    public abstract formatRolls(rolls: Roll<D, F>[], flavorText?: string): string;
 
     /**
      * Create a dice pool from an array of different dice
@@ -152,7 +152,7 @@ export function rollDie<D, F>(
     faces: F[],
     rng: RandomNumberGenerator,
     explodes: Predicate<F> = () => false,
-): Array<Roll<D, F>> {
+): Roll<D, F>[] {
     shim();
     return Array.from({length: times}, () => rng(faces.length))
         .map((randomNumber: number) => faces[randomNumber])
@@ -167,7 +167,7 @@ export function rollDie<D, F>(
 }
 
 export function combineRolls<D, F, R>(
-    rolls: Array<Roll<D, F>>,
+    rolls: Roll<D, F>[],
     rollToRollResult: (roll: Roll<D, F>) => R,
     rollValuesMonoid: IMonoid<R>,
 ): R {

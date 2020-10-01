@@ -19,7 +19,7 @@ export abstract class Parser<R> implements IParser<R> {
     public abstract parse(formula: string): R;
 }
 
-export function parseFormula<R>(formula: string, parsers: Array<IParser<R>>): R {
+export function parseFormula<R>(formula: string, parsers: IParser<R>[]): R {
     const trimmedFormula = formula.replace(/\s+/g, '')
         .toLowerCase();
     const helpMessages = [];

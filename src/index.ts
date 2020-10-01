@@ -6,6 +6,7 @@ import {secureRandomNumber} from './rng';
 import {IndexedRoll, IRoller, ReRoll} from './roller';
 import {TorRoller} from './tor/roller';
 import {V5Roller} from './v5/roller';
+import { warhammerRoller, WarhammerRoller } from './wfrp3/roller';
 
 // begin foundry types
 interface IHooks {
@@ -47,7 +48,8 @@ interface IExportedRollers {
     starWars: GenesysRoller;
     heroQuest: HeroQuestRoller;
     heXXen: HEXRoller;
-    TOR: TorRoller;
+    tor: TorRoller;
+    warhammer3: WarhammerRoller;
 }
 
 const specialDiceRoller = {
@@ -57,7 +59,8 @@ const specialDiceRoller = {
     starWars: starWarsRoller(secureRandomNumber, 'sw'),
     heroQuest: new HeroQuestRoller(secureRandomNumber, 'hq'),
     heXXen: new HEXRoller(secureRandomNumber, 'hex'),
-    TOR: new TorRoller(secureRandomNumber, 'tor'),
+    tor: new TorRoller(secureRandomNumber, 'tor'),
+    warhammer3: warhammerRoller(secureRandomNumber, 'wfrp3'),
 };
 
 Hooks.on('init', () => {
