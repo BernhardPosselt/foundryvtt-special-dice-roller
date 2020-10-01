@@ -2,4 +2,6 @@
 node_modules
 *.iml
 .idea
+package-lock.json
 .vs/slnx.sqlite
+

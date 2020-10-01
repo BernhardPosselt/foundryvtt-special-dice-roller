@@ -4,6 +4,7 @@ import {HEXRoller} from './hex/roller';
 import {L5RRoller} from './l5r/roller';
 import {secureRandomNumber} from './rng';
 import {IndexedRoll, IRoller, ReRoll} from './roller';
+import {TorRoller} from './tor/roller';
 import {V5Roller} from './v5/roller';
 import { warhammerRoller, WarhammerRoller } from './wfrp3/roller';
 
@@ -47,6 +48,7 @@ interface IExportedRollers {
     starWars: GenesysRoller;
     heroQuest: HeroQuestRoller;
     heXXen: HEXRoller;
+    tor: TorRoller;
     warhammer3: WarhammerRoller;
 }
 
@@ -57,6 +59,7 @@ const specialDiceRoller = {
     starWars: starWarsRoller(secureRandomNumber, 'sw'),
     heroQuest: new HeroQuestRoller(secureRandomNumber, 'hq'),
     heXXen: new HEXRoller(secureRandomNumber, 'hex'),
+    tor: new TorRoller(secureRandomNumber, 'tor'),
     warhammer3: warhammerRoller(secureRandomNumber, 'wfrp3'),
 };
 
