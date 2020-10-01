@@ -164,6 +164,8 @@ export class InterpretedResult {
         public autosuccess: boolean = false,
         public total: number = 0,
         public great: number = 0,
+        public adversary: boolean = false,
+        public tired: boolean = false,
     ) {
     }
 }
@@ -175,6 +177,8 @@ export function interpretResult(result: RollValues): InterpretedResult {
         autosuccess,
         total,
         result.great,
+        !!result.shadow,
+        !!result.tired,
     );
 }
 

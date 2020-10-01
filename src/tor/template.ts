@@ -6,8 +6,14 @@ const tpl = `
     {{/autosuccess}}
     {{^autosuccess}}
     <li>Total: {{total}}</li>
-    <li>Great Successes: {{great}}</li>
     {{/autosuccess}}
+    <li>Great Successes: {{great}}</li>
+    {{#adversary}}
+    <li class="special-dice-roller-failed">Adversary Roll</li>
+    {{/adversary}}
+    {{#tired}}
+    <li class="special-dice-roller-failed">Tired</li>
+    {{/tired}}
 {{/results}}
 </ul>
 `;
