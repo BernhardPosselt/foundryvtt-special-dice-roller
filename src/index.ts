@@ -7,7 +7,7 @@ import {IndexedRoll, IRoller, ReRoll} from './roller';
 import {TorRoller} from './tor/roller';
 import {V5Roller} from './v5/roller';
 import { warhammerRoller, WarhammerRoller } from './wfrp3/roller';
-import {Descent2Roller} from './dsc2/roller';
+import {Descent2Roller} from './desc2/roller';
 
 // begin foundry types
 interface IHooks {

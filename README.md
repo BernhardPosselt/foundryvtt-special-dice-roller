@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/BernhardPosselt/foundryvtt-special-dice-roller.svg?branch=master)](https://travis-ci.org/BernhardPosselt/l5r-foundryvtt-roller)
 
-Supports rolling dice in your chat window for various non regular dice systems:
+Supports rolling dice in your chat window for various non-regular dice systems:
 
 * Legend of the 5 Rings 5th edition
 * Vampire the Masquerade 5th edition
@@ -12,10 +12,11 @@ Supports rolling dice in your chat window for various non regular dice systems:
 * HeXXen 1733
 * FFG's Warhammer 3rd
 * The One Ring
+* Descent 2nd Edition
 
 L5R, Genesys and Star Wars images are taken from [SkyJedi's Discord Roller](https://github.com/SkyJedi/FFGNDS-Discord-Dice-Roller)
 Vampire the Masquerade images are taken from and [Lumi#5953's Thirst Discord bot](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=2ahUKEwj-iKLCjNvmAhWOyqYKHaYEC7AQFjAAegQIAhAB&url=https%3A%2F%2Fdiscordapp.com%2Foauth2%2Fauthorize%3Fclient_id%3D475234745848954905%26scope%3Dbot%26permissions%3D0&usg=AOvVaw0fV9gFSh3hD3WQd2BwJKv7).
-HeXXen 1733 images a taken from the pysical dice with permissin from Ulissis Spiele.
+HeXXen 1733 images a taken from the physical dice with permission from Ulisses Spiele.
 Warhammer 3rd images created by [Alex Valiushko](https://github.com/illotum)
 
 # Installation
@@ -41,6 +42,7 @@ You can roll a system by starting your message with the following string:
 * HeXXen 1733: /hex
 * Warhammer 3rd: /wfrp3
 * The One Ring: /tor
+* Descent: /desc2
 
 Then supply a dice formula separated with a space. The formula consists of dice letters that are optionally prefixed with a number.
 
@@ -138,6 +140,20 @@ Use **/tor** to roll dice using the following dice letters:
 
 ![roller usage](docs/tor.png)
 
+## Usage Descent 2nd Edition
+
+Use **/desc2** to roll dice using the following dice letters:
+
+* r: red
+* g: green
+* b: blue
+* y: yellow
+* l: low defense (brown)
+* m: mid defense (grey)
+* h: high defense (black)
+
+![roller usage](docs/desc2.png)
+
 # Building the Project
 
 Install **yarn** and run:
@@ -178,6 +194,7 @@ game.specialDiceRoller.heroQuest
 game.specialDiceRoller.heXXen
 game.specialDiceRoller.warhammer3
 game.specialDiceRoller.tor
+game.specialDiceRoller.desc2
 ```
 
 Each roller object has a rollFormula method:

@@ -129,51 +129,51 @@ export class RollValues {
 }
 
 const greenImages = new Map<Faces, string>();
-greenImages.set(Faces.RANGE1_DAMAGE1_SURGE1, 'g1.jpg');
-greenImages.set(Faces.RANGE1_DAMAGE1, 'g2.jpg');
-greenImages.set(Faces.RANGE1_SURGE1, 'g3.jpg');
-greenImages.set(Faces.DAMAGE1_SURGE1, 'g4.jpg');
-greenImages.set(Faces.SURGE1, 'g5.jpg');
-greenImages.set(Faces.DAMAGE1, 'g6.jpg');
+greenImages.set(Faces.RANGE1_DAMAGE1_SURGE1, 'g1');
+greenImages.set(Faces.RANGE1_DAMAGE1, 'g2');
+greenImages.set(Faces.RANGE1_SURGE1, 'g3');
+greenImages.set(Faces.DAMAGE1_SURGE1, 'g4');
+greenImages.set(Faces.SURGE1, 'g5');
+greenImages.set(Faces.DAMAGE1, 'g6');
 
 const blueImages = new Map<Faces, string>();
-blueImages.set(Faces.MISS, 'b1.png');
-blueImages.set(Faces.RANGE6_DAMAGE1_SURGE1, 'b2.png');
-blueImages.set(Faces.RANGE4_DAMAGE2, 'b3.png');
-blueImages.set(Faces.RANGE2_DAMAGE2_SURGE1, 'b4.png');
-blueImages.set(Faces.RANGE3_DAMAGE2, 'b5.png');
-blueImages.set(Faces.RANGE5_DAMAGE1, 'b6.png');
+blueImages.set(Faces.MISS, 'b1');
+blueImages.set(Faces.RANGE6_DAMAGE1_SURGE1, 'b2');
+blueImages.set(Faces.RANGE4_DAMAGE2, 'b3');
+blueImages.set(Faces.RANGE2_DAMAGE2_SURGE1, 'b4');
+blueImages.set(Faces.RANGE3_DAMAGE2, 'b5');
+blueImages.set(Faces.RANGE5_DAMAGE1, 'b6');
 
 const redImages = new Map<Faces, string>();
-redImages.set(Faces.DAMAGE1, 'r1.png');
-redImages.set(Faces.DAMAGE2, 'r2.png');
-redImages.set(Faces.DAMAGE3, 'r3.png');
-redImages.set(Faces.DAMAGE3_SURGE1, 'r3s.png');
+redImages.set(Faces.DAMAGE1, 'r1');
+redImages.set(Faces.DAMAGE2, 'r2');
+redImages.set(Faces.DAMAGE3, 'r3');
+redImages.set(Faces.DAMAGE3_SURGE1, 'r3s');
 
 const yellowImages = new Map<Faces, string>();
-yellowImages.set(Faces.RANGE1_DAMAGE1, 'y1.png');
-yellowImages.set(Faces.RANGE2_DAMAGE1, 'y2.png');
-yellowImages.set(Faces.DAMAGE1_SURGE1, 'y3.png');
-yellowImages.set(Faces.RANGE1_SURGE1, 'y4.png');
-yellowImages.set(Faces.SURGE1_DAMAGE2, 'y5.png');
-yellowImages.set(Faces.DAMAGE2, 'y6.png');
+yellowImages.set(Faces.RANGE1_DAMAGE1, 'y1');
+yellowImages.set(Faces.RANGE2_DAMAGE1, 'y2');
+yellowImages.set(Faces.DAMAGE1_SURGE1, 'y3');
+yellowImages.set(Faces.RANGE1_SURGE1, 'y4');
+yellowImages.set(Faces.SURGE1_DAMAGE2, 'y5');
+yellowImages.set(Faces.DAMAGE2, 'y6');
 
 const brownImages = new Map<Faces, string>();
-brownImages.set(Faces.SHIELD0, 'br0.png');
-brownImages.set(Faces.SHIELD1, 'br1.png');
-brownImages.set(Faces.SHIELD2, 'br2.png');
+brownImages.set(Faces.SHIELD0, 'br0');
+brownImages.set(Faces.SHIELD1, 'br1');
+brownImages.set(Faces.SHIELD2, 'br2');
 
 const greyImages = new Map<Faces, string>();
-greyImages.set(Faces.SHIELD0, 'g0.png');
-greyImages.set(Faces.SHIELD1, 'g1.png');
-greyImages.set(Faces.SHIELD2, 'g2.png');
-greyImages.set(Faces.SHIELD3, 'g3.png');
+greyImages.set(Faces.SHIELD0, 'gr0');
+greyImages.set(Faces.SHIELD1, 'gr1');
+greyImages.set(Faces.SHIELD2, 'gr2');
+greyImages.set(Faces.SHIELD3, 'gr3');
 
 const blackImages = new Map<Faces, string>();
-blackImages.set(Faces.SHIELD0, 'black0.png');
-blackImages.set(Faces.SHIELD2, 'black2.png');
-blackImages.set(Faces.SHIELD3, 'black3.png');
-blackImages.set(Faces.SHIELD4, 'black4.png');
+blackImages.set(Faces.SHIELD0, 'black0');
+blackImages.set(Faces.SHIELD2, 'black2');
+blackImages.set(Faces.SHIELD3, 'black3');
+blackImages.set(Faces.SHIELD4, 'black4');
 
 
 export const dieRollImages = new Map<Dice, Map<Faces, string>>();
@@ -248,10 +248,10 @@ function toRollResult(partial: Partial<RollValues>): RollValues {
 export const rollValuesMonoid: IMonoid<RollValues> = {
     identity: new RollValues(),
     combine: (roll1: RollValues, roll2: RollValues) => new RollValues(
-        roll1.damage + roll2.damage,
-        roll1.surge + roll2.surge,
-        roll1.shield + roll2.shield,
         roll1.range + roll2.range,
+        roll1.shield + roll2.shield,
+        roll1.surge + roll2.surge,
+        roll1.damage + roll2.damage,
         roll1.miss || roll2.miss,
     ),
 };
@@ -260,8 +260,8 @@ export const dicePoolMonoid: IMonoid<DicePool> = {
     identity: new DicePool(),
     combine: (roll1: DicePool, roll2: DicePool) => new DicePool(
         roll1.green + roll2.green,
-        roll1.red + roll2.red,
         roll1.blue + roll2.blue,
+        roll1.red + roll2.red,
         roll1.yellow + roll2.yellow,
         roll1.brown + roll2.brown,
         roll1.grey + roll2.grey,

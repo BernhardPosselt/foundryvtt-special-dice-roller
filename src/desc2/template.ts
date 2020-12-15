@@ -4,21 +4,19 @@ const tpl = `
     {{#miss}}
     <li class="special-dice-roller-failed">Check: missed</li>
     {{/miss}}
-    {{#range}}
-    <li>Range: {{range}}</li>
-    {{/range}}
-    {{#shield}}
-    <li>Shields: {{shield}}</li>
-    {{/shield}}
     {{#surge}}
     <li>Surges: {{surge}}</li>
     {{/surge}}
+    {{#range}}
+    <li>Range: {{range}}</li>
+    {{/range}}
     {{#damage}}
     <li>Damage: {{damage}}</li>
     {{/damage}}
-    {{#totalDamage}}
+    {{#shield}}
+    <li>Shields: {{shield}}</li>
+    {{/shield}}
     <li>Total Damage: {{totalDamage}}</li>
-    {{/totalDamage}}
 </ul>
 {{/results}}
 `;
