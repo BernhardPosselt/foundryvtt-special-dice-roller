@@ -1,7 +1,5 @@
 # Special Dice Roller
 
-[![Build Status](https://travis-ci.org/BernhardPosselt/foundryvtt-special-dice-roller.svg?branch=master)](https://travis-ci.org/BernhardPosselt/l5r-foundryvtt-roller)
-
 Supports rolling dice in your chat window for various non-regular dice systems:
 
 * Legend of the 5 Rings 5th edition
