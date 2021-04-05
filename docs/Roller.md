@@ -30,7 +30,7 @@ export enum Dice {
 and an enum for all possible fields:
 
 ```typescript
-export enum Dice {
+export enum Faces {
     FACE1,
     FACE2,
     DOUBLE_FACE2
