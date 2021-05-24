@@ -1,4 +1,4 @@
-import * as Mustache from 'mustache';
+import Mustache from 'mustache';
 import {combineAll} from '../lang';
 import {RandomNumberGenerator} from '../rng';
 import {combineRolls, Roll, rollDie, Roller} from '../roller';

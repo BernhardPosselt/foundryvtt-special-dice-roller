@@ -1,4 +1,4 @@
-import * as Mustache from 'mustache';
+import Mustache from 'mustache';
 import {countMatches} from '../arrays';
 import {combineAll} from '../lang';
 import {RandomNumberGenerator} from '../rng';
