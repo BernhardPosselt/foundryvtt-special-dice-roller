@@ -11,6 +11,7 @@ Supports rolling dice in your chat window for various non-regular dice systems:
 * FFG's Warhammer 3rd
 * The One Ring
 * Descent 2nd Edition
+* Neon City Overdrive
 
 L5R, Genesys and Star Wars images are taken from [SkyJedi's Discord Roller](https://github.com/SkyJedi/FFGNDS-Discord-Dice-Roller)
 
@@ -21,6 +22,8 @@ Vampire the Masquerade images are taken from and [Lumi#5953's Thirst Discord bot
 HeXXen 1733 images a taken from the physical dice with permission from Ulisses Spiele.
 
 Warhammer 3rd images created by [Alex Valiushko](https://github.com/illotum)
+
+Neon City Overdrive implemented by [Pascal Scheepers](https://github.com/pascal-splotches) and images created by Jelmer.
 
 # Installation
 
@@ -46,6 +49,7 @@ You can roll a system by starting your message with the following string:
 * Warhammer 3rd: /wfrp3
 * The One Ring: /tor
 * Descent: /desc2
+* Neon City Overdrive: /neon
 
 Then supply a dice formula separated with a space. The formula consists of dice letters that are optionally prefixed with a number.
 
@@ -156,6 +160,15 @@ Use **/desc2** to roll dice using the following dice letters:
 * h: high defense (black)
 
 ![roller usage](docs/desc2.png)
+
+## Usage Neon City Overdrive
+
+Use **/neon** to roll dice using the following dice letters:
+
+* a: action
+* d: danger
+
+![roller usage](docs/neon.png)
 
 # Building the Project
 
