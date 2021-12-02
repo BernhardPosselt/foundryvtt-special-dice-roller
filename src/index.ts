@@ -8,7 +8,7 @@ import {TorRoller} from './tor/roller';
 import {V5Roller} from './v5/roller';
 import { warhammerRoller, WarhammerRoller } from './wfrp3/roller';
 import {Descent2Roller} from './desc2/roller';
-import {NeonCityOverdriveRoller} from './neo/roller';
+import {NeonCityOverdriveRoller} from './neon/roller';
 
 // begin foundry types
 interface IHooks {
@@ -53,7 +53,7 @@ interface IExportedRollers {
     tor: TorRoller;
     warhammer3: WarhammerRoller;
     desc2: Descent2Roller;
-    neo: NeonCityOverdriveRoller;
+    neon: NeonCityOverdriveRoller;
 }
 
 const specialDiceRoller = {
@@ -66,7 +66,7 @@ const specialDiceRoller = {
     tor: new TorRoller(secureRandomNumber, 'tor'),
     warhammer3: warhammerRoller(secureRandomNumber, 'wfrp3'),
     desc2: new Descent2Roller(secureRandomNumber, 'desc2'),
-    neo: new NeonCityOverdriveRoller(secureRandomNumber, 'neo'),
+    neon: new NeonCityOverdriveRoller(secureRandomNumber, 'neon'),
 };
 
 Hooks.on('init', () => {
