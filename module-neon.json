@@ -8,7 +8,7 @@
     "styles": ["./public/css/styles.css"],
     "packs": [],
     "minimumCoreVersion": "0.8.5",
-    "compatibleCoreVersion": "0.8.5",
+    "compatibleCoreVersion": "0.8.9",
     "url": "https://github.com/pascal-splotches/foundryvtt-special-dice-roller/tree/feature/neon-city-overdrive",
     "manifest": "https://raw.githubusercontent.com/pascal-splotches/foundryvtt-special-dice-roller/feature/neon-city-overdrive/module-neon.json",
     "download": "https://github.com/pascal-splotches/foundryvtt-special-dice-roller/archive/refs/heads/feature/neon-city-overdrive.zip"
