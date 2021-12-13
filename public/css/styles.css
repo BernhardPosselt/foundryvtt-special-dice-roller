@@ -41,3 +41,26 @@
     color: #444;
     font-size: 85%;
 }
+
+.neon-success {
+    color: darkgreen;
+}
+
+.neon-botch {
+    color: darkred;
+}
+
+.neon-rainbow {
+    background-image: linear-gradient(to right, violet, indigo, blue, green, yellow, orange, red, violet);
+    background-size: 400% 100%;
+    background-clip: text;
+    color: transparent;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: neon-rainbow 3s ease infinite;
+}
+
+@keyframes neon-rainbow {
+    0%, 100% { background-position: 0 0; }
+    50% { background-position: 100% 0; }
+}

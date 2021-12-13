@@ -1,0 +1,15 @@
+{
+    "name": "special-dice-roller",
+    "title": "Special Dice Roller",
+    "description": "Supports rolling dice for: Legend of the 5 Rings 5th edition, Genesys, Vampire the Masquerade 5th edition, FFG's Star Wars TTRPG, WFRP3, HeroQuest, HeXXen 1733, The One Ring, Descent 2nd Edition, Neon City Overdrive. Check out the README.md on the homepage for a guide on how to roll various dice.",
+    "version": "0.15.0",
+    "author": "Bernhard Posselt",
+    "scripts": ["./dist/main.js"],
+    "styles": ["./public/css/styles.css"],
+    "packs": [],
+    "minimumCoreVersion": "0.8.5",
+    "compatibleCoreVersion": "0.8.9",
+    "url": "https://github.com/pascal-splotches/foundryvtt-special-dice-roller/tree/feature/neon-city-overdrive",
+    "manifest": "https://raw.githubusercontent.com/pascal-splotches/foundryvtt-special-dice-roller/feature/neon-city-overdrive/module-neon.json",
+    "download": "https://github.com/pascal-splotches/foundryvtt-special-dice-roller/archive/refs/heads/feature/neon-city-overdrive.zip"
+}
