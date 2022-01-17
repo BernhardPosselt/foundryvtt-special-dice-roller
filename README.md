@@ -22,6 +22,8 @@ HeXXen 1733 images a taken from the physical dice with permission from Ulisses S
 
 Warhammer 3rd images created by [Alex Valiushko](https://github.com/illotum)
 
+OVA images are taken from [BlueCorvid's Discord Rollbot](https://replit.com/@truebluecorvid/BlueCorvids-Rollbot#main.py)
+
 # Installation
 
 Go to your setup page and click on the **Add-on Modules** Tab.
