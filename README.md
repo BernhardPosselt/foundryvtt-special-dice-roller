@@ -11,6 +11,7 @@ Supports rolling dice in your chat window for various non-regular dice systems:
 * FFG's Warhammer 3rd
 * The One Ring
 * Descent 2nd Edition
+* [OVA: The Anime Role-Playing Game](https://www.wiseturtle.com)
 
 L5R, Genesys and Star Wars images are taken from [SkyJedi's Discord Roller](https://github.com/SkyJedi/FFGNDS-Discord-Dice-Roller)
 
@@ -48,6 +49,7 @@ You can roll a system by starting your message with the following string:
 * Warhammer 3rd: /wfrp3
 * The One Ring: /tor
 * Descent: /desc2
+* OVA: /ova
 
 Then supply a dice formula separated with a space. The formula consists of dice letters that are optionally prefixed with a number.
 
@@ -159,6 +161,16 @@ Use **/desc2** to roll dice using the following dice letters:
 
 ![roller usage](docs/desc2.png)
 
+# Usage OVA
+
+Use **/ova x** to roll *x* amount of dice. Use *0* or a negative number to roll negative dice (result will be in red). You can click the result to expand to view the related die face. 
+
+![roller usage](docs/ova1.png)
+
+![roller usage](docs/ova2.png)
+
+![roller usage](docs/ova3.png)
+
 # Building the Project
 
 Install **yarn** and run:
@@ -200,6 +212,7 @@ game.specialDiceRoller.heXXen
 game.specialDiceRoller.warhammer3
 game.specialDiceRoller.tor
 game.specialDiceRoller.desc2
+game.specialDiceRoller.ova
 ```
 
 Each roller object has a rollFormula method:

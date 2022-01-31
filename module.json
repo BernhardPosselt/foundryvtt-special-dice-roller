@@ -1,7 +1,7 @@
 {
   "name": "special-dice-roller",
   "title": "Special Dice Roller",
-  "description": "Supports rolling dice for: Legend of the 5 Rings 5th edition, Genesys, Vampire the Masquerade 5th edition, FFG's Star Wars TTRPG, WFRP3, HeroQuest, HeXXen 1733, The One Ring, Descent 2nd Edition. Check out the README.md on the homepage for a guide on how to roll various dice.",
+  "description": "Supports rolling dice for: Legend of the 5 Rings 5th edition, Genesys, Vampire the Masquerade 5th edition, FFG's Star Wars TTRPG, WFRP3, HeroQuest, HeXXen 1733, The One Ring, Descent 2nd Edition, OVA. Check out the README.md on the homepage for a guide on how to roll various dice.",
   "version": "0.14.0",
   "author": "Bernhard Posselt",
   "scripts": ["./dist/main.js"],
