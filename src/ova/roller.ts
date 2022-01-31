@@ -1,12 +1,12 @@
 import {
+    D6_ROLL_TABLE,
     Dice,
     DicePool,
-    Faces,
-    D6_ROLL_TABLE,
-    rollValuesMonoid,
     dieRollImages,
+    Faces,
+    interpretResult,
     rollToRollResult,
-    interpretResult
+    rollValuesMonoid
 } from './dice';
 import {combineRolls, Roll, rollDie, Roller} from '../roller';
 import {RandomNumberGenerator} from '../rng';
@@ -19,6 +19,7 @@ import {OVAParser} from './parser';
 
 export class OVARoller extends Roller<Dice, Faces, DicePool> {
     negative: boolean;
+
     constructor(private rng: RandomNumberGenerator, command: string) {
         super(command, [new OVAParser()]);
         this.negative = false;
@@ -31,8 +32,7 @@ export class OVARoller extends Roller<Dice, Faces, DicePool> {
         if (rolls.d6 <= 0) {
             amount = 2 + Math.abs(rolls.d6);
             this.negative = true;
-        }
-        else {
+        } else {
             amount = rolls.d6;
             this.negative = false;
         }
@@ -60,13 +60,13 @@ export class OVARoller extends Roller<Dice, Faces, DicePool> {
         );
     }
 
+    public toRoll(die: number, face: number): Roll<Dice, Faces> {
+        return new Roll(die, face);
+    }
+
     protected toDicePool(dice: Dice[]): DicePool {
         const d6 = countMatches(dice, (die) => die === Dice.D6);
         return new DicePool(d6);
-    }
-
-    public toRoll(die: number, face: number): Roll<Dice, Faces> {
-        return new Roll(die, face);
     }
 
 }
