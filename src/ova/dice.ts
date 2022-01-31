@@ -64,109 +64,120 @@ export const rollValuesMonoid: IMonoid<RollValues> = {
     ),
 };
 
-export function rollToRollResult(roll: Roll<Dice, Faces>): RollValues {
-    if (roll.face === Faces.FACE1) {
-        return new RollValues(1)
-    } else if (roll.face === Faces.FACE2) {
-        return new RollValues(0, 1)
-    } else if (roll.face === Faces.FACE3) {
-        return new RollValues(0, 0, 1)
-    } else if (roll.face === Faces.FACE4) {
-        return new RollValues(0, 0, 0, 1)
-    } else if (roll.face === Faces.FACE5) {
-        return new RollValues(0, 0, 0, 0, 1)
-    } else if (roll.face === Faces.FACE6) {
-        return new RollValues(0, 0, 0, 0, 0, 1)
+const rollToRollResultMapping = new Map<Faces, Partial<RollValues>>();
+rollToRollResultMapping.set(Faces.FACE1, {face1: 1});
+rollToRollResultMapping.set(Faces.FACE2, {face2: 1});
+rollToRollResultMapping.set(Faces.FACE3, {face3: 1});
+rollToRollResultMapping.set(Faces.FACE4, {face4: 1});
+rollToRollResultMapping.set(Faces.FACE5, {face5: 1});
+rollToRollResultMapping.set(Faces.FACE6, {face6: 1});
+
+export function parseRollValues(roll: Roll<Dice, Faces>): RollValues {
+    const result = rollToRollResultMapping.get(roll.face);
+    if (result !== undefined) {
+        return toRollResult(result);
     } else {
         throw new Error(`Unhandled Face ${roll.face}`);
     }
 }
 
-export class InterpretedResult {
-    key1: boolean = false
-    key2: boolean = false
-    key3: boolean = false
-    key4: boolean = false
-    key5: boolean = false
-    key6: boolean = false
-    value: number = 0
+export function toRollResult(partial: Partial<RollValues>): RollValues {
+    return Object.assign(new RollValues(), partial);
+}
 
-    constructor(public ones: number = 0, public twos: number = 0, public threes: number = 0,
-                public fours: number = 0, public fives: number = 0, public sixes: number = 0,
-                public negative: boolean = false) {
-        if (!negative) {
-            if (ones > this.value) {
-                this.value = ones
-                this.key1 = true
-            }
-            if (twos * 2 > this.value) {
-                this.value = twos * 2
-                this.key1 = false
-                this.key2 = true
-            }
-            if (threes * 3 > this.value) {
-                this.value = threes * 3
-                this.key1 = false
-                this.key2 = false
-                this.key3 = true
-            }
-            if (fours * 4 > this.value) {
-                this.value = fours * 4
-                this.key1 = false
-                this.key2 = false
-                this.key3 = false
-                this.key4 = true
-            }
-            if (fives * 5 > this.value) {
-                this.value = fives * 5
-                this.key1 = false
-                this.key2 = false
-                this.key3 = false
-                this.key4 = false
-                this.key5 = true
-            }
-            if (sixes * 6 > this.value) {
-                this.value = sixes * 6
-                this.key1 = false
-                this.key2 = false
-                this.key3 = false
-                this.key4 = false
-                this.key5 = false
-                this.key6 = true
-            }
-        } else {
-            if (ones > 0) {
-                this.value = 1
-                this.key1 = true
-            } else if (twos > 0) {
-                this.value = 2
-                this.key2 = true
-            } else if (threes > 0) {
-                this.value = 3
-                this.key3 = true
-            } else if (fours > 0) {
-                this.value = 4
-                this.key4 = true
-            } else if (fives > 0) {
-                this.value = 5
-                this.key5 = true
-            } else if (sixes > 0) {
-                this.value = 6
-                this.key6 = true
-            }
-        }
+export class InterpretedResult {
+    constructor(
+        public value: number = 0,
+        public key1: boolean = false,
+        public key2: boolean = false,
+        public key3: boolean = false,
+        public key4: boolean = false,
+        public key5: boolean = false,
+        public key6: boolean = false,
+        public negative: boolean = false
+    ) {
     }
 }
 
 
 export function interpretResult(result: RollValues, negative: boolean): InterpretedResult {
+    let value: number = 0;
+    let key1: boolean = false
+    let key2: boolean = false
+    let key3: boolean = false
+    let key4: boolean = false
+    let key5: boolean = false
+    let key6: boolean = false
+
+    if (!negative) {
+        if (result.face1 >= value) {
+            value = result.face1
+            key1 = true
+        }
+        if (result.face2 * 2 >= value) {
+            value = result.face2 * 2
+            key1 = false
+            key2 = true
+        }
+        if (result.face3 * 3 >= value) {
+            value = result.face3 * 3
+            key1 = false
+            key2 = false
+            key3 = true
+        }
+        if (result.face4 * 4 >= value) {
+            value = result.face4 * 4
+            key1 = false
+            key2 = false
+            key3 = false
+            key4 = true
+        }
+        if (result.face5 * 5 >= value) {
+            value = result.face5 * 5
+            key1 = false
+            key2 = false
+            key3 = false
+            key4 = false
+            key5 = true
+        }
+        if (result.face6 * 6 >= value) {
+            value = result.face6 * 6
+            key1 = false
+            key2 = false
+            key3 = false
+            key4 = false
+            key5 = false
+            key6 = true
+        }
+    } else {
+        if (result.face1 > 0) {
+            value = 1
+            key1 = true
+        } else if (result.face2 > 0) {
+            value = 2
+            key2 = true
+        } else if (result.face3 > 0) {
+            value = 3
+            key3 = true
+        } else if (result.face4 > 0) {
+            value = 4
+            key4 = true
+        } else if (result.face5 > 0) {
+            value = 5
+            key5 = true
+        } else if (result.face6 > 0) {
+            value = 6
+            key6 = true
+        }
+    }
     return new InterpretedResult(
-        result.face1,
-        result.face2,
-        result.face3,
-        result.face4,
-        result.face5,
-        result.face6,
+        value,
+        key1,
+        key2,
+        key3,
+        key4,
+        key5,
+        key6,
         negative
-    )
+    );
 }

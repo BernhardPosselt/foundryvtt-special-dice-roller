@@ -5,7 +5,7 @@ import {
     dieRollImages,
     Faces,
     interpretResult,
-    rollToRollResult,
+    parseRollValues,
     rollValuesMonoid
 } from './dice';
 import {combineRolls, Roll, rollDie, Roller} from '../roller';
@@ -16,6 +16,10 @@ import {DieRollView} from '../view';
 import {countMatches} from '../arrays';
 import tpl from './template';
 import {OVAParser} from './parser';
+
+export function ovaRoller(rng: RandomNumberGenerator, command: string): OVARoller {
+    return new OVARoller(rng, command);
+}
 
 export class OVARoller extends Roller<Dice, Faces, DicePool> {
     negative: boolean;
@@ -42,7 +46,7 @@ export class OVARoller extends Roller<Dice, Faces, DicePool> {
     }
 
     public formatRolls(rolls: Roll<Dice, Faces>[], flavorText?: string): string {
-        const combinedRolls = combineRolls(rolls, rollToRollResult, rollValuesMonoid);
+        const combinedRolls = combineRolls(rolls, parseRollValues, rollValuesMonoid);
         return Mustache.render(
             base,
             {
