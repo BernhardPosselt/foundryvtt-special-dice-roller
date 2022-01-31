@@ -22,6 +22,8 @@ export class OVARoller extends Roller<Dice, Faces, DicePool> {
     constructor(private rng: RandomNumberGenerator, command: string) {
         super(command, [new OVAParser()]);
         this.negative = false;
+        this.canKeep = false;
+        this.canReRoll = false;
     }
 
     public roll(rolls: DicePool): Roll<Dice, Faces>[] {
