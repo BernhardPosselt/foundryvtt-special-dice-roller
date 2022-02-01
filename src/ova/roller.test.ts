@@ -11,7 +11,7 @@ test('should react to ova command', () => {
 test('should roll d6 dice', () => {
     // the random number is based on the die faces, so
     // 0 = FACE1
-    // 5 = FACE5
+    // 5 = FACE6
     const roller = ovaRoller(makeRng(0, 5, 1, 3, 2, 4), 'ova');
     const result = roller.roll(new DicePool(6));
 
