@@ -17,13 +17,13 @@ L5R, Genesys and Star Wars images are taken from [SkyJedi's Discord Roller](http
 
 Descent 2nd Edition images are token from [j0ran](https://www.boardgamegeek.com/filepage/56448/descent-dice)
 
-Vampire the Masquerade images are taken from and [Lumi#5953's Thirst Discord bot](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=2ahUKEwj-iKLCjNvmAhWOyqYKHaYEC7AQFjAAegQIAhAB&url=https%3A%2F%2Fdiscordapp.com%2Foauth2%2Fauthorize%3Fclient_id%3D475234745848954905%26scope%3Dbot%26permissions%3D0&usg=AOvVaw0fV9gFSh3hD3WQd2BwJKv7).
+Vampire the Masquerade images are taken from [Lumi#5953's Thirst Discord bot](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=2ahUKEwj-iKLCjNvmAhWOyqYKHaYEC7AQFjAAegQIAhAB&url=https%3A%2F%2Fdiscordapp.com%2Foauth2%2Fauthorize%3Fclient_id%3D475234745848954905%26scope%3Dbot%26permissions%3D0&usg=AOvVaw0fV9gFSh3hD3WQd2BwJKv7).
 
 HeXXen 1733 images a taken from the physical dice with permission from Ulisses Spiele.
 
 Warhammer 3rd images created by [Alex Valiushko](https://github.com/illotum)
 
-OVA images are taken from [BlueCorvid's Discord Rollbot](https://replit.com/@truebluecorvid/BlueCorvids-Rollbot#main.py)
+OVA images are used with permission from [Clay Gardner](https://blog.claygardner.com/)
 
 # Installation
 
