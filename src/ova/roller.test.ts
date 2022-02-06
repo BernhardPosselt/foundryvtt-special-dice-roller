@@ -9,10 +9,7 @@ test('should react to ova command', () => {
 });
 
 test('should roll d6 dice', () => {
-    // the random number is based on the die faces, so
-    // 0 = FACE1
-    // 5 = FACE6
-    const roller = ovaRoller(makeRng(0, 5, 1, 3, 2, 4), 'ova');
+    const roller = ovaRoller(makeRng(Faces.FACE1, Faces.FACE6, Faces.FACE2, Faces.FACE4, Faces.FACE3, Faces.FACE5), 'ova');
     const result = roller.roll(new DicePool(6));
 
     expect(result.length).toBe(6);
@@ -31,7 +28,7 @@ test('should roll d6 dice', () => {
 });
 
 test('should handle positive rolls', () => {
-    const roller = ovaRoller(makeRng(3, 5, 3), 'ova');
+    const roller = ovaRoller(makeRng(Faces.FACE4, Faces.FACE6, Faces.FACE4), 'ova');
     const result = roller.roll(new DicePool(3));
 
     expect(result.length).toBe(3);
@@ -39,7 +36,7 @@ test('should handle positive rolls', () => {
 });
 
 test('should handle zero roll', () => {
-    const roller = ovaRoller(makeRng(3, 5, 3), 'ova');
+    const roller = ovaRoller(makeRng(Faces.FACE4, Faces.FACE6, Faces.FACE4), 'ova');
     const result = roller.roll(new DicePool(0));
 
     expect(result.length).toBe(2);
@@ -47,7 +44,7 @@ test('should handle zero roll', () => {
 });
 
 test('should handle negative rolls', () => {
-    const roller = ovaRoller(makeRng(3, 5, 3), 'ova');
+    const roller = ovaRoller(makeRng(Faces.FACE4, Faces.FACE6, Faces.FACE4), 'ova');
     const result = roller.roll(new DicePool(-1));
 
     expect(result.length).toBe(3);
@@ -55,7 +52,7 @@ test('should handle negative rolls', () => {
 });
 
 test('should count results', () => {
-    const roller = ovaRoller(makeRng(0, 5, 1, 1, 0, 5, 4), 'ova');
+    const roller = ovaRoller(makeRng(Faces.FACE1, Faces.FACE6, Faces.FACE2, Faces.FACE2, Faces.FACE1, Faces.FACE6, Faces.FACE5), 'ova');
     const result = roller.roll(new DicePool(7));
     const combined = combineRolls(result, parseRollValues, rollValuesMonoid);
 
@@ -68,7 +65,7 @@ test('should count results', () => {
 });
 
 test('should interpret positive results', () => {
-    const roller = ovaRoller(makeRng(3, 5, 3), 'ova');
+    const roller = ovaRoller(makeRng(Faces.FACE4, Faces.FACE6, Faces.FACE4), 'ova');
     const result = roller.roll(new DicePool(3));
     const combined = combineRolls(result, parseRollValues, rollValuesMonoid);
     const interpreted = interpretResult(combined, roller.negative);
@@ -83,7 +80,7 @@ test('should interpret positive results', () => {
 });
 
 test('should interpret negative results', () => {
-    const roller = ovaRoller(makeRng(3, 5, 3), 'ova');
+    const roller = ovaRoller(makeRng(Faces.FACE4, Faces.FACE6, Faces.FACE4), 'ova');
     const result = roller.roll(new DicePool(-1));
     const combined = combineRolls(result, parseRollValues, rollValuesMonoid);
     const interpreted = interpretResult(combined, roller.negative);
@@ -98,7 +95,7 @@ test('should interpret negative results', () => {
 });
 
 test('should interpret results for a zero roll', () => {
-    const roller = ovaRoller(makeRng(3, 5), 'ova');
+    const roller = ovaRoller(makeRng(Faces.FACE4, Faces.FACE6), 'ova');
     const result = roller.roll(new DicePool(0));
     const combined = combineRolls(result, parseRollValues, rollValuesMonoid);
     const interpreted = interpretResult(combined, roller.negative);
