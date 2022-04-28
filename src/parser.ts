@@ -54,7 +54,7 @@ export class DefaultSimpleParser<R> extends Parser<R> {
         private rollValuesMonoid: IMonoid<R>,
         private letterExplanation: string[],
     ) {
-        super(new RegExp(`^(?:(?:[1-9][0-9]*)?[${escapeRegExp(alphabet)}])+$`));
+        super(new RegExp(`^(?:(?:[0-9]*)?[${escapeRegExp(alphabet)}])+$`));
         this.letters = alphabet.split('');
         this.numbers.add('0');
         this.numbers.add('1');
