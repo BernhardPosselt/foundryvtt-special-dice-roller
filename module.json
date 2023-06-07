@@ -1,15 +1,25 @@
 {
-  "name": "special-dice-roller",
-  "title": "Special Dice Roller",
-  "description": "Supports rolling dice for: Legend of the 5 Rings 5th edition, Genesys, Vampire the Masquerade 5th edition, FFG's Star Wars TTRPG, WFRP3, HeroQuest, HeXXen 1733, The One Ring, Descent 2nd Edition, OVA. Check out the README.md on the homepage for a guide on how to roll various dice.",
-  "version": "0.16.0",
-  "author": "Bernhard Posselt",
-  "scripts": ["./dist/main.js"],
-  "styles": ["./public/css/styles.css"],
-  "packs": [],
-  "minimumCoreVersion": "0.8.5",
-  "compatibleCoreVersion": "10",
-  "url": "https://github.com/BernhardPosselt/foundryvtt-special-dice-roller",
-  "manifest": "https://github.com/BernhardPosselt/foundryvtt-special-dice-roller/raw/master/module.json",
-  "download": "https://github.com/BernhardPosselt/foundryvtt-special-dice-roller/archive/master.zip"
+    "name": "special-dice-roller",
+    "title": "Special Dice Roller",
+    "description": "Supports rolling dice for: Legend of the 5 Rings 5th edition, Genesys, Vampire the Masquerade 5th edition, FFG's Star Wars TTRPG, WFRP3, HeroQuest, HeXXen 1733, The One Ring, Descent 2nd Edition, OVA. Check out the README.md on the homepage for a guide on how to roll various dice.",
+    "version": "0.17.0",
+    "authors": [
+        {
+            "name": "Bernhard Posselt"
+        }
+    ],
+    "scripts": [
+        "./dist/main.js"
+    ],
+    "styles": [
+        "./public/css/styles.css"
+    ],
+    "packs": [],
+    "compatibility": {
+        "minimum": "10",
+        "verified": "11"
+    },
+    "url": "https://github.com/BernhardPosselt/foundryvtt-special-dice-roller",
+    "manifest": "https://github.com/BernhardPosselt/foundryvtt-special-dice-roller/raw/master/module.json",
+    "download": "https://github.com/BernhardPosselt/foundryvtt-special-dice-roller/releases/download/0.17.0/release.zip"
 }

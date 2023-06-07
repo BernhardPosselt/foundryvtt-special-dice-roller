@@ -71,7 +71,11 @@ export abstract class Roller<D, F, P> implements IRoller {
             console.log(`Rolled ${rolls} with formula ${parsedFormula}`);
             return this.formatRolls(rolls, flavorText);
         } catch (e) {
-            return escapeHtml(e.message);
+            if (e instanceof Error) {
+                return escapeHtml(e.message);
+            } else {
+                throw e;
+            }
         }
     }
 
