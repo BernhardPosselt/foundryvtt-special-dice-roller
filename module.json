@@ -17,6 +17,7 @@
     "packs": [],
     "compatibility": {
         "minimum": "10",
+        "maximum": "11",
         "verified": "11"
     },
     "url": "https://github.com/BernhardPosselt/foundryvtt-special-dice-roller",
