@@ -13,13 +13,13 @@ yarn run build
 
 # create release directories
 rm -rf ./build
-mkdir -p build/foundryvtt-special-dice-roller/
+mkdir -p build/special-dice-roller/
 
 # create archive
 node ./scripts/update-module-json.mjs "$version"
-cp module.json README.md LICENSE CHANGELOG.md build/foundryvtt-special-dice-roller/
-cp -r dist/ docs/ public/ build/foundryvtt-special-dice-roller/
+cp module.json README.md LICENSE CHANGELOG.md build/special-dice-roller/
+cp -r dist/ docs/ public/ build/special-dice-roller/
 
 cd build
-zip -r release.zip foundryvtt-special-dice-roller
+zip -r release.zip special-dice-roller
 cd -
