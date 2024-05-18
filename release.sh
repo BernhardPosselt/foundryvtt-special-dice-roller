@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Run with ./release.sh 0.0.2 "$GITHUB_TOKEN" "$FOUNDRY_TOKEN"
+# Run with ./release.sh 0.0.2 "$GITHUB_TOKEN" "$FOUNDRY_ROLLER_TOKEN"
 # requires zip, curl, jq
 
 set -e
