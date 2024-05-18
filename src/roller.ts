@@ -1,4 +1,3 @@
-import {shim} from 'array.prototype.flatmap';
 import {combineAll, IMonoid, Predicate} from './lang';
 import {IParser, parseFormula} from './parser';
 import {RandomNumberGenerator} from './rng';
@@ -93,7 +92,6 @@ export abstract class Roller<D, F, P> implements IRoller {
     }
 
     public formatReRolls(rolls: ReRoll[]): string {
-        shim();
         const reRolls = rolls
             .flatMap((roll: ReRoll) => {
                 const die = roll.indexedRoll[0];
@@ -157,7 +155,6 @@ export function rollDie<D, F>(
     rng: RandomNumberGenerator,
     explodes: Predicate<F> = () => false,
 ): Roll<D, F>[] {
-    shim();
     return Array.from({length: times}, () => rng(faces.length))
         .map((randomNumber: number) => faces[randomNumber])
         .flatMap((face) => {
