@@ -1,5 +1,7 @@
 # Special Dice Roller
 
+**NOTE: THIS MODULE IS EOL AND WILL NOT BE PORTED TO V13**
+
 Supports rolling dice in your chat window for various non-regular dice systems:
 
 * Legend of the 5 Rings 5th edition
